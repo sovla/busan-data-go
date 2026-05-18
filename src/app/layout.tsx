@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import "./globals.css";
-import BottomNav from "@/components/BottomNav";
+import RootLayoutClient from "@/components/RootLayoutClient";
 
 export const metadata: Metadata = {
   title: "맘편한 부산 - AI 출산·육아 도우미",
@@ -19,8 +19,7 @@ export default function RootLayout({
         style={{ fontFamily: "'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}
         className="min-h-full flex flex-col bg-gray-50 pb-16"
       >
-        {children}
-        <BottomNav />
+        <RootLayoutClient>{children}</RootLayoutClient>
       </body>
     </html>
   );

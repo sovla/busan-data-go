@@ -5,22 +5,19 @@ export async function GET(request: NextRequest) {
   const searchParams = request.nextUrl.searchParams;
   const lat = parseFloat(searchParams.get('lat') || '35.1796');
   const lng = parseFloat(searchParams.get('lng') || '129.0756');
-  const radius = parseFloat(searchParams.get('radius') || '5000');
-  const typesParam = searchParams.get('types');
-  const types = typesParam ? typesParam.split(',') : null;
+  const radius = parseFloat(searchParams.get('radius') || '1000');
 
   const supabase = await createClient();
 
-  const { data, error } = await supabase.rpc('nearby_facilities', {
+  const { data, error } = await supabase.rpc('nearby_meal_stores', {
     lat,
     lng,
     radius_m: radius,
-    facility_types: types,
   });
 
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 
-  return NextResponse.json({ facilities: data ?? [], total: data?.length ?? 0 });
+  return NextResponse.json({ stores: data ?? [], total: data?.length ?? 0 });
 }

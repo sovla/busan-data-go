@@ -12,7 +12,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Baby, MapPin, Users, Wallet, Heart, Sparkles } from "lucide-react";
+import { Baby, MapPin, Users, Wallet, Heart } from "lucide-react";
 
 const DISTRICTS = [
   "중구", "서구", "동구", "영도구", "부산진구", "동래구",
@@ -85,7 +85,7 @@ export function BenefitForm({ onSearch }: BenefitFormProps) {
           {STEPS.map((step, i) => (
             <div key={step.number} className="flex items-center">
               <div className="flex flex-col items-center">
-                <div className="h-6 w-6 rounded-full bg-gradient-to-br from-rose-400 to-violet-500 flex items-center justify-center text-white text-xs font-bold">
+                <div className="h-6 w-6 rounded-full bg-[#FF6B6B] flex items-center justify-center text-white text-xs font-bold">
                   {step.number}
                 </div>
                 <span className="text-[10px] text-muted-foreground mt-0.5 whitespace-nowrap">
@@ -93,7 +93,7 @@ export function BenefitForm({ onSearch }: BenefitFormProps) {
                 </span>
               </div>
               {i < STEPS.length - 1 && (
-                <div className="h-px w-8 bg-gradient-to-r from-violet-300 to-rose-300 mb-3 mx-1" />
+                <div className="h-px w-8 bg-gray-200 mb-3 mx-1" />
               )}
             </div>
           ))}
@@ -102,9 +102,9 @@ export function BenefitForm({ onSearch }: BenefitFormProps) {
 
       <CardContent className="space-y-5">
         {/* Step 1: 기본 정보 */}
-        <div className="rounded-xl bg-rose-50/50 border border-rose-100 p-4 space-y-4">
-          <div className="flex items-center gap-2 text-sm font-semibold text-rose-700">
-            <Heart className="h-4 w-4" />
+        <div className="rounded-xl bg-gray-50/50 border border-gray-100 p-4 space-y-4">
+          <div className="flex items-center gap-2 text-sm font-semibold text-gray-700">
+            <Heart className="h-4 w-4 text-[#FF6B6B]" />
             <span>Step 1 · 기본 정보</span>
           </div>
 
@@ -123,7 +123,7 @@ export function BenefitForm({ onSearch }: BenefitFormProps) {
                 }}
                 className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
                   isPregnant
-                    ? "bg-gradient-to-r from-rose-400 to-violet-500"
+                    ? "bg-[#FF6B6B]"
                     : "bg-input"
                 }`}
               >
@@ -135,7 +135,7 @@ export function BenefitForm({ onSearch }: BenefitFormProps) {
               </button>
               <span className="text-sm font-medium">
                 {isPregnant ? (
-                  <span className="text-rose-600">임신 중</span>
+                  <span className="text-[#FF6B6B]">임신 중</span>
                 ) : (
                   <span className="text-muted-foreground">임신 아님</span>
                 )}
@@ -181,9 +181,9 @@ export function BenefitForm({ onSearch }: BenefitFormProps) {
         </div>
 
         {/* Step 2: 자녀 정보 */}
-        <div className="rounded-xl bg-violet-50/50 border border-violet-100 p-4 space-y-4">
-          <div className="flex items-center gap-2 text-sm font-semibold text-violet-700">
-            <Baby className="h-4 w-4" />
+        <div className="rounded-xl bg-gray-50/50 border border-gray-100 p-4 space-y-4">
+          <div className="flex items-center gap-2 text-sm font-semibold text-gray-700">
+            <Baby className="h-4 w-4 text-[#FF6B6B]" />
             <span>Step 2 · 자녀 정보</span>
           </div>
 
@@ -220,8 +220,8 @@ export function BenefitForm({ onSearch }: BenefitFormProps) {
                     key={option.label}
                     className={`flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs cursor-pointer transition-colors ${
                       isAgeChecked(option)
-                        ? "bg-violet-100 border-violet-300 text-violet-700 font-medium"
-                        : "bg-white border-border text-muted-foreground hover:border-violet-200"
+                        ? "bg-red-50 border-[#FF6B6B]/30 text-gray-700 font-medium"
+                        : "bg-white border-border text-muted-foreground hover:border-gray-300"
                     }`}
                   >
                     <Checkbox
@@ -239,9 +239,9 @@ export function BenefitForm({ onSearch }: BenefitFormProps) {
         </div>
 
         {/* Step 3: 소득 */}
-        <div className="rounded-xl bg-emerald-50/50 border border-emerald-100 p-4 space-y-3">
-          <div className="flex items-center gap-2 text-sm font-semibold text-emerald-700">
-            <Wallet className="h-4 w-4" />
+        <div className="rounded-xl bg-gray-50/50 border border-gray-100 p-4 space-y-3">
+          <div className="flex items-center gap-2 text-sm font-semibold text-gray-700">
+            <Wallet className="h-4 w-4 text-[#FF6B6B]" />
             <span>Step 3 · 소득 수준</span>
           </div>
           <Select value={incomeLevel} onValueChange={(v) => setIncomeLevel(v ?? "middle")}>
@@ -257,11 +257,11 @@ export function BenefitForm({ onSearch }: BenefitFormProps) {
         </div>
 
         <Button
-          className="w-full bg-gradient-to-r from-rose-500 to-violet-500 hover:from-rose-600 hover:to-violet-600 text-white font-semibold shadow-md shadow-rose-200 transition-all"
+          className="w-full bg-[#FF6B6B] hover:bg-[#e85d5d] text-white font-semibold shadow-sm transition-colors"
           onClick={handleSubmit}
         >
-          <Sparkles className="mr-2 h-4 w-4" />
-          AI 혜택 분석 시작
+          <Heart className="mr-2 h-4 w-4" />
+          혜택 찾기
         </Button>
       </CardContent>
     </Card>
