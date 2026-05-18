@@ -12,6 +12,7 @@ declare global {
         LatLng: new (lat: number, lng: number) => NaverLatLng;
         Marker: new (options: NaverMarkerOptions) => NaverMarker;
         InfoWindow: new (options: NaverInfoWindowOptions) => NaverInfoWindow;
+        Point: new (x: number, y: number) => NaverPoint;
         Event: {
           addListener: (target: unknown, type: string, handler: () => void) => void;
         };
@@ -35,10 +36,21 @@ interface NaverLatLng {
   lng: () => number;
 }
 
+interface NaverMarkerIcon {
+  content: string;
+  anchor: NaverPoint;
+}
+
+interface NaverPoint {
+  x: number;
+  y: number;
+}
+
 interface NaverMarkerOptions {
   position: NaverLatLng;
   map: NaverMap;
   title?: string;
+  icon?: NaverMarkerIcon;
 }
 
 interface NaverMarker {
@@ -60,6 +72,14 @@ const TYPE_EMOJIS: Record<FacilityType, string> = {
   postpartum: '🏥',
   daycare: '🏫',
   hospital: '⚕️',
+};
+
+const TYPE_COLORS: Record<FacilityType, string> = {
+  nursing_room: '#FF6B6B',
+  kids_cafe: '#4ECDC4',
+  postpartum: '#9B59B6',
+  daycare: '#2ECC71',
+  hospital: '#F39C12',
 };
 
 interface FacilityMapProps {
@@ -97,10 +117,16 @@ export function FacilityMap({ facilities, selectedFacility, onSelectFacility }: 
 
     facilities.forEach((facility) => {
       const position = new window.naver.maps.LatLng(facility.lat, facility.lng);
+      const color = TYPE_COLORS[facility.type];
+      const emoji = TYPE_EMOJIS[facility.type];
       const marker = new window.naver.maps.Marker({
         position,
         map: mapRef.current!,
         title: facility.name,
+        icon: {
+          content: `<div style="width:28px;height:28px;border-radius:50%;background:${color};border:2px solid white;box-shadow:0 2px 6px rgba(0,0,0,0.3);display:flex;align-items:center;justify-content:center;"><span style="color:white;font-size:12px;">${emoji}</span></div>`,
+          anchor: new window.naver.maps.Point(14, 14),
+        },
       });
 
       const infoWindow = new window.naver.maps.InfoWindow({

@@ -2,8 +2,9 @@
 
 import { useState, useRef } from "react";
 import { Benefit, BenefitMatchRequest } from "@/types/benefit";
-import { Loader2, ChevronDown, Search } from "lucide-react";
+import { ChevronDown, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface AIAnalysisProps {
   benefits: Benefit[];
@@ -94,43 +95,62 @@ export function AIAnalysis({ benefits, userContext }: AIAnalysisProps) {
         )}
       </div>
 
-      {/* 로딩 상태 */}
-      {loading && !text && (
-        <div className="flex flex-col items-center justify-center py-10 gap-3">
-          <div className="relative">
-            <div className="h-10 w-10 rounded-full border-2 border-gray-200 border-t-[#FF6B6B] animate-spin" />
-          </div>
-          <p className="text-sm font-medium text-gray-700">
-            상황을 분석하고 있어요...
-          </p>
-          <p className="text-xs text-gray-400">잠시만 기다려 주세요</p>
-        </div>
-      )}
+      <AnimatePresence mode="wait">
+        {/* shimmer 로딩 상태 */}
+        {loading && !text && (
+          <motion.div
+            key="shimmer"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="px-5 py-6 space-y-3"
+          >
+            <div className="h-3 rounded bg-gray-200 animate-pulse w-3/4" />
+            <div className="h-3 rounded bg-gray-200 animate-pulse w-full" />
+            <div className="h-3 rounded bg-gray-200 animate-pulse w-5/6" />
+            <div className="h-3 rounded bg-gray-200 animate-pulse w-2/3" />
+          </motion.div>
+        )}
 
-      {/* 스트리밍 텍스트 결과 */}
-      {text && (
-        <div className="px-5 py-4">
-          <div className="prose prose-sm max-w-none text-gray-700 leading-relaxed whitespace-pre-wrap">
-            {text}
-            {loading && (
-              <span className="inline-block h-4 w-0.5 bg-[#FF6B6B] animate-pulse ml-0.5 align-middle" />
-            )}
-          </div>
-        </div>
-      )}
+        {/* 스트리밍 텍스트 결과 */}
+        {text && (
+          <motion.div
+            key="text"
+            initial={{ opacity: 0, y: 6 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.3 }}
+            className="px-5 py-4"
+          >
+            <div className="prose prose-sm max-w-none text-gray-700 leading-relaxed whitespace-pre-wrap">
+              {text}
+              {loading && (
+                <span className="inline-block h-4 w-0.5 bg-[#FF6B6B] animate-pulse ml-0.5 align-middle" />
+              )}
+            </div>
+          </motion.div>
+        )}
 
-      {/* 초기 안내 (분석 전) */}
-      {!loading && !done && !text && (
-        <div className="flex flex-col items-center justify-center py-8 gap-2 text-center px-6">
-          <ChevronDown className="h-5 w-5 text-gray-300" />
-          <p className="text-sm text-gray-500">
-            버튼을 눌러 내 혜택을 상세 분석해보세요
-          </p>
-          <p className="text-xs text-gray-400">
-            연간 수혜 금액, TOP 3 혜택, 즉시 신청 가능 항목 등을 알려드려요
-          </p>
-        </div>
-      )}
+        {/* 초기 안내 (분석 전) */}
+        {!loading && !done && !text && (
+          <motion.div
+            key="guide"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+            className="flex flex-col items-center justify-center py-8 gap-2 text-center px-6"
+          >
+            <ChevronDown className="h-5 w-5 text-gray-300" />
+            <p className="text-sm text-gray-500">
+              버튼을 눌러 내 혜택을 상세 분석해보세요
+            </p>
+            <p className="text-xs text-gray-400">
+              연간 수혜 금액, TOP 3 혜택, 즉시 신청 가능 항목 등을 알려드려요
+            </p>
+          </motion.div>
+        )}
+      </AnimatePresence>
     </div>
   );
 }

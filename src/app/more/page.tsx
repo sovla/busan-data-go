@@ -1,5 +1,7 @@
+"use client";
 import { Card, CardContent } from "@/components/ui/card";
 import { Heart, Database, Cpu, Map } from "lucide-react";
+import { PageTransition } from "@/components/PageTransition";
 
 const publicDatasets = [
   {
@@ -34,7 +36,8 @@ const techStack = [
 
 export default function MorePage() {
   return (
-    <main className="min-h-screen bg-white pb-24">
+    <PageTransition>
+      <main className="min-h-screen bg-white pb-24">
       {/* 헤더 */}
       <div className="bg-white border-b border-gray-100 px-4 py-10 text-center">
         <div className="inline-flex items-center justify-center h-16 w-16 rounded-2xl bg-[#FFF8F0] mb-4">
@@ -142,6 +145,7 @@ export default function MorePage() {
           </a>
         </div>
       </div>
-    </main>
+      </main>
+    </PageTransition>
   );
 }

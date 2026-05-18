@@ -49,7 +49,7 @@ export function BenefitCard({ benefit }: BenefitCardProps) {
   };
 
   return (
-    <Card className="h-full flex flex-col group transition-all duration-200 hover:-translate-y-1 hover:shadow-lg border border-border/60">
+    <Card className="h-full flex flex-col group transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md border border-border/60">
       <CardHeader className="pb-3">
         <div className="flex items-start justify-between gap-2 mb-2">
           <span

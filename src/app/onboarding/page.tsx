@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Heart, Search, MapPin } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const steps = [
   {
@@ -24,37 +25,29 @@ const steps = [
 
 export default function OnboardingPage() {
   const [currentStep, setCurrentStep] = useState(0);
-  const [animating, setAnimating] = useState(false);
+  const [direction, setDirection] = useState(1);
   const router = useRouter();
 
   const step = steps[currentStep];
   const Icon = step.icon;
 
   const handleNext = () => {
-    if (animating) return;
     if (currentStep === steps.length - 1) {
       router.push("/");
       return;
     }
-    setAnimating(true);
-    setTimeout(() => {
-      setCurrentStep((prev) => prev + 1);
-      setAnimating(false);
-    }, 300);
+    setDirection(1);
+    setCurrentStep((prev) => prev + 1);
   };
 
   const handleDotClick = (idx: number) => {
-    if (animating || idx === currentStep) return;
-    setAnimating(true);
-    setTimeout(() => {
-      setCurrentStep(idx);
-      setAnimating(false);
-    }, 300);
+    if (idx === currentStep) return;
+    setDirection(idx > currentStep ? 1 : -1);
+    setCurrentStep(idx);
   };
 
   return (
     <div className="fixed inset-0 flex flex-col bg-white">
-      {/* 건너뛰기 */}
       <div className="flex justify-end px-6 pt-12">
         <button
           onClick={() => router.push("/")}
@@ -64,44 +57,63 @@ export default function OnboardingPage() {
         </button>
       </div>
 
-      {/* 메인 콘텐츠 */}
-      <div
-        className={`flex flex-1 flex-col items-center justify-center px-8 text-center transition-all duration-300 ${
-          animating ? "opacity-0 translate-y-4" : "opacity-100 translate-y-0"
-        }`}
-      >
-        <div className="mb-8 flex h-28 w-28 items-center justify-center rounded-3xl bg-[#FFF8F0]">
-          <Icon className="h-12 w-12 text-[#FF6B6B]" />
-        </div>
+      <div className="flex flex-1 flex-col items-center justify-center px-8 text-center overflow-hidden">
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.div
+            key={currentStep}
+            initial={{ opacity: 0, x: direction > 0 ? 100 : -100 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: direction > 0 ? -100 : 100 }}
+            transition={{ duration: 0.3, ease: "easeInOut" }}
+            className="flex flex-col items-center"
+          >
+            <motion.div
+              initial={{ scale: 0.8 }}
+              animate={{ scale: 1 }}
+              transition={{ type: "spring", stiffness: 300, damping: 20 }}
+              className="mb-8 flex h-28 w-28 items-center justify-center rounded-3xl bg-[#FFF8F0]"
+            >
+              <Icon className="h-12 w-12 text-[#FF6B6B]" />
+            </motion.div>
 
-        <h1 className="whitespace-pre-line text-3xl font-bold leading-tight tracking-tight text-gray-900 md:text-4xl">
-          {step.title}
-        </h1>
+            <h1 className="whitespace-pre-line text-3xl font-bold leading-tight tracking-tight text-gray-900 md:text-4xl">
+              {step.title}
+            </h1>
 
-        <p className="mt-4 max-w-xs text-base leading-relaxed text-gray-500">
-          {step.subtitle}
-        </p>
+            <p className="mt-4 max-w-xs text-base leading-relaxed text-gray-500">
+              {step.subtitle}
+            </p>
+          </motion.div>
+        </AnimatePresence>
       </div>
 
-      {/* 하단 영역 */}
       <div className="px-8 pb-16">
-        <div className="mb-8 flex justify-center gap-2">
+        <div className="mb-8 flex justify-center gap-2 items-center">
           {steps.map((_, idx) => (
             <button
               key={idx}
               onClick={() => handleDotClick(idx)}
-              className={`h-2 rounded-full transition-all duration-300 ${
-                idx === currentStep
-                  ? "w-6 bg-[#FF6B6B]"
-                  : "w-2 bg-gray-200"
-              }`}
-            />
+              className="relative flex items-center justify-center"
+              style={{ width: idx === currentStep ? 24 : 8, height: 8 }}
+            >
+              <motion.div
+                layoutId="dot-indicator"
+                className="absolute inset-0 rounded-full bg-[#FF6B6B]"
+                style={{ display: idx === currentStep ? "block" : "none" }}
+                transition={{ type: "spring", stiffness: 400, damping: 30 }}
+              />
+              <div
+                className={`rounded-full transition-all duration-300 ${
+                  idx === currentStep ? "w-6 h-2 bg-[#FF6B6B]" : "w-2 h-2 bg-gray-200"
+                }`}
+              />
+            </button>
           ))}
         </div>
 
         <button
           onClick={handleNext}
-          className="w-full rounded-2xl bg-[#FF6B6B] hover:bg-[#e85d5d] py-4 text-base font-bold text-white transition-colors active:scale-[0.98]"
+          className="w-full rounded-2xl bg-[#FF6B6B] hover:bg-[#e85d5d] py-4 text-base font-bold text-white transition-colors active:scale-95"
         >
           {currentStep === steps.length - 1 ? "시작하기" : "다음"}
         </button>

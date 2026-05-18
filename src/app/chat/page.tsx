@@ -3,9 +3,11 @@
 import { useChat, Chat } from '@ai-sdk/react';
 import { DefaultChatTransport } from 'ai';
 import { useEffect, useRef, useState, useMemo } from 'react';
+import { motion } from 'framer-motion';
 import ChatMessage from '@/components/chat/ChatMessage';
 import ChatInput from '@/components/chat/ChatInput';
 import { MessageCircle } from 'lucide-react';
+import { PageTransition } from '@/components/PageTransition';
 
 const EXAMPLE_QUESTIONS = [
   "해운대구에서 받을 수 있는 출산 혜택은?",
@@ -48,6 +50,7 @@ export default function ChatPage() {
   };
 
   return (
+    <PageTransition>
     <div className="flex flex-col h-screen bg-white">
       <div className="bg-white border-b border-gray-100 px-4 pt-12 pb-4 flex-shrink-0">
         <div className="flex items-center gap-3">
@@ -72,14 +75,17 @@ export default function ChatPage() {
               <p className="text-gray-400 text-xs mt-1">부산시 출산·육아 혜택을 안내해 드립니다</p>
             </div>
             <div className="flex flex-col gap-2 w-full max-w-sm">
-              {EXAMPLE_QUESTIONS.map((q) => (
-                <button
+              {EXAMPLE_QUESTIONS.map((q, idx) => (
+                <motion.button
                   key={q}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ delay: idx * 0.1, duration: 0.3, ease: "easeOut" }}
                   onClick={() => handleExampleClick(q)}
-                  className="text-left px-4 py-3 rounded-2xl bg-white border border-gray-100 text-sm text-gray-700 hover:bg-gray-50 hover:border-gray-200 transition-colors shadow-sm"
+                  className="text-left px-4 py-3 rounded-2xl bg-white border border-gray-100 text-sm text-gray-700 hover:bg-gray-50 hover:border-gray-200 transition-colors shadow-sm active:scale-95"
                 >
                   {q}
-                </button>
+                </motion.button>
               ))}
             </div>
           </div>
@@ -120,5 +126,6 @@ export default function ChatPage() {
         />
       </div>
     </div>
+    </PageTransition>
   );
 }

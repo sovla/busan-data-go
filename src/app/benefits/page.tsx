@@ -7,6 +7,21 @@ import { BenefitForm } from "@/components/benefits/BenefitForm";
 import { BenefitResult } from "@/components/benefits/BenefitResult";
 import { AIAnalysis } from "@/components/benefits/AIAnalysis";
 import { Heart } from "lucide-react";
+import { PageTransition } from "@/components/PageTransition";
+import { AnimatePresence, motion } from "framer-motion";
+
+function SkeletonCards() {
+  return (
+    <div className="space-y-6">
+      <div className="rounded-2xl bg-gray-100 h-32 animate-pulse" />
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        {[0, 1, 2].map((i) => (
+          <div key={i} className="rounded-2xl bg-gray-100 h-48 animate-pulse" />
+        ))}
+      </div>
+    </div>
+  );
+}
 
 export default function BenefitsPage() {
   const [results, setResults] = useState<Benefit[]>([]);
@@ -28,6 +43,7 @@ export default function BenefitsPage() {
   }
 
   return (
+    <PageTransition>
     <main className="min-h-screen bg-white">
       {/* 헤더 */}
       <div className="bg-white border-b border-gray-100">
@@ -58,29 +74,38 @@ export default function BenefitsPage() {
             <BenefitForm onSearch={handleSearch} />
           </div>
           <div className="lg:col-span-2 space-y-6">
-            {loading ? (
-              <div className="flex flex-col items-center justify-center h-72 rounded-2xl border border-dashed border-gray-200 bg-gray-50/40">
-                <div className="relative mb-4">
-                  <div className="h-12 w-12 rounded-full border-4 border-gray-200 border-t-[#FF6B6B] animate-spin" />
-                </div>
-                <p className="text-sm font-medium text-gray-700">
-                  혜택을 찾고 있어요...
-                </p>
-                <p className="text-xs text-gray-400 mt-1">
-                  잠시만 기다려 주세요
-                </p>
-              </div>
-            ) : (
-              <>
-                <BenefitResult benefits={results} searched={searched} />
-                {searched && results.length > 0 && userContext && (
-                  <AIAnalysis benefits={results} userContext={userContext} />
-                )}
-              </>
-            )}
+            <AnimatePresence mode="wait">
+              {loading ? (
+                <motion.div
+                  key="loading"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <SkeletonCards />
+                </motion.div>
+              ) : (
+                <motion.div
+                  key="results"
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                >
+                  <BenefitResult benefits={results} searched={searched} />
+                  {searched && results.length > 0 && userContext && (
+                    <div className="mt-6">
+                      <AIAnalysis benefits={results} userContext={userContext} />
+                    </div>
+                  )}
+                </motion.div>
+              )}
+            </AnimatePresence>
           </div>
         </div>
       </div>
     </main>
+    </PageTransition>
   );
 }

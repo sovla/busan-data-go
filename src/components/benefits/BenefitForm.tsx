@@ -257,7 +257,7 @@ export function BenefitForm({ onSearch }: BenefitFormProps) {
         </div>
 
         <Button
-          className="w-full bg-[#FF6B6B] hover:bg-[#e85d5d] text-white font-semibold shadow-sm transition-colors"
+          className="w-full bg-[#FF6B6B] hover:bg-[#e85d5d] text-white font-semibold shadow-sm transition-all active:scale-95"
           onClick={handleSubmit}
         >
           <Heart className="mr-2 h-4 w-4" />

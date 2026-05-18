@@ -8,6 +8,7 @@ import { FacilityFilter } from '@/components/map/FacilityFilter';
 import { FacilityDetail } from '@/components/map/FacilityDetail';
 import { Badge } from '@/components/ui/badge';
 import { MapPin } from 'lucide-react';
+import { PageTransition } from '@/components/PageTransition';
 
 const ALL_TYPES: FacilityType[] = ['nursing_room', 'kids_cafe', 'postpartum', 'daycare', 'hospital'];
 
@@ -55,6 +56,7 @@ export default function MapPage() {
         onReady={() => setNaverLoaded(true)}
         strategy="afterInteractive"
       />
+      <PageTransition>
       <div className="flex flex-col h-screen">
         {/* 헤더 */}
         <div className="bg-white border-b border-gray-100 z-10 px-4 pt-4 pb-3">
@@ -100,6 +102,7 @@ export default function MapPage() {
           onClose={() => setSelectedFacility(null)}
         />
       </div>
+      </PageTransition>
     </>
   );
 }

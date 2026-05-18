@@ -89,7 +89,11 @@ export function FacilityDetail({ facility, onClose }: FacilityDetailProps) {
 
   return (
     <Sheet open={!!facility} onOpenChange={(open) => !open && onClose()}>
-      <SheetContent side="bottom" className="rounded-t-2xl max-h-[72vh] overflow-y-auto p-0">
+      <SheetContent
+        side="bottom"
+        className="rounded-t-2xl max-h-[72vh] overflow-y-auto p-0"
+        style={{ transition: 'transform 0.35s cubic-bezier(0.34, 1.56, 0.64, 1)' }}
+      >
         {facility && config && (
           <>
             {/* 시설 유형별 컬러 바 */}
@@ -145,10 +149,14 @@ export function FacilityDetail({ facility, onClose }: FacilityDetailProps) {
                       상세 정보
                     </span>
                   </div>
-                  {metadataEntries.map(([key, value]) => {
+                  {metadataEntries.map(([key, value], index) => {
                     const meta = METADATA_LABELS[key];
                     return (
-                      <div key={key} className="flex items-center justify-between text-sm">
+                      <div
+                        key={key}
+                        className="flex items-center justify-between text-sm transition-all duration-300"
+                        style={{ transitionDelay: `${index * 40}ms` }}
+                      >
                         <span className="flex items-center gap-1.5 text-slate-500">
                           <span className="text-sm">{meta?.icon ?? '•'}</span>
                           <span>{meta?.label ?? key}</span>

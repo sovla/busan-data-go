@@ -1,9 +1,11 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import { Benefit } from "@/types/benefit";
 import { BenefitCard } from "./BenefitCard";
 import { Badge } from "@/components/ui/badge";
 import { Heart, Zap, Clock } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface BenefitResultProps {
   benefits: Benefit[];
@@ -25,6 +27,43 @@ function isImmediatelyApplicable(benefit: Benefit): boolean {
     benefit.how_to_apply.includes("보건소");
   return easyProviders.includes(benefit.provider) || hasSimpleApply;
 }
+
+function useCountUp(target: number, duration = 1000) {
+  const [value, setValue] = useState(0);
+  const rafRef = useRef<number | null>(null);
+
+  useEffect(() => {
+    if (target === 0) {
+      setValue(0);
+      return;
+    }
+    const start = performance.now();
+    function tick(now: number) {
+      const elapsed = now - start;
+      const progress = Math.min(elapsed / duration, 1);
+      setValue(Math.round(target * progress));
+      if (progress < 1) {
+        rafRef.current = requestAnimationFrame(tick);
+      }
+    }
+    rafRef.current = requestAnimationFrame(tick);
+    return () => {
+      if (rafRef.current !== null) cancelAnimationFrame(rafRef.current);
+    };
+  }, [target, duration]);
+
+  return value;
+}
+
+const container = {
+  hidden: {},
+  show: { transition: { staggerChildren: 0.08 } },
+};
+
+const item = {
+  hidden: { opacity: 0, y: 12 },
+  show: { opacity: 1, y: 0, transition: { duration: 0.3 } },
+};
 
 export function BenefitResult({ benefits, searched }: BenefitResultProps) {
   if (!searched) {
@@ -72,8 +111,40 @@ export function BenefitResult({ benefits, searched }: BenefitResultProps) {
   const immediateCount = benefits.filter(isImmediatelyApplicable).length;
   const conditionalCount = benefits.length - immediateCount;
 
+  return <BenefitResultInner
+    benefits={benefits}
+    annualEstimate={annualEstimate}
+    totalMonthly={totalMonthly}
+    totalOneTime={totalOneTime}
+    immediateCount={immediateCount}
+    conditionalCount={conditionalCount}
+  />;
+}
+
+function BenefitResultInner({
+  benefits,
+  annualEstimate,
+  totalMonthly,
+  totalOneTime,
+  immediateCount,
+  conditionalCount,
+}: {
+  benefits: Benefit[];
+  annualEstimate: number;
+  totalMonthly: number;
+  totalOneTime: number;
+  immediateCount: number;
+  conditionalCount: number;
+}) {
+  const countedAnnual = useCountUp(annualEstimate);
+
   return (
-    <div className="space-y-6">
+    <motion.div
+      className="space-y-6"
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.4 }}
+    >
       {/* 총 수혜 금액 요약 카드 */}
       <div className="rounded-2xl bg-[#FFF8F0] border border-gray-100 p-5">
         <div className="flex items-start justify-between gap-3">
@@ -86,7 +157,7 @@ export function BenefitResult({ benefits, searched }: BenefitResultProps) {
               <p className="text-2xl font-bold text-gray-900 leading-tight">
                 연간 약{" "}
                 <span className="text-[#FF6B6B]">
-                  {formatAmount(annualEstimate)}
+                  {formatAmount(countedAnnual)}
                 </span>{" "}
                 수혜 가능
               </p>
@@ -131,12 +202,19 @@ export function BenefitResult({ benefits, searched }: BenefitResultProps) {
         </div>
       </div>
 
-      {/* 혜택 카드 목록 */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 animate-in fade-in duration-500">
+      {/* 혜택 카드 목록 — stagger 진입 */}
+      <motion.div
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+        variants={container}
+        initial="hidden"
+        animate="show"
+      >
         {benefits.map((benefit) => (
-          <BenefitCard key={benefit.id} benefit={benefit} />
+          <motion.div key={benefit.id} variants={item}>
+            <BenefitCard benefit={benefit} />
+          </motion.div>
         ))}
-      </div>
-    </div>
+      </motion.div>
+    </motion.div>
   );
 }

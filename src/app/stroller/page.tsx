@@ -7,6 +7,7 @@ import { StationDetail } from '@/components/stroller/StationDetail';
 import { AccessibilityLegend } from '@/components/stroller/AccessibilityLegend';
 import { Badge } from '@/components/ui/badge';
 import { Navigation } from 'lucide-react';
+import { PageTransition } from '@/components/PageTransition';
 
 interface MetroStation {
   id: number;
@@ -52,7 +53,7 @@ export default function StrollerPage() {
   }, []);
 
   return (
-    <>
+    <PageTransition>
       <Script
         src={`https://oapi.map.naver.com/openapi/v3/maps.js?ncpKeyId=${process.env.NEXT_PUBLIC_NAVER_MAP_CLIENT_ID}`}
         onReady={() => setNaverLoaded(true)}
@@ -90,7 +91,7 @@ export default function StrollerPage() {
             </div>
           )}
 
-          <div className="absolute top-3 left-3 z-10 w-52">
+          <div className="absolute top-3 left-3 z-10 w-52 animate-[fadeIn_0.4s_ease-out]">
             <AccessibilityLegend />
           </div>
         </div>
@@ -100,6 +101,6 @@ export default function StrollerPage() {
           onClose={() => setSelectedStation(null)}
         />
       </div>
-    </>
+    </PageTransition>
   );
 }
