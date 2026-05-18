@@ -1,0 +1,134 @@
+[
+  {
+    "name": "퀸즈힐산후조리원",
+    "district": "해운대구",
+    "address": "부산광역시 해운대구 해운대로 794, 엘리움 13층 (좌동)",
+    "phone": null,
+    "lat": null,
+    "lng": null,
+    "capacity": 17,
+    "price_regular": null,
+    "price_special": null
+  },
+  {
+    "name": "엘리움산후조리원",
+    "district": "해운대구",
+    "address": "부산광역시 해운대구 해운대로 794, 엘리움 12층 (좌동)",
+    "phone": null,
+    "lat": null,
+    "lng": null,
+    "capacity": 20,
+    "price_regular": null,
+    "price_special": null
+  },
+  {
+    "name": "제일여성산후조리원",
+    "district": "해운대구",
+    "address": "부산광역시 해운대구 좌동로 66 (중동)",
+    "phone": null,
+    "lat": null,
+    "lng": null,
+    "capacity": 17,
+    "price_regular": null,
+    "price_special": null
+  },
+  {
+    "name": "미즈웰 산후조리원",
+    "district": "북구",
+    "address": "부산광역시 북구 금곡대로 280-7 (화명동)",
+    "phone": "051-797-7730",
+    "lat": null,
+    "lng": null,
+    "capacity": null,
+    "price_regular": null,
+    "price_special": null
+  },
+  {
+    "name": "화명일신기독병원 산후조리원",
+    "district": "북구",
+    "address": "부산광역시 북구 금곡대로 83 (덕천동) 거성빌딩 4층",
+    "phone": "051-363-0360",
+    "lat": null,
+    "lng": null,
+    "capacity": null,
+    "price_regular": null,
+    "price_special": null
+  },
+  {
+    "name": "미래로 산후조리원",
+    "district": "북구",
+    "address": "부산광역시 북구 금곡대로 15 (덕천동, 미래로병원 7~9층)",
+    "phone": "051-330-5620",
+    "lat": null,
+    "lng": null,
+    "capacity": null,
+    "price_regular": null,
+    "price_special": null
+  },
+  {
+    "name": "마미캠프 산후조리원",
+    "district": "남구",
+    "address": "부산광역시 남구 수영로 294 3층 303,304호(대연동,동일스위트)",
+    "phone": "051-621-1241",
+    "lat": 35.1362765,
+    "lng": 129.098631,
+    "capacity": 27,
+    "price_regular": 180,
+    "price_special": 210
+  },
+  {
+    "name": "연제일신산후조리원",
+    "district": "연제구",
+    "address": "부산광역시 연제구 월드컵대로 120번길 15",
+    "phone": "051-852-2031",
+    "lat": 35.18528717,
+    "lng": 129.082727,
+    "capacity": null,
+    "price_regular": null,
+    "price_special": null
+  },
+  {
+    "name": "위대한탄생산후조리원",
+    "district": "연제구",
+    "address": "부산광역시 연제구 중앙대로1083",
+    "phone": "051-862-0010",
+    "lat": 35.18485049,
+    "lng": 129.080152,
+    "capacity": null,
+    "price_regular": null,
+    "price_special": null
+  },
+  {
+    "name": "아이앤젤산후조리원",
+    "district": "기장군",
+    "address": "부산광역시 기장군 정관읍 정관로 601",
+    "phone": "051-997-3579",
+    "lat": 35.32044219,
+    "lng": 129.1796362,
+    "capacity": null,
+    "price_regular": null,
+    "price_special": null
+  },
+  {
+    "name": "㈜에디스",
+    "district": "사하구",
+    "address": "부산광역시 사하구 낙동대로 363, 낙동대로361",
+    "phone": "051-206-0999",
+    "lat": null,
+    "lng": null,
+    "capacity": 44,
+    "price_regular": 1300000,
+    "price_special": 1800000
+  },
+  {
+    "name": "미래아이",
+    "district": "사하구",
+    "address": "부산광역시 사하구 낙동남로 1388",
+    "phone": "051-200-9900",
+    "lat": null,
+    "lng": null,
+    "capacity": 29,
+    "price_regular": 1407900,
+    "price_special": 2057900
+  }
+]
