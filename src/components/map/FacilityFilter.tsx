@@ -1,6 +1,5 @@
 'use client';
 
-import { Checkbox } from '@/components/ui/checkbox';
 import {
   Select,
   SelectContent,
@@ -10,12 +9,48 @@ import {
 } from '@/components/ui/select';
 import { FacilityType } from '@/types/facility';
 
-const FACILITY_TYPES: { type: FacilityType; label: string; emoji: string }[] = [
-  { type: 'nursing_room', label: '수유실', emoji: '🍼' },
-  { type: 'kids_cafe', label: '키즈카페', emoji: '🎠' },
-  { type: 'postpartum', label: '산후조리원', emoji: '🏥' },
-  { type: 'daycare', label: '어린이집', emoji: '🏫' },
-  { type: 'hospital', label: '병원', emoji: '💊' },
+const FACILITY_TYPES: {
+  type: FacilityType;
+  label: string;
+  emoji: string;
+  activeClass: string;
+  inactiveClass: string;
+}[] = [
+  {
+    type: 'nursing_room',
+    label: '수유실',
+    emoji: '🍼',
+    activeClass: 'bg-rose-500 text-white border-rose-500 shadow-rose-200 shadow-sm',
+    inactiveClass: 'bg-white text-rose-500 border-rose-300 hover:bg-rose-50',
+  },
+  {
+    type: 'kids_cafe',
+    label: '키즈카페',
+    emoji: '🎪',
+    activeClass: 'bg-violet-500 text-white border-violet-500 shadow-violet-200 shadow-sm',
+    inactiveClass: 'bg-white text-violet-500 border-violet-300 hover:bg-violet-50',
+  },
+  {
+    type: 'postpartum',
+    label: '산후조리원',
+    emoji: '🏥',
+    activeClass: 'bg-sky-500 text-white border-sky-500 shadow-sky-200 shadow-sm',
+    inactiveClass: 'bg-white text-sky-500 border-sky-300 hover:bg-sky-50',
+  },
+  {
+    type: 'daycare',
+    label: '어린이집',
+    emoji: '🏫',
+    activeClass: 'bg-emerald-500 text-white border-emerald-500 shadow-emerald-200 shadow-sm',
+    inactiveClass: 'bg-white text-emerald-500 border-emerald-300 hover:bg-emerald-50',
+  },
+  {
+    type: 'hospital',
+    label: '병원',
+    emoji: '⚕️',
+    activeClass: 'bg-amber-500 text-white border-amber-500 shadow-amber-200 shadow-sm',
+    inactiveClass: 'bg-white text-amber-500 border-amber-300 hover:bg-amber-50',
+  },
 ];
 
 const RADIUS_OPTIONS = [
@@ -47,38 +82,39 @@ export function FacilityFilter({
   };
 
   return (
-    <div className="bg-white rounded-xl shadow-md p-3 flex flex-wrap items-center gap-3">
-      <div className="flex flex-wrap gap-3">
-        {FACILITY_TYPES.map(({ type, label, emoji }) => (
-          <label
-            key={type}
-            className="flex items-center gap-1.5 cursor-pointer select-none"
-          >
-            <Checkbox
-              checked={selectedTypes.includes(type)}
-              onCheckedChange={() => toggleType(type)}
-              id={`filter-${type}`}
-            />
-            <span className="text-sm font-medium text-gray-700">
-              {emoji} {label}
-            </span>
-          </label>
-        ))}
+    <div className="flex items-center gap-2">
+      <div className="flex flex-wrap gap-1.5 flex-1">
+        {FACILITY_TYPES.map(({ type, label, emoji, activeClass, inactiveClass }) => {
+          const isSelected = selectedTypes.includes(type);
+          return (
+            <button
+              key={type}
+              type="button"
+              onClick={() => toggleType(type)}
+              className={`
+                inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium
+                border transition-all duration-150 cursor-pointer select-none
+                ${isSelected ? activeClass : inactiveClass}
+              `}
+            >
+              <span>{emoji}</span>
+              <span>{label}</span>
+            </button>
+          );
+        })}
       </div>
-      <div className="ml-auto">
-        <Select value={radius} onValueChange={(value) => value !== null && onRadiusChange(value)}>
-          <SelectTrigger className="w-24 h-8 text-sm">
-            <SelectValue placeholder="반경" />
-          </SelectTrigger>
-          <SelectContent>
-            {RADIUS_OPTIONS.map((opt) => (
-              <SelectItem key={opt.value} value={opt.value}>
-                {opt.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
+      <Select value={radius} onValueChange={(value) => value !== null && onRadiusChange(value)}>
+        <SelectTrigger className="w-20 h-7 text-xs border-slate-200 rounded-full bg-white shrink-0">
+          <SelectValue placeholder="반경" />
+        </SelectTrigger>
+        <SelectContent>
+          {RADIUS_OPTIONS.map((opt) => (
+            <SelectItem key={opt.value} value={opt.value} className="text-xs">
+              {opt.label}
+            </SelectItem>
+          ))}
+        </SelectContent>
+      </Select>
     </div>
   );
 }

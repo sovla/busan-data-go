@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useCallback } from 'react';
 import { Facility, FacilityType } from '@/types/facility';
-import { Button } from '@/components/ui/button';
 import { Locate } from 'lucide-react';
 
 declare global {
@@ -57,10 +56,10 @@ interface NaverInfoWindow {
 
 const TYPE_EMOJIS: Record<FacilityType, string> = {
   nursing_room: '🍼',
-  kids_cafe: '🎠',
+  kids_cafe: '🎪',
   postpartum: '🏥',
   daycare: '🏫',
-  hospital: '💊',
+  hospital: '⚕️',
 };
 
 interface FacilityMapProps {
@@ -105,7 +104,7 @@ export function FacilityMap({ facilities, selectedFacility, onSelectFacility }: 
       });
 
       const infoWindow = new window.naver.maps.InfoWindow({
-        content: `<div style="padding:6px 10px;font-size:13px;font-weight:600;">${TYPE_EMOJIS[facility.type]} ${facility.name}</div>`,
+        content: `<div style="padding:7px 12px;font-size:13px;font-weight:600;color:#1e293b;border-radius:8px;">${TYPE_EMOJIS[facility.type]} ${facility.name}</div>`,
       });
 
       window.naver.maps.Event.addListener(marker, 'click', () => {
@@ -130,15 +129,24 @@ export function FacilityMap({ facilities, selectedFacility, onSelectFacility }: 
   return (
     <div className="relative w-full h-full">
       <div ref={mapContainerRef} className="w-full h-full" />
-      <Button
+      <button
+        type="button"
         onClick={handleCurrentLocation}
-        size="icon"
-        variant="outline"
-        className="absolute bottom-6 right-4 z-10 bg-white shadow-md rounded-full w-10 h-10"
-        title="현재 위치"
+        title="현재 위치로 이동"
+        className="
+          absolute bottom-6 right-4 z-10
+          w-11 h-11 rounded-full
+          bg-white border border-slate-200
+          shadow-lg shadow-slate-200/80
+          flex items-center justify-center
+          text-slate-600 hover:text-sky-600
+          hover:border-sky-300 hover:shadow-sky-100
+          active:scale-95
+          transition-all duration-150
+        "
       >
         <Locate className="w-4 h-4" />
-      </Button>
+      </button>
     </div>
   );
 }

@@ -12,7 +12,7 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Search } from "lucide-react";
+import { Baby, MapPin, Users, Wallet, Heart, Sparkles } from "lucide-react";
 
 const DISTRICTS = [
   "중구", "서구", "동구", "영도구", "부산진구", "동래구",
@@ -31,6 +31,12 @@ const CHILD_AGE_OPTIONS = [
 interface BenefitFormProps {
   onSearch: (request: BenefitMatchRequest) => void;
 }
+
+const STEPS = [
+  { number: 1, label: "기본 정보" },
+  { number: 2, label: "자녀 정보" },
+  { number: 3, label: "소득" },
+];
 
 export function BenefitForm({ onSearch }: BenefitFormProps) {
   const [isPregnant, setIsPregnant] = useState(false);
@@ -71,115 +77,175 @@ export function BenefitForm({ onSearch }: BenefitFormProps) {
   }
 
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle className="text-lg">내 조건 입력하기</CardTitle>
+    <Card className="border border-border/60 shadow-sm">
+      <CardHeader className="pb-4">
+        <CardTitle className="text-base font-semibold">내 조건 입력하기</CardTitle>
+        {/* 스텝 인디케이터 */}
+        <div className="flex items-center gap-0 mt-3">
+          {STEPS.map((step, i) => (
+            <div key={step.number} className="flex items-center">
+              <div className="flex flex-col items-center">
+                <div className="h-6 w-6 rounded-full bg-gradient-to-br from-rose-400 to-violet-500 flex items-center justify-center text-white text-xs font-bold">
+                  {step.number}
+                </div>
+                <span className="text-[10px] text-muted-foreground mt-0.5 whitespace-nowrap">
+                  {step.label}
+                </span>
+              </div>
+              {i < STEPS.length - 1 && (
+                <div className="h-px w-8 bg-gradient-to-r from-violet-300 to-rose-300 mb-3 mx-1" />
+              )}
+            </div>
+          ))}
+        </div>
       </CardHeader>
+
       <CardContent className="space-y-5">
-        <div className="space-y-3">
-          <label className="text-sm font-medium">임신 여부</label>
-          <div className="flex items-center gap-3">
-            <button
-              type="button"
-              role="switch"
-              aria-checked={isPregnant}
-              onClick={() => {
-                setIsPregnant((v) => !v);
-                if (isPregnant) setPregnancyWeek(null);
-              }}
-              className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
-                isPregnant ? "bg-primary" : "bg-input"
-              }`}
-            >
-              <span
-                className={`inline-block h-4 w-4 rounded-full bg-white shadow-sm transition-transform ${
-                  isPregnant ? "translate-x-6" : "translate-x-1"
-                }`}
-              />
-            </button>
-            <span className="text-sm">{isPregnant ? "임신 중" : "임신 아님"}</span>
+        {/* Step 1: 기본 정보 */}
+        <div className="rounded-xl bg-rose-50/50 border border-rose-100 p-4 space-y-4">
+          <div className="flex items-center gap-2 text-sm font-semibold text-rose-700">
+            <Heart className="h-4 w-4" />
+            <span>Step 1 · 기본 정보</span>
           </div>
-          {isPregnant && (
-            <Select
-              value={pregnancyWeek?.toString() ?? ""}
-              onValueChange={(v) => setPregnancyWeek(Number(v))}
-            >
-              <SelectTrigger>
-                <SelectValue placeholder="임신 주수 선택" />
+
+          <div className="space-y-2">
+            <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+              임신 여부
+            </label>
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                role="switch"
+                aria-checked={isPregnant}
+                onClick={() => {
+                  setIsPregnant((v) => !v);
+                  if (isPregnant) setPregnancyWeek(null);
+                }}
+                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
+                  isPregnant
+                    ? "bg-gradient-to-r from-rose-400 to-violet-500"
+                    : "bg-input"
+                }`}
+              >
+                <span
+                  className={`inline-block h-4 w-4 rounded-full bg-white shadow-sm transition-transform ${
+                    isPregnant ? "translate-x-6" : "translate-x-1"
+                  }`}
+                />
+              </button>
+              <span className="text-sm font-medium">
+                {isPregnant ? (
+                  <span className="text-rose-600">임신 중</span>
+                ) : (
+                  <span className="text-muted-foreground">임신 아님</span>
+                )}
+              </span>
+            </div>
+            {isPregnant && (
+              <Select
+                value={pregnancyWeek?.toString() ?? ""}
+                onValueChange={(v) => setPregnancyWeek(Number(v ?? ""))}
+              >
+                <SelectTrigger className="bg-white">
+                  <SelectValue placeholder="임신 주수 선택" />
+                </SelectTrigger>
+                <SelectContent>
+                  {Array.from({ length: 40 }, (_, i) => i + 1).map((week) => (
+                    <SelectItem key={week} value={week.toString()}>
+                      {week}주
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            )}
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide flex items-center gap-1.5">
+              <MapPin className="h-3 w-3" />
+              거주 구군
+            </label>
+            <Select value={district} onValueChange={(v) => setDistrict(v ?? "")}>
+              <SelectTrigger className="bg-white">
+                <SelectValue placeholder="구군 선택" />
               </SelectTrigger>
               <SelectContent>
-                {Array.from({ length: 40 }, (_, i) => i + 1).map((week) => (
-                  <SelectItem key={week} value={week.toString()}>
-                    {week}주
+                {DISTRICTS.map((d) => (
+                  <SelectItem key={d} value={d}>
+                    {d}
                   </SelectItem>
                 ))}
               </SelectContent>
             </Select>
+          </div>
+        </div>
+
+        {/* Step 2: 자녀 정보 */}
+        <div className="rounded-xl bg-violet-50/50 border border-violet-100 p-4 space-y-4">
+          <div className="flex items-center gap-2 text-sm font-semibold text-violet-700">
+            <Baby className="h-4 w-4" />
+            <span>Step 2 · 자녀 정보</span>
+          </div>
+
+          <div className="space-y-2">
+            <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide flex items-center gap-1.5">
+              <Users className="h-3 w-3" />
+              자녀 수
+            </label>
+            <Select
+              value={childrenCount.toString()}
+              onValueChange={(v) => setChildrenCount(Number(v ?? "0"))}
+            >
+              <SelectTrigger className="bg-white">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {[0, 1, 2, 3, 4, 5].map((n) => (
+                  <SelectItem key={n} value={n.toString()}>
+                    {n === 5 ? "5명 이상" : `${n}명`}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+
+          {childrenCount > 0 && (
+            <div className="space-y-2">
+              <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+                자녀 연령 (중복 선택)
+              </label>
+              <div className="flex flex-wrap gap-2">
+                {CHILD_AGE_OPTIONS.map((option) => (
+                  <label
+                    key={option.label}
+                    className={`flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs cursor-pointer transition-colors ${
+                      isAgeChecked(option)
+                        ? "bg-violet-100 border-violet-300 text-violet-700 font-medium"
+                        : "bg-white border-border text-muted-foreground hover:border-violet-200"
+                    }`}
+                  >
+                    <Checkbox
+                      id={`age-${option.label}`}
+                      checked={isAgeChecked(option)}
+                      onCheckedChange={() => toggleAge(option)}
+                      className="h-3 w-3"
+                    />
+                    {option.label}
+                  </label>
+                ))}
+              </div>
+            </div>
           )}
         </div>
 
-        <div className="space-y-2">
-          <label className="text-sm font-medium">거주 구군</label>
-          <Select value={district} onValueChange={(v) => setDistrict(v ?? "")}>
-            <SelectTrigger>
-              <SelectValue placeholder="구군 선택" />
-            </SelectTrigger>
-            <SelectContent>
-              {DISTRICTS.map((d) => (
-                <SelectItem key={d} value={d}>
-                  {d}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div className="space-y-2">
-          <label className="text-sm font-medium">자녀 수</label>
-          <Select
-            value={childrenCount.toString()}
-            onValueChange={(v) => setChildrenCount(Number(v))}
-          >
-            <SelectTrigger>
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {[0, 1, 2, 3, 4, 5].map((n) => (
-                <SelectItem key={n} value={n.toString()}>
-                  {n === 5 ? "5명 이상" : `${n}명`}
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-
-        {childrenCount > 0 && (
-          <div className="space-y-2">
-            <label className="text-sm font-medium">자녀 연령 (중복 선택 가능)</label>
-            <div className="flex flex-wrap gap-3">
-              {CHILD_AGE_OPTIONS.map((option) => (
-                <div key={option.label} className="flex items-center gap-1.5">
-                  <Checkbox
-                    id={`age-${option.label}`}
-                    checked={isAgeChecked(option)}
-                    onCheckedChange={() => toggleAge(option)}
-                  />
-                  <label
-                    htmlFor={`age-${option.label}`}
-                    className="text-sm cursor-pointer"
-                  >
-                    {option.label}
-                  </label>
-                </div>
-              ))}
-            </div>
+        {/* Step 3: 소득 */}
+        <div className="rounded-xl bg-emerald-50/50 border border-emerald-100 p-4 space-y-3">
+          <div className="flex items-center gap-2 text-sm font-semibold text-emerald-700">
+            <Wallet className="h-4 w-4" />
+            <span>Step 3 · 소득 수준</span>
           </div>
-        )}
-
-        <div className="space-y-2">
-          <label className="text-sm font-medium">소득 수준</label>
-          <Select value={incomeLevel} onValueChange={(v) => setIncomeLevel(v ?? "")}>
-            <SelectTrigger>
+          <Select value={incomeLevel} onValueChange={(v) => setIncomeLevel(v ?? "middle")}>
+            <SelectTrigger className="bg-white">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -190,9 +256,12 @@ export function BenefitForm({ onSearch }: BenefitFormProps) {
           </Select>
         </div>
 
-        <Button className="w-full" onClick={handleSubmit}>
-          <Search className="mr-2 h-4 w-4" />
-          혜택 찾기
+        <Button
+          className="w-full bg-gradient-to-r from-rose-500 to-violet-500 hover:from-rose-600 hover:to-violet-600 text-white font-semibold shadow-md shadow-rose-200 transition-all"
+          onClick={handleSubmit}
+        >
+          <Sparkles className="mr-2 h-4 w-4" />
+          AI 혜택 분석 시작
         </Button>
       </CardContent>
     </Card>

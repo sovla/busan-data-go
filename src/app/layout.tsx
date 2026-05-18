@@ -1,20 +1,11 @@
 import type { Metadata } from "next";
-import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
-
-const geistSans = Geist({
-  variable: "--font-geist-sans",
-  subsets: ["latin"],
-});
-
-const geistMono = Geist_Mono({
-  variable: "--font-geist-mono",
-  subsets: ["latin"],
-});
+import BottomNav from "@/components/BottomNav";
 
 export const metadata: Metadata = {
-  title: "맘편한 부산",
-  description: "부산 임산부·예비부모를 위한 AI 생활 도우미",
+  title: "맘편한 부산 - AI 출산·육아 도우미",
+  description:
+    "부산시 임산부·예비부모·영유아 가정을 위한 AI 기반 출산·육아 정보 서비스. 혜택 안내, 시설 지도, 맞춤 상담을 한 곳에서.",
 };
 
 export default function RootLayout({
@@ -23,11 +14,14 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html
-      lang="ko"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
-      <body className="min-h-full flex flex-col">{children}</body>
+    <html lang="ko" className="h-full antialiased">
+      <body
+        style={{ fontFamily: "'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}
+        className="min-h-full flex flex-col bg-gray-50 pb-16"
+      >
+        {children}
+        <BottomNav />
+      </body>
     </html>
   );
 }
