@@ -1,0 +1,144 @@
+'use client';
+
+import { useEffect, useRef, useCallback } from 'react';
+import { Facility, FacilityType } from '@/types/facility';
+import { Button } from '@/components/ui/button';
+import { Locate } from 'lucide-react';
+
+declare global {
+  interface Window {
+    naver: {
+      maps: {
+        Map: new (container: HTMLElement, options: NaverMapOptions) => NaverMap;
+        LatLng: new (lat: number, lng: number) => NaverLatLng;
+        Marker: new (options: NaverMarkerOptions) => NaverMarker;
+        InfoWindow: new (options: NaverInfoWindowOptions) => NaverInfoWindow;
+        Event: {
+          addListener: (target: unknown, type: string, handler: () => void) => void;
+        };
+      };
+    };
+  }
+}
+
+interface NaverMapOptions {
+  center: NaverLatLng;
+  zoom: number;
+}
+
+interface NaverMap {
+  setCenter: (latlng: NaverLatLng) => void;
+  getCenter: () => NaverLatLng;
+}
+
+interface NaverLatLng {
+  lat: () => number;
+  lng: () => number;
+}
+
+interface NaverMarkerOptions {
+  position: NaverLatLng;
+  map: NaverMap;
+  title?: string;
+}
+
+interface NaverMarker {
+  setMap: (map: NaverMap | null) => void;
+}
+
+interface NaverInfoWindowOptions {
+  content: string;
+}
+
+interface NaverInfoWindow {
+  open: (map: NaverMap, marker: NaverMarker) => void;
+  close: () => void;
+}
+
+const TYPE_EMOJIS: Record<FacilityType, string> = {
+  nursing_room: '🍼',
+  kids_cafe: '🎠',
+  postpartum: '🏥',
+  daycare: '🏫',
+  hospital: '💊',
+};
+
+interface FacilityMapProps {
+  facilities: Facility[];
+  selectedFacility: Facility | null;
+  onSelectFacility: (facility: Facility) => void;
+}
+
+export function FacilityMap({ facilities, selectedFacility, onSelectFacility }: FacilityMapProps) {
+  const mapContainerRef = useRef<HTMLDivElement>(null);
+  const mapRef = useRef<NaverMap | null>(null);
+  const markersRef = useRef<NaverMarker[]>([]);
+  const infoWindowRef = useRef<NaverInfoWindow | null>(null);
+
+  useEffect(() => {
+    if (!mapContainerRef.current || !window.naver?.maps) return;
+
+    const center = new window.naver.maps.LatLng(35.1796, 129.0756);
+    mapRef.current = new window.naver.maps.Map(mapContainerRef.current, {
+      center,
+      zoom: 12,
+    });
+  }, []);
+
+  useEffect(() => {
+    if (!mapRef.current || !window.naver?.maps) return;
+
+    markersRef.current.forEach((marker) => marker.setMap(null));
+    markersRef.current = [];
+
+    if (infoWindowRef.current) {
+      infoWindowRef.current.close();
+      infoWindowRef.current = null;
+    }
+
+    facilities.forEach((facility) => {
+      const position = new window.naver.maps.LatLng(facility.lat, facility.lng);
+      const marker = new window.naver.maps.Marker({
+        position,
+        map: mapRef.current!,
+        title: facility.name,
+      });
+
+      const infoWindow = new window.naver.maps.InfoWindow({
+        content: `<div style="padding:6px 10px;font-size:13px;font-weight:600;">${TYPE_EMOJIS[facility.type]} ${facility.name}</div>`,
+      });
+
+      window.naver.maps.Event.addListener(marker, 'click', () => {
+        if (infoWindowRef.current) infoWindowRef.current.close();
+        infoWindow.open(mapRef.current!, marker);
+        infoWindowRef.current = infoWindow;
+        onSelectFacility(facility);
+      });
+
+      markersRef.current.push(marker);
+    });
+  }, [facilities, onSelectFacility]);
+
+  const handleCurrentLocation = useCallback(() => {
+    if (!navigator.geolocation || !mapRef.current || !window.naver?.maps) return;
+    navigator.geolocation.getCurrentPosition((pos) => {
+      const latlng = new window.naver.maps.LatLng(pos.coords.latitude, pos.coords.longitude);
+      mapRef.current!.setCenter(latlng);
+    });
+  }, []);
+
+  return (
+    <div className="relative w-full h-full">
+      <div ref={mapContainerRef} className="w-full h-full" />
+      <Button
+        onClick={handleCurrentLocation}
+        size="icon"
+        variant="outline"
+        className="absolute bottom-6 right-4 z-10 bg-white shadow-md rounded-full w-10 h-10"
+        title="현재 위치"
+      >
+        <Locate className="w-4 h-4" />
+      </Button>
+    </div>
+  );
+}
