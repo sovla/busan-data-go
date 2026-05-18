@@ -1,6 +1,12 @@
 import { streamText, type UIMessage } from 'ai';
 import { anthropic } from '@ai-sdk/anthropic';
 import { createClient } from '@/lib/supabase/server';
+import {
+  analyzeQuery,
+  retrieveContext,
+  buildSystemPrompt,
+  getFallbackContext,
+} from '@/lib/chat-rag';
 
 function uiMessagesToModelMessages(uiMessages: UIMessage[]) {
   return uiMessages.map((msg) => ({
@@ -17,31 +23,26 @@ export async function POST(req: Request) {
   const { messages } = await req.json();
   const supabase = await createClient();
 
-  const { data: benefits } = await supabase
-    .from('benefits')
-    .select('title, amount, description, category, eligibility');
+  const lastUserMessage =
+    [...messages]
+      .reverse()
+      .find((m: UIMessage) => m.role === 'user')
+      ?.parts?.filter((p: { type: string }) => p.type === 'text')
+      .map((p: { type: string; text: string }) => p.text)
+      .join('') ?? '';
 
-  const { data: facilities } = await supabase
-    .from('facilities')
-    .select('type, name, district, address, phone')
-    .limit(50);
+  const analysis = await analyzeQuery(lastUserMessage);
 
-  const context = `
-## 부산시 출산/육아 혜택 데이터
-${JSON.stringify(benefits, null, 2)}
+  const context = analysis
+    ? await retrieveContext(analysis, supabase)
+    : await getFallbackContext(supabase);
 
-## 부산시 시설 데이터 (상위 50건)
-${JSON.stringify(facilities, null, 2)}
-`;
-
+  const systemPrompt = buildSystemPrompt(context);
   const modelMessages = uiMessagesToModelMessages(messages);
 
   const result = streamText({
     model: anthropic('claude-sonnet-4-20250514'),
-    system: `당신은 '맘편한 부산' AI 도우미입니다. 부산시 임산부와 예비부모를 위한 출산/육아 혜택, 시설 정보를 안내합니다.
-항상 친절하고 따뜻한 톤으로 답변하세요. 답변에 구체적인 금액, 자격 조건, 신청 방법을 포함하세요.
-아래는 참고할 부산시 공공데이터입니다:
-${context}`,
+    system: systemPrompt,
     messages: modelMessages,
   });
 
