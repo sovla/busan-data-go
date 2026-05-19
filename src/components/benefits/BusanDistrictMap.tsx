@@ -62,8 +62,8 @@ export default function BusanDistrictMap({ selected, onSelect }: BusanDistrictMa
       }
     }
 
-    const padding = 10;
-    const width = 300;
+    const padding = 25;
+    const width = 340;
     const geoWidth = maxX - minX;
     const geoHeight = maxY - minY;
     const scale = (width - padding * 2) / geoWidth;
