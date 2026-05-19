@@ -139,25 +139,34 @@ export default function BusanDistrictMap({ selected, onSelect }: BusanDistrictMa
   return (
     <div className="w-full">
       <svg viewBox={viewBox} className="w-full h-auto max-h-[320px]">
+        {/* 레이어 1: 폴리곤 (클릭 영역) */}
         {paths.map((d) => {
           const isSelected = selected === d.name;
           return (
-            <g key={d.name} onClick={() => onSelect(d.name)} className="cursor-pointer">
-              <path
-                d={d.pathD}
-                fill={isSelected ? "#FF6B6B" : "#E5E7EB"}
-                stroke="white"
-                strokeWidth="1.5"
-                className="transition-colors duration-150 hover:fill-[#FFD4D4]"
-              />
-              <line x1={d.cx} y1={d.cy} x2={d.lx} y2={d.ly} stroke={isSelected ? "#FF6B6B" : "#D1D5DB"} strokeWidth="0.6" className="pointer-events-none" />
-              <circle cx={d.cx} cy={d.cy} r="2" fill={isSelected ? "#FF6B6B" : "#D1D5DB"} className="pointer-events-none" />
+            <path
+              key={`p-${d.name}`}
+              d={d.pathD}
+              fill={isSelected ? "#FF6B6B" : "#E5E7EB"}
+              stroke="white"
+              strokeWidth="1.5"
+              onClick={() => onSelect(d.name)}
+              className="cursor-pointer transition-colors duration-150 hover:fill-[#FFD4D4]"
+            />
+          );
+        })}
+        {/* 레이어 2: 연결선 + 라벨 (항상 위에) */}
+        {paths.map((d) => {
+          const isSelected = selected === d.name;
+          return (
+            <g key={`l-${d.name}`} onClick={() => onSelect(d.name)} className="cursor-pointer">
+              <line x1={d.cx} y1={d.cy} x2={d.lx} y2={d.ly} stroke={isSelected ? "#FF6B6B" : "#D1D5DB"} strokeWidth="0.6" />
+              <circle cx={d.cx} cy={d.cy} r="2" fill={isSelected ? "#FF6B6B" : "#D1D5DB"} />
               <text
                 x={d.lx}
                 y={d.ly}
                 textAnchor="middle"
                 dominantBaseline="middle"
-                className={`text-[9px] pointer-events-none select-none ${
+                className={`text-[9px] select-none ${
                   isSelected ? "fill-[#FF6B6B] font-bold" : "fill-[#4B5563] font-medium"
                 }`}
               >
