@@ -73,6 +73,22 @@ export default function HomePage() {
     );
   };
 
+  const mergedMessages = useMemo(() => {
+    const result: (typeof messages) = [];
+    for (const msg of messages) {
+      const prev = result[result.length - 1];
+      if (prev && prev.role === "assistant" && msg.role === "assistant") {
+        result[result.length - 1] = {
+          ...prev,
+          parts: [...prev.parts, ...msg.parts],
+        };
+      } else {
+        result.push(msg);
+      }
+    }
+    return result;
+  }, [messages]);
+
   const hasMessages = messages.length > 0;
 
   return (
@@ -200,7 +216,7 @@ export default function HomePage() {
             </div>
           ) : (
             <div className="px-4 py-4 space-y-4">
-              {messages.map((msg) => {
+              {mergedMessages.map((msg) => {
                 const text = getMessageText(msg);
                 const toolParts = msg.role === "assistant" ? getToolParts(msg) : [];
 
