@@ -42,60 +42,63 @@ export function StationDetail({ station, onClose }: StationDetailProps) {
 
   return (
     <Sheet open={!!station} onOpenChange={(open) => !open && onClose()}>
-      <SheetContent side="bottom" className="rounded-t-2xl pb-8">
+      <SheetContent side="bottom" className="rounded-t-[20px] pb-8">
+        <div className="mx-auto w-9 h-1 rounded-full bg-gray-300 mb-4" />
         <SheetHeader className="mb-4">
           <div className="flex items-center gap-2">
             <Badge className={`text-xs font-bold px-2.5 py-1 rounded-full border ${LINE_COLORS[station.line] ?? 'bg-slate-400 text-white border-slate-400'}`}>
               {station.line}
             </Badge>
-            <SheetTitle className="text-lg font-bold text-slate-800">
+            <SheetTitle className="text-lg font-bold text-[#1A1A1A]">
               {station.station_name}역
             </SheetTitle>
           </div>
           {station.location && (
-            <p className="text-xs text-slate-400 mt-1">{station.location}</p>
+            <p className="text-xs text-[#9CA3AF] mt-1">{station.location}</p>
           )}
         </SheetHeader>
 
         <div className="grid grid-cols-2 gap-3 mb-4">
-          <div className="bg-sky-50 rounded-xl p-3">
-            <p className="text-xs text-slate-500 mb-1">♿ 엘리베이터 (내부)</p>
-            <p className="text-lg font-bold text-sky-700">{station.elevator_inner ?? 0}개</p>
+          <div className="rounded-xl p-3 border border-[#F3F4F6]">
+            <p className="text-xs text-[#6B7280] mb-1">엘리베이터 (내부)</p>
+            <p className="text-lg font-bold text-[#1A1A1A]">{station.elevator_inner ?? 0}개</p>
           </div>
-          <div className="bg-sky-50 rounded-xl p-3">
-            <p className="text-xs text-slate-500 mb-1">♿ 엘리베이터 (외부)</p>
-            <p className="text-lg font-bold text-sky-700">{station.elevator_outer ?? 0}개</p>
+          <div className="rounded-xl p-3 border border-[#F3F4F6]">
+            <p className="text-xs text-[#6B7280] mb-1">엘리베이터 (외부)</p>
+            <p className="text-lg font-bold text-[#1A1A1A]">{station.elevator_outer ?? 0}개</p>
           </div>
-          <div className="bg-pink-50 rounded-xl p-3">
-            <p className="text-xs text-slate-500 mb-1">🍼 수유실</p>
-            <p className="text-lg font-bold text-pink-700">
+          <div className="rounded-xl p-3 border border-[#F3F4F6]">
+            <p className="text-xs text-[#6B7280] mb-1">수유실</p>
+            <p className="text-lg font-bold text-[#1A1A1A]">
               {(station.nursing_room ?? 0) >= 1 ? '있음' : '없음'}
             </p>
           </div>
-          <div className="bg-violet-50 rounded-xl p-3">
-            <p className="text-xs text-slate-500 mb-1">🔄 에스컬레이터</p>
-            <p className="text-lg font-bold text-violet-700">{station.escalator ?? 0}개</p>
+          <div className="rounded-xl p-3 border border-[#F3F4F6]">
+            <p className="text-xs text-[#6B7280] mb-1">에스컬레이터</p>
+            <p className="text-lg font-bold text-[#1A1A1A]">{station.escalator ?? 0}개</p>
           </div>
-          <div className="bg-teal-50 rounded-xl p-3">
-            <p className="text-xs text-slate-500 mb-1">⬆️ 외부경사로</p>
-            <p className="text-lg font-bold text-teal-700">{station.outer_ramp ?? 0}개</p>
+          <div className="rounded-xl p-3 border border-[#F3F4F6]">
+            <p className="text-xs text-[#6B7280] mb-1">외부경사로</p>
+            <p className="text-lg font-bold text-[#1A1A1A]">{station.outer_ramp ?? 0}개</p>
           </div>
-          <div className="bg-amber-50 rounded-xl p-3">
-            <p className="text-xs text-slate-500 mb-1">🦽 휠체어리프트</p>
-            <p className="text-lg font-bold text-amber-700">{station.wheelchair_lift ?? 0}개</p>
+          <div className="rounded-xl p-3 border border-[#F3F4F6]">
+            <p className="text-xs text-[#6B7280] mb-1">휠체어리프트</p>
+            <p className="text-lg font-bold text-[#1A1A1A]">{station.wheelchair_lift ?? 0}개</p>
           </div>
         </div>
 
         <div className={`rounded-xl p-3 text-sm font-medium text-center ${
           level === 'safe'
-            ? 'bg-emerald-50 text-emerald-700'
+            ? 'text-white'
             : level === 'normal'
-            ? 'bg-amber-50 text-amber-700'
-            : 'bg-red-50 text-red-700'
-        }`}>
-          {level === 'safe' && '유모차 이용이 편리합니다 ✅'}
-          {level === 'normal' && '엘리베이터가 있어 이용 가능합니다 🟡'}
-          {level === 'caution' && '엘리베이터가 없어 주의가 필요합니다 ⚠️'}
+            ? 'text-white'
+            : 'text-white'
+        }`} style={{
+          backgroundColor: level === 'safe' ? '#2ECC71' : level === 'normal' ? '#F39C12' : '#FF6B6B'
+        }}>
+          {level === 'safe' && '유모차 이용이 편리합니다'}
+          {level === 'normal' && '엘리베이터가 있어 이용 가능합니다'}
+          {level === 'caution' && '엘리베이터가 없어 주의가 필요합니다'}
         </div>
       </SheetContent>
     </Sheet>

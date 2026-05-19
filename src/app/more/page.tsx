@@ -41,7 +41,7 @@ export default function MorePage() {
       {/* 헤더 */}
       <div className="bg-white border-b border-gray-100 px-4 py-10 text-center">
         <div className="inline-flex items-center justify-center h-16 w-16 rounded-2xl bg-[#FFF8F0] mb-4">
-          <Heart className="h-7 w-7 text-[#FF6B6B]" />
+          <Heart className="w-5 h-5 text-[#FF6B6B]" />
         </div>
         <h1 className="text-2xl font-bold text-gray-900">맘편한 부산</h1>
         <p className="mt-1 text-sm font-medium text-gray-400">v1.0</p>
@@ -50,7 +50,7 @@ export default function MorePage() {
       <div className="mx-auto max-w-lg px-4 space-y-6 pt-6">
         {/* 활용 공공데이터 */}
         <section>
-          <h2 className="mb-3 text-xs font-bold uppercase tracking-widest text-gray-400">
+          <h2 className="mb-3 text-xs font-medium uppercase tracking-wider text-[#9CA3AF]">
             활용 공공데이터
           </h2>
           <Card className="border-0 shadow-sm">
@@ -69,7 +69,7 @@ export default function MorePage() {
                     {dataset.items.map((item) => (
                       <div
                         key={item.label}
-                        className="flex items-center justify-between px-4 py-3"
+                        className="flex items-center justify-between px-4 min-h-[56px]"
                       >
                         <span className="text-sm text-gray-700">{item.label}</span>
                         <span className="text-sm font-bold text-gray-900">
@@ -86,7 +86,7 @@ export default function MorePage() {
 
         {/* 기술 스택 */}
         <section>
-          <h2 className="mb-3 text-xs font-bold uppercase tracking-widest text-gray-400">
+          <h2 className="mb-3 text-xs font-medium uppercase tracking-wider text-[#9CA3AF]">
             기술 스택
           </h2>
           <div className="grid grid-cols-2 gap-3">
@@ -96,7 +96,7 @@ export default function MorePage() {
                 <Card key={tech.name} className="border-0 shadow-sm">
                   <CardContent className="p-4">
                     <div className="mb-2 h-8 w-8 rounded-lg bg-[#FFF8F0] flex items-center justify-center">
-                      <Icon className="h-4 w-4 text-[#FF6B6B]" />
+                      <Icon className="w-5 h-5 text-[#FF6B6B]" />
                     </div>
                     <p className="text-sm font-bold text-gray-900">{tech.name}</p>
                     <p className="mt-0.5 text-xs text-gray-500 leading-relaxed">
@@ -111,7 +111,7 @@ export default function MorePage() {
 
         {/* 대회 정보 */}
         <section>
-          <h2 className="mb-3 text-xs font-bold uppercase tracking-widest text-gray-400">
+          <h2 className="mb-3 text-xs font-medium uppercase tracking-wider text-[#9CA3AF]">
             대회 정보
           </h2>
           <Card className="border-0 shadow-sm bg-[#FFF8F0]">

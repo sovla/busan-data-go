@@ -60,21 +60,18 @@ export default function StrollerPage() {
         strategy="afterInteractive"
       />
       <div className="flex flex-col h-screen">
-        <div className="bg-white border-b border-gray-100 z-10 px-4 pt-4 pb-3">
-          <div className="flex items-center justify-between mb-1">
-            <div className="flex items-center gap-2">
-              <div className="w-7 h-7 rounded-full bg-[#E6FAF5] flex items-center justify-center">
-                <Navigation className="w-3.5 h-3.5 text-[#4ECDC4]" />
-              </div>
-              <h1 className="text-base font-bold text-gray-900">
-                유모차 길 안내
-              </h1>
+        <div className="h-14 bg-white border-b border-[#F3F4F6] z-10 px-4 flex items-center justify-between flex-shrink-0">
+          <div className="flex items-center gap-2">
+            <div className="w-7 h-7 rounded-full bg-[#E6FAF5] flex items-center justify-center">
+              <Navigation className="w-3.5 h-3.5 text-[#4ECDC4]" />
             </div>
-            <Badge className="bg-gray-100 text-gray-600 border-gray-200 text-xs font-medium px-2.5 py-1 rounded-full">
-              {stations.length}개 역 · {roads.length}개 도로
-            </Badge>
+            <h1 className="text-lg font-bold text-[#1A1A1A]">
+              유모차 길 안내
+            </h1>
           </div>
-          <p className="text-xs text-gray-400 pl-9">부산 도시철도 접근성 + 보행자우선도로</p>
+          <Badge className="bg-gray-100 text-gray-600 border-gray-200 text-xs font-medium px-2.5 py-1 rounded-full">
+            {stations.length}개 역 · {roads.length}개 도로
+          </Badge>
         </div>
 
         <div className="flex-1 relative overflow-hidden">

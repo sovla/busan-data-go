@@ -76,11 +76,11 @@ export default function OnboardingPage() {
               <Icon className="h-12 w-12 text-[#FF6B6B]" />
             </motion.div>
 
-            <h1 className="whitespace-pre-line text-3xl font-bold leading-tight tracking-tight text-gray-900 md:text-4xl">
+            <h1 className="whitespace-pre-line text-[26px] leading-[34px] font-bold text-[#1A1A1A]">
               {step.title}
             </h1>
 
-            <p className="mt-4 max-w-xs text-base leading-relaxed text-gray-500">
+            <p className="mt-4 max-w-xs text-sm leading-[22px] text-[#6B7280]">
               {step.subtitle}
             </p>
           </motion.div>
@@ -104,7 +104,7 @@ export default function OnboardingPage() {
               />
               <div
                 className={`rounded-full transition-all duration-300 ${
-                  idx === currentStep ? "w-6 h-2 bg-[#FF6B6B]" : "w-2 h-2 bg-gray-200"
+                  idx === currentStep ? "w-6 h-2 bg-[#FF6B6B]" : "w-2 h-2 bg-[#F3F4F6]"
                 }`}
               />
             </button>
@@ -113,7 +113,7 @@ export default function OnboardingPage() {
 
         <button
           onClick={handleNext}
-          className="w-full rounded-2xl bg-[#FF6B6B] hover:bg-[#e85d5d] py-4 text-base font-bold text-white transition-colors active:scale-95"
+          className="w-full h-12 rounded-xl bg-[#FF6B6B] hover:bg-[#e85d5d] text-sm font-semibold text-white transition-colors active:scale-95"
         >
           {currentStep === steps.length - 1 ? "시작하기" : "다음"}
         </button>

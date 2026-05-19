@@ -49,8 +49,8 @@ export function BenefitCard({ benefit }: BenefitCardProps) {
   };
 
   return (
-    <Card className="h-full flex flex-col group transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md border border-border/60">
-      <CardHeader className="pb-3">
+    <Card className="h-full flex flex-col group transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md rounded-2xl p-4 border border-[#F3F4F6] shadow-sm">
+      <CardHeader className="p-0 pb-3">
         <div className="flex items-start justify-between gap-2 mb-2">
           <span
             className={`shrink-0 inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-xs font-medium ${style.badge}`}
@@ -59,37 +59,37 @@ export function BenefitCard({ benefit }: BenefitCardProps) {
             {benefit.category}
           </span>
         </div>
-        <CardTitle className="text-sm font-semibold leading-snug text-foreground">
+        <CardTitle className="text-sm font-semibold leading-snug text-[#1A1A1A]">
           {benefit.title}
         </CardTitle>
         <div className="mt-2">
-          <span className="text-2xl font-bold text-rose-600 leading-none">
+          <span className="text-xl font-bold text-[#FF6B6B] leading-none">
             {benefit.amount}
           </span>
         </div>
       </CardHeader>
 
-      <CardContent className="flex flex-col flex-1 gap-3 pt-0">
-        <p className="text-xs text-muted-foreground leading-relaxed">
+      <CardContent className="flex flex-col flex-1 gap-3 p-0">
+        <p className="text-xs text-[#6B7280] leading-relaxed">
           {benefit.description}
         </p>
 
-        <div className="flex items-center gap-1.5 text-xs text-muted-foreground">
+        <div className="flex items-center gap-1.5 text-xs text-[#9CA3AF]">
           <Building2 className="h-3 w-3 shrink-0" />
           <span>{benefit.provider}</span>
         </div>
 
-        <div className="mt-auto pt-3 border-t border-border/50 space-y-2">
+        <div className="mt-auto pt-3 border-t border-[#F3F4F6] space-y-2">
           <div className="flex items-start gap-1.5">
-            <FileText className="h-3 w-3 shrink-0 mt-0.5 text-muted-foreground" />
-            <p className="text-xs text-muted-foreground leading-relaxed">
+            <FileText className="h-3 w-3 shrink-0 mt-0.5 text-[#9CA3AF]" />
+            <p className="text-xs text-[#6B7280] leading-relaxed">
               {benefit.how_to_apply}
             </p>
           </div>
           <Button
             variant="outline"
             size="sm"
-            className="w-full text-xs h-8 hover:bg-rose-50 hover:text-rose-600 hover:border-rose-200 transition-colors"
+            className="w-full text-xs h-8 border-[#F3F4F6] hover:bg-[#FFF0F0] hover:text-[#FF6B6B] hover:border-[#FF6B6B]/30 transition-colors"
             onClick={() => window.open(benefit.url, "_blank")}
           >
             <ExternalLink className="mr-1.5 h-3 w-3" />

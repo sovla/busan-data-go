@@ -18,13 +18,13 @@ export default function ChatInput({ input, isLoading, onInputChange, onSubmit }:
         onChange={onInputChange}
         placeholder="출산/육아 관련 질문을 해보세요..."
         disabled={isLoading}
-        className="flex-1 rounded-full bg-white border-gray-200 px-4 text-sm focus-visible:ring-rose-300"
+        className="flex-1 h-12 rounded-xl bg-white border-[#F3F4F6] px-4 text-sm focus-visible:ring-[#FF6B6B]"
       />
       <Button
         type="submit"
         disabled={isLoading || !input.trim()}
         size="icon"
-        className="rounded-full bg-gradient-to-r from-rose-500 to-violet-500 hover:from-rose-600 hover:to-violet-600 text-white flex-shrink-0 shadow-md"
+        className="h-12 w-12 rounded-xl bg-[#FF6B6B] hover:bg-[#e55a5a] text-white flex-shrink-0 active:scale-95 transition-transform"
       >
         <Send className="w-4 h-4" />
       </Button>

@@ -21,8 +21,8 @@ export default function BottomNav() {
   };
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 z-50 backdrop-blur-sm bg-white/80 border-t border-gray-100">
-      <div className="flex items-stretch pb-safe">
+    <nav className="fixed bottom-0 left-0 right-0 z-50 h-14 backdrop-blur-md bg-white/80 border-t border-[#F3F4F6]">
+      <div className="flex items-stretch h-full pb-safe">
         {navItems.map((item) => {
           const active = isActive(item.href);
           const Icon = item.icon;
@@ -34,16 +34,16 @@ export default function BottomNav() {
             >
               <Link
                 href={item.href}
-                className={`relative flex flex-col items-center justify-center w-full py-2 gap-0.5 transition-colors duration-150 ${
+                className={`relative flex flex-col items-center justify-center w-full h-full gap-0.5 transition-colors duration-150 ${
                   active
                     ? "text-[#FF6B6B]"
-                    : "text-gray-400 hover:text-gray-600"
+                    : "text-[#9CA3AF]"
                 }`}
               >
-                <Icon className="h-5 w-5" />
+                <Icon className="w-5 h-5" />
                 <span
                   className={`text-[10px] font-medium leading-none ${
-                    active ? "text-[#FF6B6B]" : "text-gray-400"
+                    active ? "text-[#FF6B6B]" : "text-[#9CA3AF]"
                   }`}
                 >
                   {item.label}

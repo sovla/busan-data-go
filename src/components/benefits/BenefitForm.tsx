@@ -77,9 +77,9 @@ export function BenefitForm({ onSearch }: BenefitFormProps) {
   }
 
   return (
-    <Card className="border border-border/60 shadow-sm">
+    <Card className="rounded-2xl border border-[#F3F4F6] shadow-sm">
       <CardHeader className="pb-4">
-        <CardTitle className="text-base font-semibold">내 조건 입력하기</CardTitle>
+        <CardTitle className="text-base font-semibold text-[#1A1A1A]">내 조건 입력하기</CardTitle>
         {/* 스텝 인디케이터 */}
         <div className="flex items-center gap-0 mt-3">
           {STEPS.map((step, i) => (
@@ -88,28 +88,28 @@ export function BenefitForm({ onSearch }: BenefitFormProps) {
                 <div className="h-6 w-6 rounded-full bg-[#FF6B6B] flex items-center justify-center text-white text-xs font-bold">
                   {step.number}
                 </div>
-                <span className="text-[10px] text-muted-foreground mt-0.5 whitespace-nowrap">
+                <span className="text-[10px] text-[#9CA3AF] mt-0.5 whitespace-nowrap">
                   {step.label}
                 </span>
               </div>
               {i < STEPS.length - 1 && (
-                <div className="h-px w-8 bg-gray-200 mb-3 mx-1" />
+                <div className="h-px w-8 bg-[#F3F4F6] mb-3 mx-1" />
               )}
             </div>
           ))}
         </div>
       </CardHeader>
 
-      <CardContent className="space-y-5">
+      <CardContent className="space-y-6">
         {/* Step 1: 기본 정보 */}
-        <div className="rounded-xl bg-gray-50/50 border border-gray-100 p-4 space-y-4">
-          <div className="flex items-center gap-2 text-sm font-semibold text-gray-700">
+        <div className="rounded-2xl bg-[#F8F8F8] border border-[#F3F4F6] p-4 space-y-4">
+          <div className="flex items-center gap-2 text-sm font-semibold text-[#1A1A1A]">
             <Heart className="h-4 w-4 text-[#FF6B6B]" />
             <span>Step 1 · 기본 정보</span>
           </div>
 
           <div className="space-y-2">
-            <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+            <label className="text-xs font-medium text-[#6B7280] uppercase tracking-wide">
               임신 여부
             </label>
             <div className="flex items-center gap-3">
@@ -122,9 +122,7 @@ export function BenefitForm({ onSearch }: BenefitFormProps) {
                   if (isPregnant) setPregnancyWeek(null);
                 }}
                 className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
-                  isPregnant
-                    ? "bg-[#FF6B6B]"
-                    : "bg-input"
+                  isPregnant ? "bg-[#FF6B6B]" : "bg-input"
                 }`}
               >
                 <span
@@ -137,7 +135,7 @@ export function BenefitForm({ onSearch }: BenefitFormProps) {
                 {isPregnant ? (
                   <span className="text-[#FF6B6B]">임신 중</span>
                 ) : (
-                  <span className="text-muted-foreground">임신 아님</span>
+                  <span className="text-[#9CA3AF]">임신 아님</span>
                 )}
               </span>
             </div>
@@ -146,7 +144,7 @@ export function BenefitForm({ onSearch }: BenefitFormProps) {
                 value={pregnancyWeek?.toString() ?? ""}
                 onValueChange={(v) => setPregnancyWeek(Number(v ?? ""))}
               >
-                <SelectTrigger className="bg-white">
+                <SelectTrigger className="h-12 rounded-lg bg-white">
                   <SelectValue placeholder="임신 주수 선택" />
                 </SelectTrigger>
                 <SelectContent>
@@ -161,12 +159,12 @@ export function BenefitForm({ onSearch }: BenefitFormProps) {
           </div>
 
           <div className="space-y-2">
-            <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide flex items-center gap-1.5">
+            <label className="text-xs font-medium text-[#6B7280] uppercase tracking-wide flex items-center gap-1.5">
               <MapPin className="h-3 w-3" />
               거주 구군
             </label>
             <Select value={district} onValueChange={(v) => setDistrict(v ?? "")}>
-              <SelectTrigger className="bg-white">
+              <SelectTrigger className="h-12 rounded-lg bg-white">
                 <SelectValue placeholder="구군 선택" />
               </SelectTrigger>
               <SelectContent>
@@ -181,14 +179,14 @@ export function BenefitForm({ onSearch }: BenefitFormProps) {
         </div>
 
         {/* Step 2: 자녀 정보 */}
-        <div className="rounded-xl bg-gray-50/50 border border-gray-100 p-4 space-y-4">
-          <div className="flex items-center gap-2 text-sm font-semibold text-gray-700">
+        <div className="rounded-2xl bg-[#F8F8F8] border border-[#F3F4F6] p-4 space-y-4">
+          <div className="flex items-center gap-2 text-sm font-semibold text-[#1A1A1A]">
             <Baby className="h-4 w-4 text-[#FF6B6B]" />
             <span>Step 2 · 자녀 정보</span>
           </div>
 
           <div className="space-y-2">
-            <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide flex items-center gap-1.5">
+            <label className="text-xs font-medium text-[#6B7280] uppercase tracking-wide flex items-center gap-1.5">
               <Users className="h-3 w-3" />
               자녀 수
             </label>
@@ -196,7 +194,7 @@ export function BenefitForm({ onSearch }: BenefitFormProps) {
               value={childrenCount.toString()}
               onValueChange={(v) => setChildrenCount(Number(v ?? "0"))}
             >
-              <SelectTrigger className="bg-white">
+              <SelectTrigger className="h-12 rounded-lg bg-white">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -211,7 +209,7 @@ export function BenefitForm({ onSearch }: BenefitFormProps) {
 
           {childrenCount > 0 && (
             <div className="space-y-2">
-              <label className="text-xs font-medium text-muted-foreground uppercase tracking-wide">
+              <label className="text-xs font-medium text-[#6B7280] uppercase tracking-wide">
                 자녀 연령 (중복 선택)
               </label>
               <div className="flex flex-wrap gap-2">
@@ -220,8 +218,8 @@ export function BenefitForm({ onSearch }: BenefitFormProps) {
                     key={option.label}
                     className={`flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs cursor-pointer transition-colors ${
                       isAgeChecked(option)
-                        ? "bg-red-50 border-[#FF6B6B]/30 text-gray-700 font-medium"
-                        : "bg-white border-border text-muted-foreground hover:border-gray-300"
+                        ? "bg-[#FFF0F0] border-[#FF6B6B]/30 text-[#1A1A1A] font-medium"
+                        : "bg-white border-[#F3F4F6] text-[#6B7280] hover:border-gray-300"
                     }`}
                   >
                     <Checkbox
@@ -239,13 +237,13 @@ export function BenefitForm({ onSearch }: BenefitFormProps) {
         </div>
 
         {/* Step 3: 소득 */}
-        <div className="rounded-xl bg-gray-50/50 border border-gray-100 p-4 space-y-3">
-          <div className="flex items-center gap-2 text-sm font-semibold text-gray-700">
+        <div className="rounded-2xl bg-[#F8F8F8] border border-[#F3F4F6] p-4 space-y-3">
+          <div className="flex items-center gap-2 text-sm font-semibold text-[#1A1A1A]">
             <Wallet className="h-4 w-4 text-[#FF6B6B]" />
             <span>Step 3 · 소득 수준</span>
           </div>
           <Select value={incomeLevel} onValueChange={(v) => setIncomeLevel(v ?? "middle")}>
-            <SelectTrigger className="bg-white">
+            <SelectTrigger className="h-12 rounded-lg bg-white">
               <SelectValue />
             </SelectTrigger>
             <SelectContent>
@@ -257,7 +255,7 @@ export function BenefitForm({ onSearch }: BenefitFormProps) {
         </div>
 
         <Button
-          className="w-full bg-[#FF6B6B] hover:bg-[#e85d5d] text-white font-semibold shadow-sm transition-all active:scale-95"
+          className="w-full h-12 rounded-xl bg-[#FF6B6B] hover:bg-[#e85d5d] text-white text-sm font-semibold shadow-sm transition-all active:scale-95"
           onClick={handleSubmit}
         >
           <Heart className="mr-2 h-4 w-4" />

@@ -59,16 +59,16 @@ export function AIAnalysis({ benefits, userContext }: AIAnalysisProps) {
   }
 
   return (
-    <div className="rounded-2xl border border-gray-100 bg-white shadow-sm overflow-hidden">
+    <div className="rounded-2xl border border-[#F3F4F6] bg-white shadow-sm overflow-hidden">
       {/* 헤더 */}
-      <div className="px-5 py-4 flex items-center justify-between border-b border-gray-100">
+      <div className="px-5 py-4 flex items-center justify-between border-b border-[#F3F4F6]">
         <div className="flex items-center gap-2">
           <div className="h-7 w-7 rounded-lg bg-[#FFF8F0] flex items-center justify-center">
             <Search className="h-3.5 w-3.5 text-[#FF6B6B]" />
           </div>
           <div>
-            <p className="text-sm font-semibold text-gray-900">상세 분석</p>
-            <p className="text-xs text-gray-400">
+            <p className="text-sm font-semibold text-[#1A1A1A]">상세 분석</p>
+            <p className="text-xs text-[#9CA3AF]">
               내 상황에 맞게 분석해드려요
             </p>
           </div>
@@ -77,7 +77,7 @@ export function AIAnalysis({ benefits, userContext }: AIAnalysisProps) {
           <Button
             onClick={handleAnalyze}
             size="sm"
-            className="bg-[#FF6B6B] hover:bg-[#e85d5d] text-white border-0 shadow-sm"
+            className="h-9 rounded-xl bg-[#FF6B6B] hover:bg-[#e85d5d] text-white border-0 shadow-sm text-xs font-semibold"
           >
             <Search className="h-3.5 w-3.5 mr-1.5" />
             분석 시작
@@ -88,7 +88,7 @@ export function AIAnalysis({ benefits, userContext }: AIAnalysisProps) {
             onClick={handleAnalyze}
             variant="outline"
             size="sm"
-            className="text-gray-600 border-gray-200 hover:bg-gray-50"
+            className="h-9 rounded-xl text-[#6B7280] border-[#F3F4F6] hover:bg-[#F8F8F8] text-xs"
           >
             다시 분석
           </Button>
@@ -106,10 +106,10 @@ export function AIAnalysis({ benefits, userContext }: AIAnalysisProps) {
             transition={{ duration: 0.2 }}
             className="px-5 py-6 space-y-3"
           >
-            <div className="h-3 rounded bg-gray-200 animate-pulse w-3/4" />
-            <div className="h-3 rounded bg-gray-200 animate-pulse w-full" />
-            <div className="h-3 rounded bg-gray-200 animate-pulse w-5/6" />
-            <div className="h-3 rounded bg-gray-200 animate-pulse w-2/3" />
+            <div className="h-3 rounded-2xl bg-[#F3F4F6] animate-pulse w-3/4" />
+            <div className="h-3 rounded-2xl bg-[#F3F4F6] animate-pulse w-full" />
+            <div className="h-3 rounded-2xl bg-[#F3F4F6] animate-pulse w-5/6" />
+            <div className="h-3 rounded-2xl bg-[#F3F4F6] animate-pulse w-2/3" />
           </motion.div>
         )}
 
@@ -122,7 +122,7 @@ export function AIAnalysis({ benefits, userContext }: AIAnalysisProps) {
             transition={{ duration: 0.3 }}
             className="px-5 py-4"
           >
-            <div className="prose prose-sm max-w-none text-gray-700 leading-relaxed whitespace-pre-wrap">
+            <div className="prose prose-sm max-w-none text-[#6B7280] leading-relaxed whitespace-pre-wrap">
               {text}
               {loading && (
                 <span className="inline-block h-4 w-0.5 bg-[#FF6B6B] animate-pulse ml-0.5 align-middle" />
@@ -141,11 +141,11 @@ export function AIAnalysis({ benefits, userContext }: AIAnalysisProps) {
             transition={{ duration: 0.2 }}
             className="flex flex-col items-center justify-center py-8 gap-2 text-center px-6"
           >
-            <ChevronDown className="h-5 w-5 text-gray-300" />
-            <p className="text-sm text-gray-500">
+            <ChevronDown className="h-5 w-5 text-[#F3F4F6]" />
+            <p className="text-sm text-[#6B7280]">
               버튼을 눌러 내 혜택을 상세 분석해보세요
             </p>
-            <p className="text-xs text-gray-400">
+            <p className="text-xs text-[#9CA3AF]">
               연간 수혜 금액, TOP 3 혜택, 즉시 신청 가능 항목 등을 알려드려요
             </p>
           </motion.div>

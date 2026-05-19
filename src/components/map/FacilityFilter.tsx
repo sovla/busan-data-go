@@ -9,48 +9,20 @@ import {
 } from '@/components/ui/select';
 import { FacilityType } from '@/types/facility';
 
-const FACILITY_TYPES: {
-  type: FacilityType;
-  label: string;
-  emoji: string;
-  activeClass: string;
-  inactiveClass: string;
-}[] = [
-  {
-    type: 'nursing_room',
-    label: '수유실',
-    emoji: '🍼',
-    activeClass: 'bg-rose-500 text-white border-rose-500 shadow-rose-200 shadow-sm',
-    inactiveClass: 'bg-white text-rose-500 border-rose-300 hover:bg-rose-50',
-  },
-  {
-    type: 'kids_cafe',
-    label: '키즈카페',
-    emoji: '🎪',
-    activeClass: 'bg-violet-500 text-white border-violet-500 shadow-violet-200 shadow-sm',
-    inactiveClass: 'bg-white text-violet-500 border-violet-300 hover:bg-violet-50',
-  },
-  {
-    type: 'postpartum',
-    label: '산후조리원',
-    emoji: '🏥',
-    activeClass: 'bg-sky-500 text-white border-sky-500 shadow-sky-200 shadow-sm',
-    inactiveClass: 'bg-white text-sky-500 border-sky-300 hover:bg-sky-50',
-  },
-  {
-    type: 'daycare',
-    label: '어린이집',
-    emoji: '🏫',
-    activeClass: 'bg-emerald-500 text-white border-emerald-500 shadow-emerald-200 shadow-sm',
-    inactiveClass: 'bg-white text-emerald-500 border-emerald-300 hover:bg-emerald-50',
-  },
-  {
-    type: 'hospital',
-    label: '병원',
-    emoji: '⚕️',
-    activeClass: 'bg-amber-500 text-white border-amber-500 shadow-amber-200 shadow-sm',
-    inactiveClass: 'bg-white text-amber-500 border-amber-300 hover:bg-amber-50',
-  },
+const TYPE_COLORS: Record<FacilityType, { color: string; bg: string }> = {
+  nursing_room: { color: '#FF6B6B', bg: '#FFF0F0' },
+  kids_cafe: { color: '#4ECDC4', bg: '#F0FDFB' },
+  postpartum: { color: '#9B59B6', bg: '#F8F0FF' },
+  daycare: { color: '#2ECC71', bg: '#F0FFF4' },
+  hospital: { color: '#F39C12', bg: '#FFF8E7' },
+};
+
+const FACILITY_TYPES: { type: FacilityType; label: string }[] = [
+  { type: 'nursing_room', label: '수유실' },
+  { type: 'kids_cafe', label: '키즈카페' },
+  { type: 'postpartum', label: '산후조리원' },
+  { type: 'daycare', label: '어린이집' },
+  { type: 'hospital', label: '병원' },
 ];
 
 const RADIUS_OPTIONS = [
@@ -84,27 +56,28 @@ export function FacilityFilter({
   return (
     <div className="flex items-center gap-2">
       <div className="flex flex-wrap gap-1.5 flex-1">
-        {FACILITY_TYPES.map(({ type, label, emoji, activeClass, inactiveClass }) => {
+        {FACILITY_TYPES.map(({ type, label }) => {
           const isSelected = selectedTypes.includes(type);
+          const { color, bg } = TYPE_COLORS[type];
           return (
             <button
               key={type}
               type="button"
               onClick={() => toggleType(type)}
-              className={`
-                inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-medium
-                border transition-all duration-150 cursor-pointer select-none active:scale-95
-                ${isSelected ? activeClass : inactiveClass}
-              `}
+              className="inline-flex items-center h-8 px-3 rounded-full text-xs font-medium border transition-all duration-150 cursor-pointer select-none active:scale-95"
+              style={
+                isSelected
+                  ? { backgroundColor: color, color: '#fff', borderColor: color }
+                  : { backgroundColor: bg, color: color, borderColor: color + '40' }
+              }
             >
-              <span>{emoji}</span>
-              <span>{label}</span>
+              {label}
             </button>
           );
         })}
       </div>
       <Select value={radius} onValueChange={(value) => value !== null && onRadiusChange(value)}>
-        <SelectTrigger className="w-20 h-7 text-xs border-slate-200 rounded-full bg-white shrink-0">
+        <SelectTrigger className="w-20 h-8 text-xs border-[#F3F4F6] rounded-full bg-white shrink-0">
           <SelectValue placeholder="반경" />
         </SelectTrigger>
         <SelectContent>

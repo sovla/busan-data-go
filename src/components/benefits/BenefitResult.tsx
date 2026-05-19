@@ -68,14 +68,14 @@ const item = {
 export function BenefitResult({ benefits, searched }: BenefitResultProps) {
   if (!searched) {
     return (
-      <div className="flex flex-col items-center justify-center h-72 rounded-2xl border border-dashed border-gray-200 bg-gray-50/30 text-center px-6">
+      <div className="flex flex-col items-center justify-center h-72 rounded-2xl border border-dashed border-[#F3F4F6] bg-white text-center px-6">
         <div className="w-12 h-12 rounded-full bg-[#FFF8F0] flex items-center justify-center mb-4">
           <Heart className="h-6 w-6 text-[#FF6B6B]" />
         </div>
-        <p className="text-base font-medium text-gray-700">
+        <p className="text-base font-medium text-[#1A1A1A]">
           맞춤 혜택을 찾아드릴게요
         </p>
-        <p className="text-sm text-gray-400 mt-1">
+        <p className="text-sm text-[#9CA3AF] mt-1">
           조건을 입력하면 맞춤 혜택을 찾아드려요
         </p>
       </div>
@@ -84,14 +84,14 @@ export function BenefitResult({ benefits, searched }: BenefitResultProps) {
 
   if (benefits.length === 0) {
     return (
-      <div className="flex flex-col items-center justify-center h-72 rounded-2xl border border-dashed border-gray-200 p-12 text-center">
-        <div className="w-12 h-12 rounded-full bg-gray-100 flex items-center justify-center mb-4">
-          <Heart className="h-6 w-6 text-gray-400" />
+      <div className="flex flex-col items-center justify-center h-72 rounded-2xl border border-dashed border-[#F3F4F6] bg-white p-12 text-center">
+        <div className="w-12 h-12 rounded-full bg-[#F3F4F6] flex items-center justify-center mb-4">
+          <Heart className="h-6 w-6 text-[#9CA3AF]" />
         </div>
-        <p className="text-base font-medium text-gray-700">
+        <p className="text-base font-medium text-[#1A1A1A]">
           매칭된 혜택이 없어요
         </p>
-        <p className="text-sm text-muted-foreground mt-1">
+        <p className="text-sm text-[#6B7280] mt-1">
           조건을 변경하여 다시 검색해 보세요.
         </p>
       </div>
@@ -140,21 +140,21 @@ function BenefitResultInner({
 
   return (
     <motion.div
-      className="space-y-6"
+      className="space-y-4"
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.4 }}
     >
       {/* 총 수혜 금액 요약 카드 */}
-      <div className="rounded-2xl bg-[#FFF8F0] border border-gray-100 p-5">
+      <div className="rounded-2xl bg-[#FFF8F0] border border-[#F3F4F6] p-5">
         <div className="flex items-start justify-between gap-3">
           <div>
             <div className="flex items-center gap-2 mb-1">
               <Heart className="h-4 w-4 text-[#FF6B6B]" />
-              <p className="text-sm font-medium text-gray-700">매칭 완료</p>
+              <p className="text-sm font-medium text-[#6B7280]">매칭 완료</p>
             </div>
             {annualEstimate > 0 && (
-              <p className="text-2xl font-bold text-gray-900 leading-tight">
+              <p className="text-xl font-bold text-[#1A1A1A] leading-tight">
                 연간 약{" "}
                 <span className="text-[#FF6B6B]">
                   {formatAmount(countedAnnual)}
@@ -162,11 +162,11 @@ function BenefitResultInner({
                 수혜 가능
               </p>
             )}
-            <div className="flex flex-wrap gap-3 mt-2 text-sm text-muted-foreground">
+            <div className="flex flex-wrap gap-3 mt-2 text-sm text-[#6B7280]">
               {totalMonthly > 0 && (
                 <span>
                   월 정기:{" "}
-                  <strong className="text-foreground">
+                  <strong className="text-[#1A1A1A]">
                     {formatAmount(totalMonthly)}/월
                   </strong>
                 </span>
@@ -174,7 +174,7 @@ function BenefitResultInner({
               {totalOneTime > 0 && (
                 <span>
                   일시 지원:{" "}
-                  <strong className="text-foreground">
+                  <strong className="text-[#1A1A1A]">
                     {formatAmount(totalOneTime)}
                   </strong>
                 </span>
@@ -204,7 +204,7 @@ function BenefitResultInner({
 
       {/* 혜택 카드 목록 — stagger 진입 */}
       <motion.div
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4"
+        className="grid grid-cols-1 gap-3"
         variants={container}
         initial="hidden"
         animate="show"

@@ -25,10 +25,10 @@ export default function ChatMessage({ role, content }: ChatMessageProps) {
         </div>
       )}
       <div
-        className={`max-w-[75%] px-4 py-3 rounded-2xl text-sm leading-relaxed ${
+        className={`max-w-[80%] px-4 py-3 rounded-2xl text-sm leading-relaxed ${
           isUser
             ? 'bg-[#FF6B6B] text-white rounded-br-sm whitespace-pre-wrap'
-            : 'bg-white border border-gray-100 text-gray-800 shadow-sm rounded-bl-sm'
+            : 'bg-white border border-[#F3F4F6] text-gray-800 shadow-sm rounded-bl-sm'
         }`}
       >
         {isUser ? (

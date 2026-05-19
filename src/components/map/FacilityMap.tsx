@@ -66,14 +66,6 @@ interface NaverInfoWindow {
   close: () => void;
 }
 
-const TYPE_EMOJIS: Record<FacilityType, string> = {
-  nursing_room: '🍼',
-  kids_cafe: '🎪',
-  postpartum: '🏥',
-  daycare: '🏫',
-  hospital: '⚕️',
-};
-
 const TYPE_COLORS: Record<FacilityType, string> = {
   nursing_room: '#FF6B6B',
   kids_cafe: '#4ECDC4',
@@ -118,19 +110,18 @@ export function FacilityMap({ facilities, selectedFacility, onSelectFacility }: 
     facilities.forEach((facility) => {
       const position = new window.naver.maps.LatLng(facility.lat, facility.lng);
       const color = TYPE_COLORS[facility.type];
-      const emoji = TYPE_EMOJIS[facility.type];
       const marker = new window.naver.maps.Marker({
         position,
         map: mapRef.current!,
         title: facility.name,
         icon: {
-          content: `<div style="width:28px;height:28px;border-radius:50%;background:${color};border:2px solid white;box-shadow:0 2px 6px rgba(0,0,0,0.3);display:flex;align-items:center;justify-content:center;"><span style="color:white;font-size:12px;">${emoji}</span></div>`,
+          content: `<div style="width:28px;height:28px;border-radius:50%;background:${color};border:2px solid white;box-shadow:0 2px 6px rgba(0,0,0,0.2);display:flex;align-items:center;justify-content:center;"><div style="width:8px;height:8px;border-radius:50%;background:white;opacity:0.9;"></div></div>`,
           anchor: new window.naver.maps.Point(14, 14),
         },
       });
 
       const infoWindow = new window.naver.maps.InfoWindow({
-        content: `<div style="padding:7px 12px;font-size:13px;font-weight:600;color:#1e293b;border-radius:8px;">${TYPE_EMOJIS[facility.type]} ${facility.name}</div>`,
+        content: `<div style="padding:7px 12px;font-size:13px;font-weight:600;color:#1A1A1A;border-radius:8px;">${facility.name}</div>`,
       });
 
       window.naver.maps.Event.addListener(marker, 'click', () => {
@@ -159,19 +150,9 @@ export function FacilityMap({ facilities, selectedFacility, onSelectFacility }: 
         type="button"
         onClick={handleCurrentLocation}
         title="현재 위치로 이동"
-        className="
-          absolute bottom-6 right-4 z-10
-          w-11 h-11 rounded-full
-          bg-white border border-slate-200
-          shadow-lg shadow-slate-200/80
-          flex items-center justify-center
-          text-slate-600 hover:text-sky-600
-          hover:border-sky-300 hover:shadow-sky-100
-          active:scale-95
-          transition-all duration-150
-        "
+        className="absolute bottom-6 right-4 z-10 w-11 h-11 rounded-full bg-white border border-[#F3F4F6] shadow-lg flex items-center justify-center text-[#6B7280] hover:text-[#FF6B6B] active:scale-95 transition-all duration-150"
       >
-        <Locate className="w-4 h-4" />
+        <Locate className="w-5 h-5" />
       </button>
     </div>
   );

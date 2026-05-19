@@ -41,7 +41,7 @@ function FacilityCard({ facility }: { facility: Facility }) {
   const Icon = style.icon;
 
   return (
-    <div className="flex items-start gap-3 p-3 rounded-xl bg-white border border-gray-100 shadow-sm">
+    <div className="flex items-start gap-3 p-4 rounded-2xl bg-white border border-[#F3F4F6] shadow-sm">
       <div
         className="w-9 h-9 rounded-lg flex items-center justify-center flex-shrink-0"
         style={{ backgroundColor: style.bg }}
@@ -72,7 +72,7 @@ function FacilityCard({ facility }: { facility: Facility }) {
 
 function BenefitCard({ benefit }: { benefit: Benefit }) {
   return (
-    <div className="p-3 rounded-xl bg-white border border-gray-100 shadow-sm">
+    <div className="p-4 rounded-2xl bg-white border border-[#F3F4F6] shadow-sm">
       <div className="flex items-start justify-between gap-2 mb-1">
         <p className="text-sm font-medium text-gray-900">{benefit.title}</p>
         {benefit.amount && (

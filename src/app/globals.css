@@ -81,6 +81,32 @@
   --sidebar-accent-foreground: oklch(0.63 0.19 18);
   --sidebar-border: oklch(0.922 0 0);
   --sidebar-ring: oklch(0.63 0.19 18);
+
+  /* DESIGN.md 색상 토큰 */
+  --color-primary: #FF6B6B;
+  --color-primary-light: #FFF0F0;
+  --color-accent: #4ECDC4;
+  --color-accent-light: #F0FDFB;
+  --color-surface: #FFFFFF;
+  --color-background: #F8F8F8;
+  --color-warm-bg: #FFF8F0;
+  --color-text-primary: #1A1A1A;
+  --color-text-secondary: #6B7280;
+  --color-text-tertiary: #9CA3AF;
+  --color-border: #F3F4F6;
+  --color-naver-green: #03C75A;
+
+  /* 시설 유형별 색상 */
+  --color-facility-nursing: #FF6B6B;
+  --color-facility-nursing-bg: #FFF0F0;
+  --color-facility-kids: #4ECDC4;
+  --color-facility-kids-bg: #F0FDFB;
+  --color-facility-postpartum: #9B59B6;
+  --color-facility-postpartum-bg: #F8F0FF;
+  --color-facility-daycare: #2ECC71;
+  --color-facility-daycare-bg: #F0FFF4;
+  --color-facility-hospital: #F39C12;
+  --color-facility-hospital-bg: #FFF8E7;
 }
 
 .dark {

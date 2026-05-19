@@ -14,10 +14,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="ko" className="h-full antialiased">
+    <html lang="ko" className="h-[100dvh] antialiased">
       <body
         style={{ fontFamily: "'Pretendard Variable', Pretendard, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" }}
-        className="min-h-full flex flex-col bg-gray-50 pb-16"
+        className="h-[100dvh] flex flex-col bg-[#F8F8F8]"
       >
         <RootLayoutClient>{children}</RootLayoutClient>
       </body>
