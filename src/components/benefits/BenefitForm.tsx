@@ -141,12 +141,16 @@ export function BenefitForm({ onSearch }: BenefitFormProps) {
             거주 구군
           </div>
           <BusanDistrictMap selected={district} onSelect={setDistrict} />
-          {district && (
-            <div className="flex items-center justify-between bg-white rounded-xl border border-[#F3F4F6] px-4 py-2.5">
-              <span className="text-sm font-semibold text-[#1A1A1A]">{district}</span>
-              <button type="button" onClick={() => setDistrict("")} className="text-xs text-[#9CA3AF] hover:text-[#6B7280]">변경</button>
-            </div>
-          )}
+          <div className="flex items-center justify-between bg-white rounded-xl border border-[#F3F4F6] px-4 py-2.5">
+            {district ? (
+              <>
+                <span className="text-sm font-semibold text-[#1A1A1A]">{district}</span>
+                <button type="button" onClick={() => setDistrict("")} className="text-xs text-[#9CA3AF] hover:text-[#6B7280]">변경</button>
+              </>
+            ) : (
+              <span className="text-sm text-[#9CA3AF]">지도에서 거주 구군을 선택하세요</span>
+            )}
+          </div>
         </div>
 
         {/* 자녀 수 — SVG 아이콘 */}

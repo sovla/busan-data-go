@@ -129,22 +129,14 @@ export default function BusanDistrictMap({ selected, onSelect }: BusanDistrictMa
             <g key={d.name} onClick={() => onSelect(d.name)} className="cursor-pointer">
               <path
                 d={d.pathD}
-                fill={isSelected ? "#FF6B6B" : "#F3F4F6"}
+                fill={isSelected ? "#FF6B6B" : "#E5E7EB"}
                 stroke="white"
-                strokeWidth="1"
+                strokeWidth="1.5"
                 className="transition-colors duration-150 hover:fill-[#FFD4D4]"
               />
-              <text
-                x={d.cx}
-                y={d.cy}
-                textAnchor="middle"
-                dominantBaseline="middle"
-                className={`text-[8px] font-semibold pointer-events-none select-none ${
-                  isSelected ? "fill-white" : "fill-[#6B7280]"
-                }`}
-              >
-                {d.name}
-              </text>
+              {isSelected && (
+                <circle cx={d.cx} cy={d.cy} r="3" fill="white" className="pointer-events-none" />
+              )}
             </g>
           );
         })}
