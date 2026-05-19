@@ -7,6 +7,7 @@ import { motion } from "framer-motion";
 import { MessageCircle, Heart, MapPin, Baby, Navigation, Sparkles, ArrowRight } from "lucide-react";
 import ChatMessage from "@/components/chat/ChatMessage";
 import ChatInput from "@/components/chat/ChatInput";
+import ToolResultCard from "@/components/chat/ToolResultCard";
 import { PageTransition } from "@/components/PageTransition";
 import Link from "next/link";
 
@@ -62,6 +63,14 @@ export default function HomePage() {
       .filter((p) => p.type === "text")
       .map((p) => (p as { type: "text"; text: string }).text)
       .join("");
+  };
+
+  const getToolParts = (msg: (typeof messages)[number]) => {
+    return msg.parts.filter(
+      (p) =>
+        p.type === "tool-searchFacilities" ||
+        p.type === "tool-searchBenefits"
+    );
   };
 
   const hasMessages = messages.length > 0;
@@ -191,13 +200,54 @@ export default function HomePage() {
             </div>
           ) : (
             <div className="px-4 py-4 space-y-4">
-              {messages.map((msg) => (
-                <ChatMessage
-                  key={msg.id}
-                  role={msg.role as "user" | "assistant"}
-                  content={getMessageText(msg)}
-                />
-              ))}
+              {messages.map((msg) => {
+                const text = getMessageText(msg);
+                const toolParts = msg.role === "assistant" ? getToolParts(msg) : [];
+
+                return (
+                  <div key={msg.id} className="space-y-2">
+                    {text && (
+                      <ChatMessage
+                        role={msg.role as "user" | "assistant"}
+                        content={text}
+                      />
+                    )}
+                    {toolParts.map((part, i) => {
+                      const toolPart = part as {
+                        type: string;
+                        state: string;
+                        toolCallId: string;
+                        toolName: string;
+                        output?: Record<string, unknown>;
+                      };
+                      if (toolPart.state === "output-available" && toolPart.output) {
+                        return (
+                          <div key={toolPart.toolCallId} className="flex items-end gap-2">
+                            <div className="w-8 flex-shrink-0" />
+                            <div className="max-w-[75%]">
+                              <ToolResultCard
+                                toolName={toolPart.toolName}
+                                result={toolPart.output}
+                              />
+                            </div>
+                          </div>
+                        );
+                      }
+                      if (toolPart.state === "input-available" || toolPart.state === "input-streaming") {
+                        return (
+                          <div key={toolPart.toolCallId ?? i} className="flex items-end gap-2">
+                            <div className="w-8 flex-shrink-0" />
+                            <div className="text-xs text-gray-400 px-4 py-2">
+                              검색 중...
+                            </div>
+                          </div>
+                        );
+                      }
+                      return null;
+                    })}
+                  </div>
+                );
+              })}
 
               {isLoading && (
                 <div className="flex items-end gap-2">
