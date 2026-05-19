@@ -9,14 +9,6 @@ import {
 } from '@/components/ui/select';
 import { FacilityType } from '@/types/facility';
 
-const TYPE_COLORS: Record<FacilityType, { color: string; bg: string }> = {
-  nursing_room: { color: '#FF6B6B', bg: '#FFF0F0' },
-  kids_cafe: { color: '#4ECDC4', bg: '#F0FDFB' },
-  postpartum: { color: '#9B59B6', bg: '#F8F0FF' },
-  daycare: { color: '#2ECC71', bg: '#F0FFF4' },
-  hospital: { color: '#F39C12', bg: '#FFF8E7' },
-};
-
 const FACILITY_TYPES: { type: FacilityType; label: string }[] = [
   { type: 'nursing_room', label: '수유실' },
   { type: 'kids_cafe', label: '키즈카페' },
@@ -55,21 +47,23 @@ export function FacilityFilter({
 
   return (
     <div className="flex items-center gap-2">
-      <div className="flex flex-wrap gap-1.5 flex-1">
+      <div className="flex gap-1.5 flex-1 overflow-x-auto scrollbar-hide">
         {FACILITY_TYPES.map(({ type, label }) => {
           const isSelected = selectedTypes.includes(type);
-          const { color, bg } = TYPE_COLORS[type];
           return (
             <button
               key={type}
               type="button"
               onClick={() => toggleType(type)}
-              className="inline-flex items-center h-8 px-3 rounded-full text-xs font-medium border transition-all duration-150 cursor-pointer select-none active:scale-95"
-              style={
-                isSelected
-                  ? { backgroundColor: color, color: '#fff', borderColor: color }
-                  : { backgroundColor: bg, color: color, borderColor: color + '40' }
-              }
+              className={`
+                inline-flex items-center h-8 px-3 rounded-full text-xs font-medium
+                border transition-all duration-150 whitespace-nowrap
+                active:scale-95 flex-shrink-0
+                ${isSelected
+                  ? 'bg-[#1A1A1A] text-white border-[#1A1A1A]'
+                  : 'bg-white text-[#6B7280] border-[#F3F4F6] hover:border-[#9CA3AF]'
+                }
+              `}
             >
               {label}
             </button>
@@ -77,7 +71,7 @@ export function FacilityFilter({
         })}
       </div>
       <Select value={radius} onValueChange={(value) => value !== null && onRadiusChange(value)}>
-        <SelectTrigger className="w-20 h-8 text-xs border-[#F3F4F6] rounded-full bg-white shrink-0">
+        <SelectTrigger className="w-[72px] h-8 text-xs border-[#F3F4F6] rounded-full bg-white shrink-0 text-[#6B7280]">
           <SelectValue placeholder="반경" />
         </SelectTrigger>
         <SelectContent>

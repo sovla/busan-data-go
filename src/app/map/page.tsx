@@ -62,17 +62,19 @@ export default function MapPage() {
       <PageTransition>
       <div className="flex flex-col h-[100dvh]">
         {/* 헤더 */}
-        <div className="h-14 bg-white border-b border-[#F3F4F6] z-10 px-4 flex flex-col justify-center gap-2">
-          <div className="flex items-center justify-between">
-            <h1 className="text-base font-semibold text-[#1A1A1A]">주변 시설</h1>
+        <div className="bg-white border-b border-[#F3F4F6] z-10">
+          <div className="h-12 px-4 flex items-center justify-between">
+            <h1 className="text-lg font-bold text-[#1A1A1A]">주변 시설</h1>
             <span className="text-xs text-[#9CA3AF]">{facilities.length}개 시설</span>
           </div>
-          <FacilityFilter
-            selectedTypes={selectedTypes}
-            onTypesChange={setSelectedTypes}
-            radius={radius}
-            onRadiusChange={setRadius}
-          />
+          <div className="px-4 pb-3">
+            <FacilityFilter
+              selectedTypes={selectedTypes}
+              onTypesChange={setSelectedTypes}
+              radius={radius}
+              onRadiusChange={setRadius}
+            />
+          </div>
         </div>
 
         {/* 지도 영역 */}
@@ -82,6 +84,7 @@ export default function MapPage() {
               facilities={facilities}
               selectedFacility={selectedFacility}
               onSelectFacility={setSelectedFacility}
+              userLocation={userLocation}
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center bg-[#F8F8F8]">

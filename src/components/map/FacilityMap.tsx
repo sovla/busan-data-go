@@ -78,23 +78,27 @@ interface FacilityMapProps {
   facilities: Facility[];
   selectedFacility: Facility | null;
   onSelectFacility: (facility: Facility) => void;
+  userLocation?: { lat: number; lng: number };
 }
 
-export function FacilityMap({ facilities, selectedFacility, onSelectFacility }: FacilityMapProps) {
+export function FacilityMap({ facilities, selectedFacility, onSelectFacility, userLocation }: FacilityMapProps) {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<NaverMap | null>(null);
   const markersRef = useRef<NaverMarker[]>([]);
   const infoWindowRef = useRef<NaverInfoWindow | null>(null);
 
+  const lat = userLocation?.lat ?? 35.1796;
+  const lng = userLocation?.lng ?? 129.0756;
+
   useEffect(() => {
     if (!mapContainerRef.current || !window.naver?.maps) return;
 
-    const center = new window.naver.maps.LatLng(35.1796, 129.0756);
+    const center = new window.naver.maps.LatLng(lat, lng);
     mapRef.current = new window.naver.maps.Map(mapContainerRef.current, {
       center,
-      zoom: 12,
+      zoom: 14,
     });
-  }, []);
+  }, [lat, lng]);
 
   useEffect(() => {
     if (!mapRef.current || !window.naver?.maps) return;
