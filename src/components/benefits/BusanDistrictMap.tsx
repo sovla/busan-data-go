@@ -114,7 +114,7 @@ export default function BusanDistrictMap({ selected, onSelect }: BusanDistrictMa
 
   if (!geojson) {
     return (
-      <div className="w-full h-[200px] bg-[#F8F8F8] rounded-xl flex items-center justify-center">
+      <div className="w-full h-[320px] bg-[#F8F8F8] rounded-xl flex items-center justify-center">
         <div className="w-6 h-6 rounded-full bg-[#F3F4F6] animate-pulse" />
       </div>
     );
@@ -122,7 +122,7 @@ export default function BusanDistrictMap({ selected, onSelect }: BusanDistrictMa
 
   return (
     <div className="w-full">
-      <svg viewBox={viewBox} className="w-full h-auto max-h-[220px]">
+      <svg viewBox={viewBox} className="w-full h-auto max-h-[320px]">
         {paths.map((d) => {
           const isSelected = selected === d.name;
           return (
@@ -139,7 +139,7 @@ export default function BusanDistrictMap({ selected, onSelect }: BusanDistrictMa
                 y={d.cy}
                 textAnchor="middle"
                 dominantBaseline="middle"
-                className={`text-[6px] font-medium pointer-events-none select-none ${
+                className={`text-[8px] font-semibold pointer-events-none select-none ${
                   isSelected ? "fill-white" : "fill-[#6B7280]"
                 }`}
               >
