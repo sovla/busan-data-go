@@ -109,7 +109,23 @@ export default function BusanDistrictMap({ selected, onSelect }: BusanDistrictMa
       };
     });
 
-    return { paths: result, viewBox: `0 0 ${width} ${height.toFixed(0)}` };
+    const mapCx = width / 2;
+    const mapCy = height / 2;
+
+    const labeled = result.map((d) => {
+      const dx = d.cx - mapCx;
+      const dy = d.cy - mapCy;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      const norm = dist === 0 ? { x: 0, y: -1 } : { x: dx / dist, y: dy / dist };
+      const offset = 30;
+      return {
+        ...d,
+        lx: d.cx + norm.x * offset,
+        ly: d.cy + norm.y * offset,
+      };
+    });
+
+    return { paths: labeled, viewBox: `-20 -15 ${width + 40} ${height + 30}` };
   }, [geojson]);
 
   if (!geojson) {
@@ -134,9 +150,19 @@ export default function BusanDistrictMap({ selected, onSelect }: BusanDistrictMa
                 strokeWidth="1.5"
                 className="transition-colors duration-150 hover:fill-[#FFD4D4]"
               />
-              {isSelected && (
-                <circle cx={d.cx} cy={d.cy} r="3" fill="white" className="pointer-events-none" />
-              )}
+              <line x1={d.cx} y1={d.cy} x2={d.lx} y2={d.ly} stroke={isSelected ? "#FF6B6B" : "#D1D5DB"} strokeWidth="0.6" className="pointer-events-none" />
+              <circle cx={d.cx} cy={d.cy} r="1.5" fill={isSelected ? "#FF6B6B" : "#D1D5DB"} className="pointer-events-none" />
+              <text
+                x={d.lx}
+                y={d.ly}
+                textAnchor="middle"
+                dominantBaseline="middle"
+                className={`text-[6.5px] pointer-events-none select-none ${
+                  isSelected ? "fill-[#FF6B6B] font-bold" : "fill-[#6B7280] font-medium"
+                }`}
+              >
+                {d.name}
+              </text>
             </g>
           );
         })}
