@@ -2,14 +2,13 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { Home, Map, Heart, MessageCircle, MoreHorizontal } from "lucide-react";
+import { Map, Heart, MessageCircle, MoreHorizontal } from "lucide-react";
 import { motion } from "framer-motion";
 
 const navItems = [
-  { href: "/", label: "홈", icon: Home },
+  { href: "/", label: "상담", icon: MessageCircle },
   { href: "/map", label: "지도", icon: Map },
   { href: "/benefits", label: "혜택", icon: Heart },
-  { href: "/chat", label: "상담", icon: MessageCircle },
   { href: "/more", label: "더보기", icon: MoreHorizontal },
 ] as const;
 
