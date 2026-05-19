@@ -240,18 +240,39 @@ export function BenefitForm({ onSearch }: BenefitFormProps) {
         <div className="rounded-2xl bg-[#F8F8F8] border border-[#F3F4F6] p-4 space-y-3">
           <div className="flex items-center gap-2 text-sm font-semibold text-[#1A1A1A]">
             <Wallet className="h-4 w-4 text-[#FF6B6B]" />
-            <span>Step 3 · 소득 수준</span>
+            <span>Step 3 · 우리 가족 월 소득</span>
           </div>
-          <Select value={incomeLevel} onValueChange={(v) => setIncomeLevel(v ?? "middle")}>
-            <SelectTrigger className="h-12 rounded-lg bg-white">
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="low">기초생활수급자 / 차상위</SelectItem>
-              <SelectItem value="middle">중위소득 이하</SelectItem>
-              <SelectItem value="high">소득 제한 없음</SelectItem>
-            </SelectContent>
-          </Select>
+          <p className="text-xs text-[#9CA3AF]">대략적인 가구 월 소득을 선택해주세요</p>
+          <div className="grid grid-cols-1 gap-2">
+            {[
+              { value: "low", label: "200만원 이하", sub: "더 많은 혜택 대상" },
+              { value: "middle", label: "200~500만원", sub: "대부분의 혜택 대상" },
+              { value: "high", label: "500만원 이상", sub: "기본 혜택 대상" },
+            ].map((opt) => (
+              <button
+                key={opt.value}
+                type="button"
+                onClick={() => setIncomeLevel(opt.value)}
+                className={`flex items-center justify-between h-14 px-4 rounded-xl border text-left transition-all active:scale-[0.98] ${
+                  incomeLevel === opt.value
+                    ? "bg-white border-[#FF6B6B] ring-1 ring-[#FF6B6B]"
+                    : "bg-white border-[#F3F4F6] hover:border-[#E5E7EB]"
+                }`}
+              >
+                <div>
+                  <p className={`text-sm font-semibold ${incomeLevel === opt.value ? "text-[#FF6B6B]" : "text-[#1A1A1A]"}`}>
+                    {opt.label}
+                  </p>
+                  <p className="text-[11px] text-[#9CA3AF]">{opt.sub}</p>
+                </div>
+                <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${
+                  incomeLevel === opt.value ? "border-[#FF6B6B]" : "border-[#E5E7EB]"
+                }`}>
+                  {incomeLevel === opt.value && <div className="w-2.5 h-2.5 rounded-full bg-[#FF6B6B]" />}
+                </div>
+              </button>
+            ))}
+          </div>
         </div>
 
         <Button
