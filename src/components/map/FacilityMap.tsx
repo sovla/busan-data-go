@@ -79,9 +79,10 @@ interface FacilityMapProps {
   selectedFacility: Facility | null;
   onSelectFacility: (facility: Facility) => void;
   userLocation?: { lat: number; lng: number };
+  onMapPanReady?: (panFn: (lat: number, lng: number) => void) => void;
 }
 
-export function FacilityMap({ facilities, selectedFacility, onSelectFacility, userLocation }: FacilityMapProps) {
+export function FacilityMap({ facilities, selectedFacility, onSelectFacility, userLocation, onMapPanReady }: FacilityMapProps) {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<NaverMap | null>(null);
   const markersRef = useRef<NaverMarker[]>([]);
@@ -98,7 +99,15 @@ export function FacilityMap({ facilities, selectedFacility, onSelectFacility, us
       center,
       zoom: 14,
     });
-  }, [lat, lng]);
+
+    if (onMapPanReady) {
+      onMapPanReady((targetLat: number, targetLng: number) => {
+        if (mapRef.current && window.naver?.maps) {
+          mapRef.current.setCenter(new window.naver.maps.LatLng(targetLat, targetLng));
+        }
+      });
+    }
+  }, [lat, lng, onMapPanReady]);
 
   useEffect(() => {
     if (!mapRef.current || !window.naver?.maps) return;
