@@ -126,7 +126,7 @@ export default function MapPage() {
         onReady={() => setNaverLoaded(true)}
         strategy="afterInteractive"
       />
-      <div className="flex h-[100dvh] bg-[#F8F8F8]">
+      <div className="flex bg-[#F8F8F8]" style={{ height: "calc(100dvh - 56px)" }}>
 
         {/* 데스크탑: 왼쪽 사이드바 리스트 (md 이상에서만) */}
         <div className="hidden md:flex md:flex-col md:w-[380px] md:border-r md:border-[#F3F4F6] bg-white">
@@ -168,7 +168,7 @@ export default function MapPage() {
           {/* 모바일 리스트 보기 버튼 */}
           <button
             onClick={() => setViewMode('list')}
-            className="absolute bottom-24 left-1/2 -translate-x-1/2 z-10 md:hidden flex items-center gap-1.5 h-10 px-4 rounded-full bg-[#1A1A1A] text-white text-xs font-medium shadow-lg active:scale-95 transition-transform"
+            className="absolute bottom-4 left-1/2 -translate-x-1/2 z-10 md:hidden flex items-center gap-1.5 h-10 px-4 rounded-full bg-[#1A1A1A] text-white text-xs font-medium shadow-lg active:scale-95 transition-transform"
           >
             <List className="w-3.5 h-3.5" />
             목록 · {facilities.length}
@@ -184,7 +184,7 @@ export default function MapPage() {
                   animate={{ y: 0, opacity: 1 }}
                   exit={{ y: 200, opacity: 0 }}
                   transition={{ type: 'spring', damping: 25, stiffness: 300 }}
-                  className="absolute bottom-20 left-4 right-4 z-10 md:bottom-6 md:left-auto md:right-6 md:w-[340px]"
+                  className="absolute bottom-4 left-4 right-4 z-10 md:bottom-6 md:left-auto md:right-6 md:w-[340px]"
                 >
                   <div className="bg-white rounded-2xl p-4 shadow-lg border border-[#F3F4F6]">
                     <button onClick={() => setSelectedFacility(null)} className="absolute top-3 right-3 w-7 h-7 rounded-full bg-[#F8F8F8] flex items-center justify-center">

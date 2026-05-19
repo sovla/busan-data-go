@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Benefit, BenefitMatchRequest } from "@/types/benefit";
 import { matchBenefits } from "@/lib/benefits-matcher";
 import { BenefitForm } from "@/components/benefits/BenefitForm";
@@ -28,10 +28,15 @@ export default function BenefitsPage() {
   const [searched, setSearched] = useState(false);
   const [loading, setLoading] = useState(false);
   const [userContext, setUserContext] = useState<BenefitMatchRequest | null>(null);
+  const resultRef = useRef<HTMLDivElement>(null);
 
   function handleSearch(request: BenefitMatchRequest) {
     setLoading(true);
     setSearched(false);
+
+    setTimeout(() => {
+      resultRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
+    }, 100);
 
     setTimeout(() => {
       const matched = matchBenefits(request);
@@ -59,6 +64,7 @@ export default function BenefitsPage() {
       <div className="flex-1 px-4 py-6 space-y-4 pb-[calc(56px+env(safe-area-inset-bottom))]">
         <BenefitForm onSearch={handleSearch} />
 
+        <div ref={resultRef} />
         <AnimatePresence mode="wait">
           {loading ? (
             <motion.div
