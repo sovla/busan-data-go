@@ -4,15 +4,8 @@ import { useState } from "react";
 import { BenefitMatchRequest } from "@/types/benefit";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import { Checkbox } from "@/components/ui/checkbox";
-import { Baby, MapPin, Users, Wallet, Heart } from "lucide-react";
+import { Baby, MapPin, Wallet, Heart } from "lucide-react";
 
 const DISTRICTS = [
   "중구", "서구", "동구", "영도구", "부산진구", "동래구",
@@ -32,15 +25,21 @@ interface BenefitFormProps {
   onSearch: (request: BenefitMatchRequest) => void;
 }
 
-const STEPS = [
-  { number: 1, label: "기본 정보" },
-  { number: 2, label: "자녀 정보" },
-  { number: 3, label: "소득" },
-];
+function BabyIcon({ filled, size = 32 }: { filled: boolean; size?: number }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 32 32" fill="none">
+      <circle cx="16" cy="12" r="6" fill={filled ? "#FF6B6B" : "#E5E7EB"} />
+      <path d="M8 28c0-4.4 3.6-8 8-8s8 3.6 8 8" stroke={filled ? "#FF6B6B" : "#E5E7EB"} strokeWidth="2.5" strokeLinecap="round" fill="none" />
+      <circle cx="14" cy="11" r="1" fill="white" />
+      <circle cx="18" cy="11" r="1" fill="white" />
+      <path d="M14 14c.5.5 3.5.5 4 0" stroke="white" strokeWidth="0.8" strokeLinecap="round" fill="none" />
+    </svg>
+  );
+}
 
 export function BenefitForm({ onSearch }: BenefitFormProps) {
   const [isPregnant, setIsPregnant] = useState(false);
-  const [pregnancyWeek, setPregnancyWeek] = useState<number | null>(null);
+  const [pregnancyWeek, setPregnancyWeek] = useState(20);
   const [district, setDistrict] = useState("");
   const [childrenCount, setChildrenCount] = useState(0);
   const [selectedAges, setSelectedAges] = useState<number[]>([]);
@@ -62,13 +61,12 @@ export function BenefitForm({ onSearch }: BenefitFormProps) {
   }
 
   function isAgeChecked(option: (typeof CHILD_AGE_OPTIONS)[number]) {
-    const vals = getVals(option);
-    return vals.every((v) => selectedAges.includes(v));
+    return getVals(option).every((v) => selectedAges.includes(v));
   }
 
   function handleSubmit() {
     onSearch({
-      pregnancy_week: isPregnant ? (pregnancyWeek ?? 1) : null,
+      pregnancy_week: isPregnant ? pregnancyWeek : null,
       district,
       children_count: childrenCount,
       children_ages: selectedAges,
@@ -76,157 +74,143 @@ export function BenefitForm({ onSearch }: BenefitFormProps) {
     });
   }
 
+  const trimester = pregnancyWeek <= 12 ? "초기" : pregnancyWeek <= 27 ? "중기" : "후기";
+
   return (
     <Card className="rounded-2xl border border-[#F3F4F6] shadow-sm">
-      <CardHeader className="pb-4">
+      <CardHeader className="pb-3">
         <CardTitle className="text-base font-semibold text-[#1A1A1A]">내 조건 입력하기</CardTitle>
-        {/* 스텝 인디케이터 */}
-        <div className="flex items-center gap-0 mt-3">
-          {STEPS.map((step, i) => (
-            <div key={step.number} className="flex items-center">
-              <div className="flex flex-col items-center">
-                <div className="h-6 w-6 rounded-full bg-[#FF6B6B] flex items-center justify-center text-white text-xs font-bold">
-                  {step.number}
-                </div>
-                <span className="text-[10px] text-[#9CA3AF] mt-0.5 whitespace-nowrap">
-                  {step.label}
-                </span>
-              </div>
-              {i < STEPS.length - 1 && (
-                <div className="h-px w-8 bg-[#F3F4F6] mb-3 mx-1" />
-              )}
-            </div>
-          ))}
-        </div>
       </CardHeader>
 
-      <CardContent className="space-y-6">
-        {/* Step 1: 기본 정보 */}
-        <div className="rounded-2xl bg-[#F8F8F8] border border-[#F3F4F6] p-4 space-y-4">
+      <CardContent className="space-y-5">
+        {/* 임신 여부 + 주수 */}
+        <div className="space-y-3">
           <div className="flex items-center gap-2 text-sm font-semibold text-[#1A1A1A]">
             <Heart className="h-4 w-4 text-[#FF6B6B]" />
-            <span>Step 1 · 기본 정보</span>
+            임신 정보
           </div>
 
-          <div className="space-y-2">
-            <label className="text-xs font-medium text-[#6B7280] uppercase tracking-wide">
-              임신 여부
-            </label>
-            <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              role="switch"
+              aria-checked={isPregnant}
+              onClick={() => setIsPregnant((v) => !v)}
+              className={`relative inline-flex h-7 w-12 items-center rounded-full transition-colors ${
+                isPregnant ? "bg-[#FF6B6B]" : "bg-[#E5E7EB]"
+              }`}
+            >
+              <span className={`inline-block h-5 w-5 rounded-full bg-white shadow transition-transform ${
+                isPregnant ? "translate-x-6" : "translate-x-1"
+              }`} />
+            </button>
+            <span className={`text-sm font-medium ${isPregnant ? "text-[#FF6B6B]" : "text-[#9CA3AF]"}`}>
+              {isPregnant ? "임신 중" : "임신 아님"}
+            </span>
+          </div>
+
+          {isPregnant && (
+            <div className="bg-white rounded-xl border border-[#F3F4F6] p-4 space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-sm font-bold text-[#1A1A1A]">{pregnancyWeek}주</span>
+                <span className="text-xs text-[#FF6B6B] font-medium bg-[#FFF0F0] px-2 py-0.5 rounded-full">{trimester}</span>
+              </div>
+              <input
+                type="range"
+                min={1}
+                max={40}
+                value={pregnancyWeek}
+                onChange={(e) => setPregnancyWeek(Number(e.target.value))}
+                className="w-full h-2 bg-[#F3F4F6] rounded-full appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-5 [&::-webkit-slider-thumb]:h-5 [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#FF6B6B] [&::-webkit-slider-thumb]:shadow-md"
+              />
+              <div className="flex justify-between text-[10px] text-[#9CA3AF]">
+                <span>1주</span>
+                <span>12주</span>
+                <span>27주</span>
+                <span>40주</span>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* 거주 구군 — 버튼 그리드 */}
+        <div className="space-y-3">
+          <div className="flex items-center gap-2 text-sm font-semibold text-[#1A1A1A]">
+            <MapPin className="h-4 w-4 text-[#FF6B6B]" />
+            거주 구군
+          </div>
+          <div className="grid grid-cols-4 gap-1.5">
+            {DISTRICTS.map((d) => (
               <button
+                key={d}
                 type="button"
-                role="switch"
-                aria-checked={isPregnant}
-                onClick={() => {
-                  setIsPregnant((v) => !v);
-                  if (isPregnant) setPregnancyWeek(null);
-                }}
-                className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring ${
-                  isPregnant ? "bg-[#FF6B6B]" : "bg-input"
+                onClick={() => setDistrict(d)}
+                className={`h-10 rounded-lg text-xs font-medium transition-all active:scale-95 ${
+                  district === d
+                    ? "bg-[#FF6B6B] text-white shadow-sm"
+                    : "bg-white border border-[#F3F4F6] text-[#6B7280] hover:border-[#E5E7EB]"
                 }`}
               >
-                <span
-                  className={`inline-block h-4 w-4 rounded-full bg-white shadow-sm transition-transform ${
-                    isPregnant ? "translate-x-6" : "translate-x-1"
-                  }`}
-                />
+                {d}
               </button>
-              <span className="text-sm font-medium">
-                {isPregnant ? (
-                  <span className="text-[#FF6B6B]">임신 중</span>
-                ) : (
-                  <span className="text-[#9CA3AF]">임신 아님</span>
-                )}
-              </span>
-            </div>
-            {isPregnant && (
-              <Select
-                value={pregnancyWeek?.toString() ?? ""}
-                onValueChange={(v) => setPregnancyWeek(Number(v ?? ""))}
-              >
-                <SelectTrigger className="h-12 rounded-lg bg-white">
-                  <SelectValue placeholder="임신 주수 선택" />
-                </SelectTrigger>
-                <SelectContent>
-                  {Array.from({ length: 40 }, (_, i) => i + 1).map((week) => (
-                    <SelectItem key={week} value={week.toString()}>
-                      {week}주
-                    </SelectItem>
-                  ))}
-                </SelectContent>
-              </Select>
-            )}
-          </div>
-
-          <div className="space-y-2">
-            <label className="text-xs font-medium text-[#6B7280] uppercase tracking-wide flex items-center gap-1.5">
-              <MapPin className="h-3 w-3" />
-              거주 구군
-            </label>
-            <Select value={district} onValueChange={(v) => setDistrict(v ?? "")}>
-              <SelectTrigger className="h-12 rounded-lg bg-white">
-                <SelectValue placeholder="구군 선택" />
-              </SelectTrigger>
-              <SelectContent>
-                {DISTRICTS.map((d) => (
-                  <SelectItem key={d} value={d}>
-                    {d}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+            ))}
           </div>
         </div>
 
-        {/* Step 2: 자녀 정보 */}
-        <div className="rounded-2xl bg-[#F8F8F8] border border-[#F3F4F6] p-4 space-y-4">
+        {/* 자녀 수 — SVG 아이콘 */}
+        <div className="space-y-3">
           <div className="flex items-center gap-2 text-sm font-semibold text-[#1A1A1A]">
             <Baby className="h-4 w-4 text-[#FF6B6B]" />
-            <span>Step 2 · 자녀 정보</span>
+            자녀 수
           </div>
-
-          <div className="space-y-2">
-            <label className="text-xs font-medium text-[#6B7280] uppercase tracking-wide flex items-center gap-1.5">
-              <Users className="h-3 w-3" />
-              자녀 수
-            </label>
-            <Select
-              value={childrenCount.toString()}
-              onValueChange={(v) => setChildrenCount(Number(v ?? "0"))}
-            >
-              <SelectTrigger className="h-12 rounded-lg bg-white">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {[0, 1, 2, 3, 4, 5].map((n) => (
-                  <SelectItem key={n} value={n.toString()}>
-                    {n === 5 ? "5명 이상" : `${n}명`}
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
+          <div className="flex items-center gap-3">
+            {[0, 1, 2, 3, 4, 5].map((n) => (
+              <button
+                key={n}
+                type="button"
+                onClick={() => setChildrenCount(n)}
+                className={`flex flex-col items-center gap-1 py-2 px-2 rounded-xl transition-all active:scale-95 ${
+                  childrenCount === n ? "bg-[#FFF0F0]" : "hover:bg-[#F8F8F8]"
+                }`}
+              >
+                {n === 0 ? (
+                  <div className="w-8 h-8 rounded-full bg-[#F3F4F6] flex items-center justify-center">
+                    <span className="text-xs text-[#9CA3AF]">-</span>
+                  </div>
+                ) : (
+                  <div className="flex -space-x-2">
+                    {Array.from({ length: Math.min(n, 3) }).map((_, i) => (
+                      <BabyIcon key={i} filled={childrenCount === n} size={n > 2 ? 24 : 28} />
+                    ))}
+                    {n > 3 && <span className="text-xs text-[#FF6B6B] font-bold ml-1 self-center">+{n - 3}</span>}
+                  </div>
+                )}
+                <span className={`text-[11px] font-medium ${
+                  childrenCount === n ? "text-[#FF6B6B]" : "text-[#9CA3AF]"
+                }`}>
+                  {n === 0 ? "없음" : n === 5 ? "5+" : `${n}명`}
+                </span>
+              </button>
+            ))}
           </div>
 
           {childrenCount > 0 && (
-            <div className="space-y-2">
-              <label className="text-xs font-medium text-[#6B7280] uppercase tracking-wide">
-                자녀 연령 (중복 선택)
-              </label>
+            <div className="space-y-2 pt-1">
+              <label className="text-xs font-medium text-[#6B7280]">자녀 연령 (중복 선택)</label>
               <div className="flex flex-wrap gap-2">
                 {CHILD_AGE_OPTIONS.map((option) => (
                   <label
                     key={option.label}
-                    className={`flex items-center gap-1.5 rounded-lg border px-3 py-1.5 text-xs cursor-pointer transition-colors ${
+                    className={`flex items-center gap-1.5 rounded-lg border px-3 py-2 text-xs cursor-pointer transition-colors ${
                       isAgeChecked(option)
                         ? "bg-[#FFF0F0] border-[#FF6B6B]/30 text-[#1A1A1A] font-medium"
-                        : "bg-white border-[#F3F4F6] text-[#6B7280] hover:border-gray-300"
+                        : "bg-white border-[#F3F4F6] text-[#6B7280] hover:border-[#E5E7EB]"
                     }`}
                   >
                     <Checkbox
-                      id={`age-${option.label}`}
                       checked={isAgeChecked(option)}
                       onCheckedChange={() => toggleAge(option)}
-                      className="h-3 w-3"
+                      className="h-3.5 w-3.5"
                     />
                     {option.label}
                   </label>
@@ -236,13 +220,12 @@ export function BenefitForm({ onSearch }: BenefitFormProps) {
           )}
         </div>
 
-        {/* Step 3: 소득 */}
-        <div className="rounded-2xl bg-[#F8F8F8] border border-[#F3F4F6] p-4 space-y-3">
+        {/* 소득 */}
+        <div className="space-y-3">
           <div className="flex items-center gap-2 text-sm font-semibold text-[#1A1A1A]">
             <Wallet className="h-4 w-4 text-[#FF6B6B]" />
-            <span>Step 3 · 우리 가족 월 소득</span>
+            우리 가족 월 소득
           </div>
-          <p className="text-xs text-[#9CA3AF]">대략적인 가구 월 소득을 선택해주세요</p>
           <div className="grid grid-cols-1 gap-2">
             {[
               { value: "low", label: "200만원 이하", sub: "더 많은 혜택 대상" },
@@ -260,9 +243,7 @@ export function BenefitForm({ onSearch }: BenefitFormProps) {
                 }`}
               >
                 <div>
-                  <p className={`text-sm font-semibold ${incomeLevel === opt.value ? "text-[#FF6B6B]" : "text-[#1A1A1A]"}`}>
-                    {opt.label}
-                  </p>
+                  <p className={`text-sm font-semibold ${incomeLevel === opt.value ? "text-[#FF6B6B]" : "text-[#1A1A1A]"}`}>{opt.label}</p>
                   <p className="text-[11px] text-[#9CA3AF]">{opt.sub}</p>
                 </div>
                 <div className={`w-5 h-5 rounded-full border-2 flex items-center justify-center ${

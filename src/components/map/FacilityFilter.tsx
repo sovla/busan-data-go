@@ -55,7 +55,7 @@ export function FacilityFilter({
                 border transition-all duration-150 whitespace-nowrap
                 active:scale-95
                 ${isSelected
-                  ? 'bg-[#1A1A1A] text-white border-[#1A1A1A]'
+                  ? 'bg-[#FF6B6B] text-white border-[#FF6B6B]'
                   : 'bg-white text-[#6B7280] border-[#E5E7EB] hover:border-[#9CA3AF]'
                 }
               `}

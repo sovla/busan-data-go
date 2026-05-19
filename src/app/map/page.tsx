@@ -96,10 +96,7 @@ export default function MapPage() {
                   </span>
                 </div>
                 <p className="text-xs text-[#9CA3AF] mt-0.5 truncate">{f.address}</p>
-                <div className="flex items-center gap-3 mt-0.5">
-                  {f.distance_m && <span className="text-[11px] text-[#FF6B6B] font-medium">{formatDistance(f.distance_m)}</span>}
-                  {f.phone && <span className="text-[11px] text-[#9CA3AF]">{f.phone}</span>}
-                </div>
+                {f.phone && <p className="text-[11px] text-[#9CA3AF] mt-0.5">{f.phone}</p>}
               </div>
               <Navigation className="h-3.5 w-3.5 text-[#9CA3AF] flex-shrink-0" />
             </button>
