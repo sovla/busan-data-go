@@ -11,4 +11,5 @@ export interface Facility {
   lat: number;
   lng: number;
   metadata: Record<string, unknown>;
+  distance_m?: number;
 }
