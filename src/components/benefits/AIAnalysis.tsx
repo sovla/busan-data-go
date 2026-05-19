@@ -5,6 +5,7 @@ import { Benefit, BenefitMatchRequest } from "@/types/benefit";
 import { ChevronDown, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
+import ReactMarkdown from "react-markdown";
 
 interface AIAnalysisProps {
   benefits: Benefit[];
@@ -122,8 +123,8 @@ export function AIAnalysis({ benefits, userContext }: AIAnalysisProps) {
             transition={{ duration: 0.3 }}
             className="px-5 py-4"
           >
-            <div className="prose prose-sm max-w-none text-[#6B7280] leading-relaxed whitespace-pre-wrap">
-              {text}
+            <div className="prose prose-sm max-w-none text-[#4B5563] leading-relaxed prose-headings:text-[#1A1A1A] prose-headings:font-bold prose-h2:text-base prose-h3:text-sm prose-strong:text-[#1A1A1A] prose-li:marker:text-[#FF6B6B] prose-a:text-[#FF6B6B]">
+              <ReactMarkdown>{text}</ReactMarkdown>
               {loading && (
                 <span className="inline-block h-4 w-0.5 bg-[#FF6B6B] animate-pulse ml-0.5 align-middle" />
               )}

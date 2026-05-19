@@ -74,6 +74,14 @@ const TYPE_COLORS: Record<FacilityType, string> = {
   hospital: '#F39C12',
 };
 
+const TYPE_SVG_ICONS: Record<FacilityType, string> = {
+  nursing_room: `<path d="M10,6 L10,16 Q10,18 12,18 L14,18 Q16,18 16,16 L16,11 L18,9 L16,9 L16,6 Q16,4 14,4 L12,4 Q10,4 10,6Z" fill="white" opacity="0.9"/>`,
+  kids_cafe: `<path d="M8,8 L18,8 L18,18 L8,18Z M10,10 L10,12 L12,12 L12,10Z M14,10 L14,12 L16,12 L16,10Z M10,14 L10,16 L12,16 L12,14Z M14,14 L14,16 L16,16 L16,14Z" fill="white" opacity="0.9"/>`,
+  postpartum: `<path d="M13,7 C13,7 18,10 18,14 C18,17 15.5,19 13,19 C10.5,19 8,17 8,14 C8,10 13,7 13,7Z" fill="white" opacity="0.9"/>`,
+  daycare: `<circle cx="13" cy="9" r="3" fill="white" opacity="0.9"/><path d="M8,18 Q8,14 13,14 Q18,14 18,18" fill="white" opacity="0.9"/>`,
+  hospital: `<path d="M11,7 L15,7 L15,11 L19,11 L19,15 L15,15 L15,19 L11,19 L11,15 L7,15 L7,11 L11,11Z" fill="white" opacity="0.9"/>`,
+};
+
 interface FacilityMapProps {
   facilities: Facility[];
   selectedFacility: Facility | null;
@@ -87,6 +95,8 @@ export function FacilityMap({ facilities, selectedFacility, onSelectFacility, us
   const mapRef = useRef<NaverMap | null>(null);
   const markersRef = useRef<NaverMarker[]>([]);
   const infoWindowRef = useRef<NaverInfoWindow | null>(null);
+  const onSelectRef = useRef(onSelectFacility);
+  onSelectRef.current = onSelectFacility;
 
   const lat = userLocation?.lat ?? 35.1796;
   const lng = userLocation?.lng ?? 129.0756;
@@ -128,7 +138,7 @@ export function FacilityMap({ facilities, selectedFacility, onSelectFacility, us
         map: mapRef.current!,
         title: facility.name,
         icon: {
-          content: `<div style="width:28px;height:28px;border-radius:50%;background:${color};border:2px solid white;box-shadow:0 2px 6px rgba(0,0,0,0.2);display:flex;align-items:center;justify-content:center;"><div style="width:8px;height:8px;border-radius:50%;background:white;opacity:0.9;"></div></div>`,
+          content: `<svg width="28" height="28" viewBox="0 0 26 26" xmlns="http://www.w3.org/2000/svg"><circle cx="13" cy="13" r="12" fill="${color}" stroke="white" stroke-width="2"/>${TYPE_SVG_ICONS[facility.type]}</svg>`,
           anchor: new window.naver.maps.Point(14, 14),
         },
       });
@@ -141,12 +151,12 @@ export function FacilityMap({ facilities, selectedFacility, onSelectFacility, us
         if (infoWindowRef.current) infoWindowRef.current.close();
         infoWindow.open(mapRef.current!, marker);
         infoWindowRef.current = infoWindow;
-        onSelectFacility(facility);
+        onSelectRef.current(facility);
       });
 
       markersRef.current.push(marker);
     });
-  }, [facilities, onSelectFacility]);
+  }, [facilities]);
 
   const handleCurrentLocation = useCallback(() => {
     if (!navigator.geolocation || !mapRef.current || !window.naver?.maps) return;

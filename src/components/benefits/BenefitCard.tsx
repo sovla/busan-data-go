@@ -1,102 +1,40 @@
 "use client";
 
 import { Benefit } from "@/types/benefit";
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { ExternalLink, Building2, FileText } from "lucide-react";
+import { ExternalLink } from "lucide-react";
 
 interface BenefitCardProps {
   benefit: Benefit;
 }
 
-const CATEGORY_STYLES: Record<string, { badge: string; dot: string }> = {
-  출산지원: {
-    badge: "bg-rose-100 text-rose-700 border-rose-200",
-    dot: "bg-rose-400",
-  },
-  양육지원: {
-    badge: "bg-violet-100 text-violet-700 border-violet-200",
-    dot: "bg-violet-400",
-  },
-  보육지원: {
-    badge: "bg-violet-100 text-violet-700 border-violet-200",
-    dot: "bg-violet-400",
-  },
-  임산부지원: {
-    badge: "bg-rose-100 text-rose-700 border-rose-200",
-    dot: "bg-rose-400",
-  },
-  다자녀지원: {
-    badge: "bg-sky-100 text-sky-700 border-sky-200",
-    dot: "bg-sky-400",
-  },
-  주거지원: {
-    badge: "bg-emerald-100 text-emerald-700 border-emerald-200",
-    dot: "bg-emerald-400",
-  },
+const CATEGORY_DOTS: Record<string, string> = {
+  출산지원: "bg-rose-400",
+  양육지원: "bg-violet-400",
+  보육지원: "bg-violet-400",
+  임산부지원: "bg-rose-400",
+  다자녀지원: "bg-sky-400",
+  주거지원: "bg-emerald-400",
 };
 
 export function BenefitCard({ benefit }: BenefitCardProps) {
-  const style = CATEGORY_STYLES[benefit.category] ?? {
-    badge: "bg-gray-100 text-gray-700 border-gray-200",
-    dot: "bg-gray-400",
-  };
+  const dot = CATEGORY_DOTS[benefit.category] ?? "bg-gray-400";
 
   return (
-    <Card className="h-full flex flex-col group transition-all duration-200 hover:-translate-y-0.5 hover:shadow-md rounded-2xl p-4 border border-[#F3F4F6] shadow-sm">
-      <CardHeader className="p-0 pb-3">
-        <div className="flex items-start justify-between gap-2 mb-2">
-          <span
-            className={`shrink-0 inline-flex items-center gap-1 rounded-full border px-2.5 py-0.5 text-xs font-medium ${style.badge}`}
-          >
-            <span className={`h-1.5 w-1.5 rounded-full ${style.dot}`} />
-            {benefit.category}
-          </span>
+    <button
+      type="button"
+      onClick={() => benefit.url && window.open(benefit.url, "_blank")}
+      className="w-full flex items-start gap-3 p-3.5 rounded-xl bg-white border border-[#F3F4F6] text-left transition-all hover:shadow-sm hover:border-[#E5E7EB] active:scale-[0.98]"
+    >
+      <div className="flex-1 min-w-0">
+        <div className="flex items-center gap-1.5 mb-1">
+          <span className={`w-1.5 h-1.5 rounded-full flex-shrink-0 ${dot}`} />
+          <span className="text-[10px] text-[#9CA3AF] font-medium">{benefit.category}</span>
         </div>
-        <CardTitle className="text-sm font-semibold leading-snug text-[#1A1A1A]">
-          {benefit.title}
-        </CardTitle>
-        <div className="mt-2">
-          <span className="text-xl font-bold text-[#FF6B6B] leading-none">
-            {benefit.amount}
-          </span>
-        </div>
-      </CardHeader>
-
-      <CardContent className="flex flex-col flex-1 gap-3 p-0">
-        <p className="text-xs text-[#6B7280] leading-relaxed">
-          {benefit.description}
-        </p>
-
-        <div className="flex items-center gap-1.5 text-xs text-[#9CA3AF]">
-          <Building2 className="h-3 w-3 shrink-0" />
-          <span>{benefit.provider}</span>
-        </div>
-
-        <div className="mt-auto pt-3 border-t border-[#F3F4F6] space-y-2">
-          <div className="flex items-start gap-1.5">
-            <FileText className="h-3 w-3 shrink-0 mt-0.5 text-[#9CA3AF]" />
-            <p className="text-xs text-[#6B7280] leading-relaxed">
-              {benefit.how_to_apply}
-            </p>
-          </div>
-          <Button
-            variant="outline"
-            size="sm"
-            className="w-full text-xs h-8 border-[#F3F4F6] hover:bg-[#FFF0F0] hover:text-[#FF6B6B] hover:border-[#FF6B6B]/30 transition-colors"
-            onClick={() => window.open(benefit.url, "_blank")}
-          >
-            <ExternalLink className="mr-1.5 h-3 w-3" />
-            신청 방법 보기
-          </Button>
-        </div>
-      </CardContent>
-    </Card>
+        <p className="text-sm font-semibold text-[#1A1A1A] leading-snug">{benefit.title}</p>
+        <p className="text-base font-bold text-[#FF6B6B] mt-1">{benefit.amount}</p>
+        <p className="text-xs text-[#9CA3AF] mt-1 line-clamp-2 leading-relaxed">{benefit.description}</p>
+      </div>
+      <ExternalLink className="w-3.5 h-3.5 text-[#D1D5DB] flex-shrink-0 mt-1" />
+    </button>
   );
 }

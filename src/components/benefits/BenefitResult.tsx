@@ -204,7 +204,7 @@ function BenefitResultInner({
 
       {/* 혜택 카드 목록 — stagger 진입 */}
       <motion.div
-        className="grid grid-cols-1 gap-3"
+        className="grid grid-cols-1 md:grid-cols-2 gap-2"
         variants={container}
         initial="hidden"
         animate="show"
