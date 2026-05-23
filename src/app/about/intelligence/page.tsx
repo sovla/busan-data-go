@@ -10,6 +10,9 @@ import {
   ShieldCheck,
   Check,
   X,
+  Heart,
+  MapPin,
+  Navigation,
 } from "lucide-react";
 import { PageTransition } from "@/components/PageTransition";
 import Link from "next/link";
@@ -67,6 +70,41 @@ const competitors = [
   { key: "gov24" as const, label: "정부24", highlight: false },
   { key: "bokjiro" as const, label: "복지로", highlight: false },
   { key: "busanPortal" as const, label: "부산\n포털", highlight: false },
+];
+
+type ScenarioStep = { label: string; detail: string };
+
+const scenarios: { icon: typeof Heart; tag: string; title: string; steps: ScenarioStep[] }[] = [
+  {
+    icon: Heart,
+    tag: "혜택 매칭",
+    title: "둘째 출산하면 지원금 얼마야?",
+    steps: [
+      { label: "조건 추출", detail: "둘째 자녀 · 출산" },
+      { label: "도구 호출", detail: "searchBenefits(keyword=\"출산\")" },
+      { label: "응답", detail: "부산 출산 장려금 · 첫만남 이용권 · 부모급여 통합 안내" },
+    ],
+  },
+  {
+    icon: MapPin,
+    tag: "시설 검색",
+    title: "해운대구에 수유실 어디 있어?",
+    steps: [
+      { label: "조건 추출", detail: "구군=해운대구 · 유형=nursing_room" },
+      { label: "도구 호출", detail: "searchFacilities(district, type)" },
+      { label: "응답", detail: "Supabase 실시간 조회 → 5건 (롯데백화점·벡스코 등)" },
+    ],
+  },
+  {
+    icon: Navigation,
+    tag: "유모차 경로",
+    title: "유모차로 가기 좋은 지하철역 알려줘",
+    steps: [
+      { label: "조건 추출", detail: "엘리베이터 + 수유실 우선" },
+      { label: "데이터 조회", detail: "metro_accessibility · 114역 접근성 점수화" },
+      { label: "응답", detail: "안전 등급별 추천 역 + 편의시설 안내" },
+    ],
+  },
 ];
 
 const qualityChecks = [
@@ -194,6 +232,59 @@ export default function IntelligencePage() {
                         <p className="mt-0.5 text-xs text-gray-500 leading-relaxed">
                           {q.desc}
                         </p>
+                      </div>
+                    </CardContent>
+                  </Card>
+                );
+              })}
+            </div>
+          </section>
+
+          {/* 사용 사례 시나리오 */}
+          <section>
+            <h3 className="mb-3 text-xs font-medium uppercase tracking-wider text-[#9CA3AF]">
+              사용 사례
+            </h3>
+            <div className="space-y-3">
+              {scenarios.map((sc) => {
+                const Icon = sc.icon;
+                return (
+                  <Card key={sc.title} className="border-0 shadow-sm">
+                    <CardContent className="p-4">
+                      <div className="flex items-center gap-2 mb-2">
+                        <div className="w-7 h-7 rounded-lg bg-[#FFF0F0] flex items-center justify-center">
+                          <Icon className="w-4 h-4 text-[#FF6B6B]" />
+                        </div>
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-[#FF6B6B]">
+                          {sc.tag}
+                        </span>
+                      </div>
+                      <p className="text-sm font-semibold text-gray-900 leading-snug">
+                        “{sc.title}”
+                      </p>
+                      <div className="mt-3 space-y-2">
+                        {sc.steps.map((step, si) => (
+                          <div key={si} className="flex items-start gap-3">
+                            <div className="flex flex-col items-center pt-0.5">
+                              <div className="w-4 h-4 rounded-full bg-[#FFF0F0] flex items-center justify-center">
+                                <span className="text-[9px] font-bold text-[#FF6B6B]">
+                                  {si + 1}
+                                </span>
+                              </div>
+                              {si < sc.steps.length - 1 && (
+                                <div className="w-px flex-1 bg-gray-100 mt-1 min-h-[10px]" />
+                              )}
+                            </div>
+                            <div className="flex-1 min-w-0 pb-2">
+                              <p className="text-[11px] font-medium text-gray-500">
+                                {step.label}
+                              </p>
+                              <p className="mt-0.5 text-[12px] text-gray-800 leading-relaxed break-words">
+                                {step.detail}
+                              </p>
+                            </div>
+                          </div>
+                        ))}
                       </div>
                     </CardContent>
                   </Card>
