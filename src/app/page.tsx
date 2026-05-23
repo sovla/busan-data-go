@@ -186,17 +186,25 @@ export default function HomePage() {
                 initial={{ opacity: 0, y: 12 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.8, duration: 0.4 }}
-                className="mx-6 mb-5 rounded-2xl bg-[#FFF8F0] p-5"
+                className="mx-6 mb-5"
               >
-                <p className="text-xs font-medium text-[#E8847C] mb-3">부산시 공공데이터 활용</p>
-                <div className="grid grid-cols-4 gap-2">
-                  {STATS.map((s) => (
-                    <div key={s.label} className="text-center">
-                      <p className="text-lg font-bold text-gray-900">{s.value}</p>
-                      <p className="text-[10px] text-gray-400">{s.label}</p>
-                    </div>
-                  ))}
-                </div>
+                <Link
+                  href="/more#public-data"
+                  className="block rounded-2xl bg-[#FFF8F0] p-5 transition-all active:scale-[0.98] hover:shadow-sm"
+                >
+                  <div className="flex items-center justify-between mb-3">
+                    <p className="text-xs font-medium text-[#E8847C]">부산시 공공데이터 활용</p>
+                    <ArrowRight className="h-3.5 w-3.5 text-[#E8847C]" />
+                  </div>
+                  <div className="grid grid-cols-4 gap-2">
+                    {STATS.map((s) => (
+                      <div key={s.label} className="text-center">
+                        <p className="text-lg font-bold text-gray-900">{s.value}</p>
+                        <p className="text-[10px] text-gray-400">{s.label}</p>
+                      </div>
+                    ))}
+                  </div>
+                </Link>
               </motion.div>
 
               {/* 바로가기 */}

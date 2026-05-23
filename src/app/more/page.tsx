@@ -1,31 +1,59 @@
 "use client";
 import { Card, CardContent } from "@/components/ui/card";
-import { Heart, Database, Cpu, Map } from "lucide-react";
+import { Heart, Database, Cpu, Map, ExternalLink } from "lucide-react";
 import { PageTransition } from "@/components/PageTransition";
 
-const publicDatasets = [
+type DatasetItem = {
+  label: string;
+  count: string;
+  usage: string;
+};
+
+type DatasetGroup = {
+  source: string;
+  url: string;
+  items: DatasetItem[];
+};
+
+const publicDatasets: DatasetGroup[] = [
   {
     source: "data.busan.go.kr",
+    url: "https://data.busan.go.kr",
     items: [
-      { label: "수유실", count: "291개" },
-      { label: "키즈카페", count: "69개" },
-      { label: "산후조리원", count: "12개" },
-      { label: "어린이집", count: "317개" },
+      { label: "수유실", count: "291개", usage: "지도·챗봇 시설 검색" },
+      { label: "키즈카페", count: "69개", usage: "주변 시설 추천" },
+      { label: "산후조리원", count: "12개", usage: "주변 시설 추천" },
+      { label: "어린이집", count: "317개", usage: "지도·챗봇 시설 검색" },
     ],
   },
   {
     source: "부산교통공사",
-    items: [{ label: "도시철도 편의시설", count: "114역" }],
+    url: "https://www.humetro.busan.kr",
+    items: [
+      { label: "도시철도 편의시설", count: "114역", usage: "유모차 경로 추천" },
+    ],
   },
   {
     source: "부산광역시",
+    url: "https://www.busan.go.kr",
     items: [
-      { label: "보행자우선도로", count: "31개" },
-      { label: "아동급식카드 가맹점", count: "35,239개" },
-      { label: "아토피·천식 안심학교", count: "458개" },
+      { label: "보행자우선도로", count: "31개", usage: "안전한 유모차 길 안내" },
+      { label: "아동급식카드 가맹점", count: "35,239개", usage: "지도 가맹점 검색" },
+      { label: "아토피·천식 안심학교", count: "458개", usage: "교육시설 매핑" },
     ],
   },
 ];
+
+const TOTAL_DATASETS = publicDatasets.reduce(
+  (sum, g) => sum + g.items.length,
+  0
+);
+const TOTAL_RECORDS = publicDatasets.reduce(
+  (sum, g) =>
+    sum +
+    g.items.reduce((s, i) => s + parseInt(i.count.replace(/[^0-9]/g, "") || "0", 10), 0),
+  0
+);
 
 const techStack = [
   { name: "Next.js 16", desc: "App Router 기반 풀스택 프레임워크", icon: Cpu },
@@ -49,10 +77,38 @@ export default function MorePage() {
 
       <div className="mx-auto max-w-lg px-4 space-y-6 pt-6">
         {/* 활용 공공데이터 */}
-        <section>
+        <section id="public-data">
           <h2 className="mb-3 text-xs font-medium uppercase tracking-wider text-[#9CA3AF]">
             활용 공공데이터
           </h2>
+
+          {/* 총합 카드 */}
+          <Card className="border-0 shadow-sm bg-[#FFF8F0] mb-3">
+            <CardContent className="p-4">
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <p className="text-[10px] font-medium uppercase tracking-wider text-[#E8847C]">
+                    데이터셋
+                  </p>
+                  <p className="mt-0.5 text-2xl font-bold text-gray-900">
+                    {TOTAL_DATASETS}<span className="text-sm font-medium text-gray-500 ml-0.5">종</span>
+                  </p>
+                </div>
+                <div>
+                  <p className="text-[10px] font-medium uppercase tracking-wider text-[#E8847C]">
+                    총 데이터 건수
+                  </p>
+                  <p className="mt-0.5 text-2xl font-bold text-gray-900">
+                    {TOTAL_RECORDS.toLocaleString()}<span className="text-sm font-medium text-gray-500 ml-0.5">건</span>
+                  </p>
+                </div>
+              </div>
+              <p className="mt-3 text-[11px] text-gray-500 leading-relaxed">
+                부산광역시·부산교통공사·각 구 공식 공공데이터를 활용하여 출산·육아 정보를 통합 제공합니다.
+              </p>
+            </CardContent>
+          </Card>
+
           <Card className="border-0 shadow-sm">
             <CardContent className="p-0">
               {publicDatasets.map((dataset, di) => (
@@ -60,19 +116,30 @@ export default function MorePage() {
                   key={dataset.source}
                   className={di > 0 ? "border-t border-gray-100" : ""}
                 >
-                  <div className="px-4 py-3 bg-gray-50/60">
+                  <a
+                    href={dataset.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-center justify-between px-4 py-3 bg-gray-50/60 hover:bg-gray-100 transition-colors group"
+                  >
                     <p className="text-xs font-semibold text-[#FF6B6B]">
                       {dataset.source}
                     </p>
-                  </div>
+                    <ExternalLink className="h-3 w-3 text-gray-300 group-hover:text-[#FF6B6B] transition-colors" />
+                  </a>
                   <div className="divide-y divide-gray-50">
                     {dataset.items.map((item) => (
                       <div
                         key={item.label}
-                        className="flex items-center justify-between px-4 min-h-[56px]"
+                        className="flex items-start justify-between gap-3 px-4 py-3"
                       >
-                        <span className="text-sm text-gray-700">{item.label}</span>
-                        <span className="text-sm font-bold text-gray-900">
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm text-gray-700">{item.label}</p>
+                          <p className="mt-0.5 text-[11px] text-gray-400 leading-relaxed">
+                            {item.usage}
+                          </p>
+                        </div>
+                        <span className="text-sm font-bold text-gray-900 flex-shrink-0">
                           {item.count}
                         </span>
                       </div>
