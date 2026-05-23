@@ -27,10 +27,14 @@ const QUICK_QUESTIONS = [
 ];
 
 const STATS = [
-  { label: "수유실", value: "291", unit: "개소" },
-  { label: "어린이집", value: "317", unit: "개소" },
-  { label: "출산 혜택", value: "15", unit: "종" },
-  { label: "가맹점", value: "35,239", unit: "곳" },
+  { label: "수유실", value: "291" },
+  { label: "키즈카페", value: "69" },
+  { label: "어린이집", value: "317" },
+  { label: "산후조리원", value: "12" },
+  { label: "도시철도", value: "114역" },
+  { label: "보행자길", value: "31" },
+  { label: "안심학교", value: "458" },
+  { label: "혜택", value: "15종" },
 ];
 
 export default function HomePage() {
@@ -193,14 +197,17 @@ export default function HomePage() {
                   className="block rounded-2xl bg-[#FFF8F0] p-5 transition-all active:scale-[0.98] hover:shadow-sm"
                 >
                   <div className="flex items-center justify-between mb-3">
-                    <p className="text-xs font-medium text-[#E8847C]">부산시 공공데이터 활용</p>
+                    <div>
+                      <p className="text-xs font-medium text-[#E8847C]">부산시 공공데이터 활용</p>
+                      <p className="text-[10px] text-gray-400 mt-0.5">8종 36,531건 실시간 연동</p>
+                    </div>
                     <ArrowRight className="h-3.5 w-3.5 text-[#E8847C]" />
                   </div>
-                  <div className="grid grid-cols-4 gap-2">
+                  <div className="grid grid-cols-4 gap-x-2 gap-y-3">
                     {STATS.map((s) => (
                       <div key={s.label} className="text-center">
-                        <p className="text-lg font-bold text-gray-900">{s.value}</p>
-                        <p className="text-[10px] text-gray-400">{s.label}</p>
+                        <p className="text-[15px] font-bold text-gray-900 leading-tight">{s.value}</p>
+                        <p className="text-[10px] text-gray-400 mt-0.5">{s.label}</p>
                       </div>
                     ))}
                   </div>

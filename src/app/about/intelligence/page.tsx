@@ -15,6 +15,7 @@ import {
   Navigation,
 } from "lucide-react";
 import { PageTransition } from "@/components/PageTransition";
+import { LiveDemoCard } from "@/components/about/LiveDemoCard";
 import Link from "next/link";
 
 const coreCapabilities = [
@@ -355,6 +356,9 @@ export default function IntelligencePage() {
               ※ 비교 항목은 각 서비스의 공개된 기능 기준으로 작성되었습니다.
             </p>
           </section>
+
+          {/* 라이브 데모 */}
+          <LiveDemoCard />
 
           {/* 푸터 */}
           <div className="pt-2 text-center">

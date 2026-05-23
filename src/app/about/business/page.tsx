@@ -14,6 +14,7 @@ import {
   ShieldCheck,
 } from "lucide-react";
 import { PageTransition } from "@/components/PageTransition";
+import { LiveDemoCard } from "@/components/about/LiveDemoCard";
 import Link from "next/link";
 import { ArrowLeft } from "lucide-react";
 
@@ -337,6 +338,9 @@ export default function BusinessPage() {
               })}
             </div>
           </section>
+
+          {/* 라이브 데모 */}
+          <LiveDemoCard />
 
           {/* 푸터 */}
           <div className="pt-2 text-center">
