@@ -11,11 +11,15 @@ import ToolResultCard from "@/components/chat/ToolResultCard";
 import { PageTransition } from "@/components/PageTransition";
 import Link from "next/link";
 
-const SUGGESTIONS = [
-  { icon: Heart, label: "내 맞춤 혜택 찾기", query: "내 조건에 맞는 출산·육아 혜택을 알려줘", color: "#FF6B6B", bg: "#FFF0F0" },
-  { icon: MapPin, label: "주변 수유실 찾기", query: "근처 수유실 위치를 알려줘", color: "#4ECDC4", bg: "#F0FDFB" },
-  { icon: Baby, label: "출산 장려금 안내", query: "부산 출산 장려금 얼마야?", color: "#9B59B6", bg: "#F8F0FF" },
-  { icon: Navigation, label: "유모차 길 안내", query: "유모차로 이동하기 좋은 지하철역 알려줘", color: "#F39C12", bg: "#FFF8E7" },
+type Suggestion =
+  | { kind: "chat"; icon: typeof Heart; label: string; query: string; color: string; bg: string }
+  | { kind: "link"; icon: typeof MapPin; label: string; href: string; color: string; bg: string };
+
+const SUGGESTIONS: Suggestion[] = [
+  { kind: "chat", icon: Heart, label: "내 맞춤 혜택 찾기", query: "내 조건에 맞는 출산·육아 혜택을 알려줘", color: "#FF6B6B", bg: "#FFF0F0" },
+  { kind: "link", icon: MapPin, label: "주변 수유실 찾기", href: "/map?type=nursing_room", color: "#4ECDC4", bg: "#F0FDFB" },
+  { kind: "chat", icon: Baby, label: "출산 장려금 안내", query: "부산 출산 장려금 얼마야?", color: "#9B59B6", bg: "#F8F0FF" },
+  { kind: "link", icon: Navigation, label: "유모차 길 안내", href: "/stroller", color: "#F39C12", bg: "#FFF8E7" },
 ];
 
 const QUICK_QUESTIONS = [
@@ -143,15 +147,8 @@ export default function HomePage() {
                 <div className="grid grid-cols-2 gap-3">
                   {SUGGESTIONS.map((item, idx) => {
                     const Icon = item.icon;
-                    return (
-                      <motion.button
-                        key={item.label}
-                        initial={{ opacity: 0, y: 16 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.3 + idx * 0.08, duration: 0.35 }}
-                        onClick={() => handleSend(item.query)}
-                        className="flex flex-col gap-3 rounded-2xl p-4 text-left transition-all active:scale-[0.97] hover:shadow-md border border-gray-100 bg-white shadow-sm"
-                      >
+                    const inner = (
+                      <>
                         <div
                           className="w-10 h-10 rounded-xl flex items-center justify-center"
                           style={{ backgroundColor: item.bg }}
@@ -159,6 +156,36 @@ export default function HomePage() {
                           <Icon className="h-5 w-5" style={{ color: item.color }} />
                         </div>
                         <span className="text-[13px] font-semibold text-gray-800">{item.label}</span>
+                      </>
+                    );
+                    const cardCls =
+                      "flex flex-col gap-3 rounded-2xl p-4 text-left transition-all active:scale-[0.97] hover:shadow-md border border-gray-100 bg-white shadow-sm";
+
+                    if (item.kind === "link") {
+                      return (
+                        <motion.div
+                          key={item.label}
+                          initial={{ opacity: 0, y: 16 }}
+                          animate={{ opacity: 1, y: 0 }}
+                          transition={{ delay: 0.3 + idx * 0.08, duration: 0.35 }}
+                        >
+                          <Link href={item.href} className={cardCls}>
+                            {inner}
+                          </Link>
+                        </motion.div>
+                      );
+                    }
+
+                    return (
+                      <motion.button
+                        key={item.label}
+                        initial={{ opacity: 0, y: 16 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ delay: 0.3 + idx * 0.08, duration: 0.35 }}
+                        onClick={() => handleSend(item.query)}
+                        className={cardCls}
+                      >
+                        {inner}
                       </motion.button>
                     );
                   })}

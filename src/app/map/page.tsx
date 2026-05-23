@@ -35,7 +35,7 @@ type ViewMode = 'map' | 'list';
 export default function MapPage() {
   const [facilities, setFacilities] = useState<Facility[]>([]);
   const [selectedFacility, setSelectedFacility] = useState<Facility | null>(null);
-  const [selectedTypes, setSelectedTypes] = useState<FacilityType[]>(ALL_TYPES);
+  const [selectedTypes, setSelectedTypes] = useState<FacilityType[]>([]);
   const [radius, setRadius] = useState('3000');
   const [naverLoaded, setNaverLoaded] = useState(false);
   const [viewMode, setViewMode] = useState<ViewMode>('map');
@@ -49,9 +49,20 @@ export default function MapPage() {
         () => {}
       );
     }
+    const param = new URLSearchParams(window.location.search).get('type');
+    if (param) {
+      const requested = param.split(',').filter((t) => (ALL_TYPES as string[]).includes(t)) as FacilityType[];
+      setSelectedTypes(requested.length > 0 ? requested : ALL_TYPES);
+    } else {
+      setSelectedTypes(ALL_TYPES);
+    }
   }, []);
 
   const fetchFacilities = useCallback(async () => {
+    if (selectedTypes.length === 0) {
+      setFacilities([]);
+      return;
+    }
     const types = selectedTypes.join(',');
     const res = await fetch(
       `/api/facilities?lat=${userLocation.lat}&lng=${userLocation.lng}&radius=${radius}&types=${types}`
