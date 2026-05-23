@@ -1,7 +1,8 @@
 "use client";
 import { Card, CardContent } from "@/components/ui/card";
-import { Heart, Database, Cpu, Map, ExternalLink } from "lucide-react";
+import { Heart, Database, Cpu, Map, ExternalLink, Briefcase, ChevronRight } from "lucide-react";
 import { PageTransition } from "@/components/PageTransition";
+import Link from "next/link";
 
 type DatasetItem = {
   label: string;
@@ -195,6 +196,28 @@ export default function MorePage() {
               </p>
             </CardContent>
           </Card>
+
+          <Link
+            href="/about/business"
+            className="mt-3 block transition-all active:scale-[0.98]"
+          >
+            <Card className="border-0 shadow-sm">
+              <CardContent className="flex items-center gap-3 p-4">
+                <div className="w-10 h-10 rounded-xl bg-[#F0FDFB] flex items-center justify-center flex-shrink-0">
+                  <Briefcase className="w-5 h-5 text-[#4ECDC4]" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-semibold text-gray-900">
+                    사업 개요 보기
+                  </p>
+                  <p className="mt-0.5 text-xs text-gray-500 leading-relaxed">
+                    시장 규모 · 수익 모델 · 사업화 로드맵 · ESG 가치
+                  </p>
+                </div>
+                <ChevronRight className="w-4 h-4 text-gray-300 flex-shrink-0" />
+              </CardContent>
+            </Card>
+          </Link>
         </section>
 
         {/* 하단 크레딧 */}
