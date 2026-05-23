@@ -43,6 +43,9 @@ export default function MapPage() {
   const [locationReady, setLocationReady] = useState(false);
   const [locationFallback, setLocationFallback] = useState(false);
   const mapPanRef = useRef<((lat: number, lng: number) => void) | null>(null);
+  const handleMapPanReady = useCallback((fn: (lat: number, lng: number) => void) => {
+    mapPanRef.current = fn;
+  }, []);
 
   useEffect(() => {
     if (typeof window !== 'undefined' && navigator.geolocation) {
@@ -225,7 +228,7 @@ export default function MapPage() {
               onSelectFacility={setSelectedFacility}
               userLocation={userLocation}
               radiusMeters={parseInt(radius, 10)}
-              onMapPanReady={(fn) => { mapPanRef.current = fn; }}
+              onMapPanReady={handleMapPanReady}
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center bg-[#F8F8F8]">

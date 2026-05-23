@@ -4,6 +4,7 @@ export type Store = {
   category: '교육' | '의료' | '약국' | '육아용품' | '식품';
   district: string;
   address: string;
+  phone?: string;
 };
 
 export const DONGBAEK_STORES: Store[] = [
