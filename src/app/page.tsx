@@ -9,7 +9,11 @@ import ChatMessage from "@/components/chat/ChatMessage";
 import ChatInput from "@/components/chat/ChatInput";
 import ToolResultCard from "@/components/chat/ToolResultCard";
 import { PageTransition } from "@/components/PageTransition";
+import AirQualityBadge from "@/components/AirQualityBadge";
+import DDayBadge from "@/components/DDayBadge";
+import OnboardingModal from "@/components/OnboardingModal";
 import Link from "next/link";
+import { loadProfile } from "@/lib/user-profile";
 
 type Suggestion =
   | { kind: "chat"; icon: typeof Heart; label: string; query: string; color: string; bg: string }
@@ -42,18 +46,45 @@ const STATS = [
 ];
 
 export default function HomePage() {
+  const [dialect, setDialect] = useState<"standard" | "busan">(() => {
+    if (typeof window === "undefined") return "standard";
+    return (localStorage.getItem("dialect") as "standard" | "busan") ?? "standard";
+  });
+  const dialectRef = useRef<"standard" | "busan">("standard");
+  dialectRef.current = dialect;
+
   const chat = useMemo(
-    () => new Chat({ transport: new DefaultChatTransport({ api: "/api/chat" }) }),
+    () =>
+      new Chat({
+        transport: new DefaultChatTransport({
+          api: "/api/chat",
+          body: () => ({ dialect: dialectRef.current }),
+        }),
+      }),
     []
   );
   const { messages, status, sendMessage } = useChat({ chat });
   const [input, setInput] = useState("");
+  const [showOnboarding, setShowOnboarding] = useState(false);
   const bottomRef = useRef<HTMLDivElement>(null);
   const isLoading = status === "streaming" || status === "submitted";
 
   useEffect(() => {
+    const profile = loadProfile();
+    if (!profile) setShowOnboarding(true);
+  }, []);
+
+  useEffect(() => {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
+
+  const handleDialectToggle = () => {
+    setDialect((prev) => {
+      const next = prev === "standard" ? "busan" : "standard";
+      localStorage.setItem("dialect", next);
+      return next;
+    });
+  };
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -98,6 +129,10 @@ export default function HomePage() {
   const hasMessages = messages.length > 0;
 
   return (
+    <>
+    {showOnboarding && (
+      <OnboardingModal onClose={() => setShowOnboarding(false)} />
+    )}
     <PageTransition>
       <div className="flex flex-col h-screen bg-white">
         <div className="flex-1 overflow-y-auto">
@@ -139,6 +174,9 @@ export default function HomePage() {
                   출산·육아 혜택부터 주변 시설까지, AI가 찾아드려요
                 </motion.p>
               </motion.div>
+
+              {/* D-day 배지 */}
+              <DDayBadge />
 
               {/* 기능 카드 4개 — 2x2 그리드 */}
               <div className="px-6 pb-5">
@@ -209,6 +247,9 @@ export default function HomePage() {
                   ))}
                 </div>
               </div>
+
+              {/* 대기질 배지 */}
+              <AirQualityBadge />
 
               {/* 데이터 통계 배너 */}
               <motion.div
@@ -362,8 +403,27 @@ export default function HomePage() {
           )}
         </div>
 
-        {/* 입력창 */}
+        {/* 입력창 + 부산말 토글 */}
         <div className="flex-shrink-0 px-4 py-3 bg-white border-t border-gray-100 pb-20">
+          <div className="flex items-center justify-end gap-2 mb-2">
+            <span className="text-xs text-gray-400">
+              {dialect === "busan" ? "🌊 부산말" : "서울말"}
+            </span>
+            <button
+              type="button"
+              onClick={handleDialectToggle}
+              className={`relative inline-flex h-5 w-9 items-center rounded-full transition-colors focus:outline-none ${
+                dialect === "busan" ? "bg-[#4ECDC4]" : "bg-gray-200"
+              }`}
+              aria-label="부산말 토글"
+            >
+              <span
+                className={`inline-block h-3.5 w-3.5 transform rounded-full bg-white shadow transition-transform ${
+                  dialect === "busan" ? "translate-x-[18px]" : "translate-x-[2px]"
+                }`}
+              />
+            </button>
+          </div>
           <ChatInput
             input={input}
             isLoading={isLoading}
@@ -373,5 +433,6 @@ export default function HomePage() {
         </div>
       </div>
     </PageTransition>
+    </>
   );
 }
