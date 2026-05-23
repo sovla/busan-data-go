@@ -72,6 +72,8 @@ const TYPE_COLORS: Record<FacilityType, string> = {
   postpartum: '#9B59B6',
   daycare: '#2ECC71',
   hospital: '#F39C12',
+  atopy_school: '#3B82F6',
+  meal_store: '#EC4899',
 };
 
 const TYPE_SVG_ICONS: Record<FacilityType, string> = {
@@ -80,6 +82,8 @@ const TYPE_SVG_ICONS: Record<FacilityType, string> = {
   postpartum: `<path d="M13,7 C13,7 18,10 18,14 C18,17 15.5,19 13,19 C10.5,19 8,17 8,14 C8,10 13,7 13,7Z" fill="white" opacity="0.9"/>`,
   daycare: `<circle cx="13" cy="9" r="3" fill="white" opacity="0.9"/><path d="M8,18 Q8,14 13,14 Q18,14 18,18" fill="white" opacity="0.9"/>`,
   hospital: `<path d="M11,7 L15,7 L15,11 L19,11 L19,15 L15,15 L15,19 L11,19 L11,15 L7,15 L7,11 L11,11Z" fill="white" opacity="0.9"/>`,
+  atopy_school: `<path d="M13,6 L13,10 M11,8 L15,8 M8,12 L18,12 L18,20 L8,20Z" stroke="white" stroke-width="1.5" fill="none" opacity="0.9"/>`,
+  meal_store: `<path d="M9,8 L9,18 M13,8 L13,13 L11,18 M17,8 L17,13 Q17,15 15,15 L15,18" stroke="white" stroke-width="1.5" fill="none" opacity="0.9"/>`,
 };
 
 interface FacilityMapProps {

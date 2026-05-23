@@ -8,6 +8,8 @@ const FACILITY_TYPES: { type: FacilityType; label: string }[] = [
   { type: 'postpartum', label: '산후조리원' },
   { type: 'daycare', label: '어린이집' },
   { type: 'hospital', label: '병원' },
+  { type: 'atopy_school', label: '안심학교' },
+  { type: 'meal_store', label: '급식가맹점' },
 ];
 
 const RADIUS_OPTIONS = [

@@ -1,4 +1,4 @@
-export type FacilityType = 'nursing_room' | 'kids_cafe' | 'postpartum' | 'daycare' | 'hospital';
+export type FacilityType = 'nursing_room' | 'kids_cafe' | 'postpartum' | 'daycare' | 'hospital' | 'atopy_school' | 'meal_store';
 
 export interface Facility {
   id: number;

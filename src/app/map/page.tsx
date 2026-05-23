@@ -5,11 +5,11 @@ import Script from 'next/script';
 import { Facility, FacilityType } from '@/types/facility';
 import { FacilityMap } from '@/components/map/FacilityMap';
 import { FacilityFilter } from '@/components/map/FacilityFilter';
-import { MapPin, Phone, Navigation, X, List, Baby, Puzzle, HeartPulse, GraduationCap, Stethoscope } from 'lucide-react';
+import { MapPin, Phone, Navigation, X, List, Baby, Puzzle, HeartPulse, GraduationCap, Stethoscope, Shield, UtensilsCrossed } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { type LucideIcon } from 'lucide-react';
 
-const ALL_TYPES: FacilityType[] = ['nursing_room', 'kids_cafe', 'postpartum', 'daycare', 'hospital'];
+const ALL_TYPES: FacilityType[] = ['nursing_room', 'kids_cafe', 'postpartum', 'daycare', 'hospital', 'atopy_school', 'meal_store'];
 
 const TYPE_ICONS: Record<FacilityType, LucideIcon> = {
   nursing_room: Baby,
@@ -17,15 +17,17 @@ const TYPE_ICONS: Record<FacilityType, LucideIcon> = {
   postpartum: HeartPulse,
   daycare: GraduationCap,
   hospital: Stethoscope,
+  atopy_school: Shield,
+  meal_store: UtensilsCrossed,
 };
 
 const TYPE_LABELS: Record<FacilityType, string> = {
   nursing_room: '수유실', kids_cafe: '키즈카페', postpartum: '산후조리원',
-  daycare: '어린이집', hospital: '병원',
+  daycare: '어린이집', hospital: '병원', atopy_school: '안심학교', meal_store: '급식가맹점',
 };
 const TYPE_COLORS: Record<FacilityType, string> = {
   nursing_room: '#FF6B6B', kids_cafe: '#4ECDC4', postpartum: '#9B59B6',
-  daycare: '#2ECC71', hospital: '#F39C12',
+  daycare: '#2ECC71', hospital: '#F39C12', atopy_school: '#3B82F6', meal_store: '#EC4899',
 };
 
 type ViewMode = 'map' | 'list';
