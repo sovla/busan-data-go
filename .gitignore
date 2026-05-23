@@ -48,3 +48,8 @@ supabase/.temp/
 
 # omc
 .omc/
+
+# playwright mcp 임시 출력 + 스크린샷
+.playwright-mcp/
+cycle*-*.png
+mobile-*.png
