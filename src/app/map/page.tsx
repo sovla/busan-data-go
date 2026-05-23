@@ -128,9 +128,10 @@ export default function MapPage() {
       const db = b.distance_m ?? Number.MAX_SAFE_INTEGER;
       return da - db;
     });
+    const display = sorted.slice(0, 50);
     return (
-      <div className="space-y-0.5">
-        {sorted.slice(0, 50).map((f, idx) => {
+      <div className="divide-y divide-[#F3F4F6]">
+        {display.map((f, idx) => {
           const Icon = TYPE_ICONS[f.type];
           const isSelected = selectedFacility?.id === f.id;
           const item = (
@@ -169,6 +170,11 @@ export default function MapPage() {
           }
           return <div key={f.id}>{item}</div>;
         })}
+        {sorted.length > 50 && (
+          <div className="text-center py-3 text-[11px] text-[#9CA3AF]">
+            가까운 50개만 표시 중 (전체 {sorted.length}건)
+          </div>
+        )}
       </div>
     );
   };
@@ -198,6 +204,9 @@ export default function MapPage() {
           </div>
           <div className="flex-1 overflow-y-auto">
             {renderList(false)}
+          </div>
+          <div className="px-4 py-2 border-t border-[#F3F4F6] text-[10px] text-[#9CA3AF] leading-relaxed">
+            📊 부산광역시 공공데이터 11종 37,826건 · data.busan.go.kr
           </div>
         </div>
 
@@ -266,9 +275,9 @@ export default function MapPage() {
                         <Icon className="h-4 w-4" style={{ color: TYPE_COLORS[selectedFacility.type] }} />
                       </div>
                       <div className="flex-1 min-w-0 pr-6">
-                        <div className="flex items-center gap-2">
-                          <span className="text-sm font-bold text-[#1A1A1A] truncate">{selectedFacility.name}</span>
-                          <span className="text-[10px] font-medium px-1.5 py-0.5 rounded-full flex-shrink-0" style={{ color: TYPE_COLORS[selectedFacility.type], backgroundColor: `${TYPE_COLORS[selectedFacility.type]}15` }}>
+                        <div className="flex items-start gap-2">
+                          <span className="text-sm font-bold text-[#1A1A1A] line-clamp-2">{selectedFacility.name}</span>
+                          <span className="text-[10px] font-medium px-1.5 py-0.5 rounded-full flex-shrink-0 mt-0.5" style={{ color: TYPE_COLORS[selectedFacility.type], backgroundColor: `${TYPE_COLORS[selectedFacility.type]}15` }}>
                             {TYPE_LABELS[selectedFacility.type]}
                           </span>
                         </div>

@@ -51,8 +51,8 @@ export function FacilityFilter({
 
   return (
     <div className="flex flex-col gap-2">
-      <div className="overflow-x-auto -mx-1 px-1 scrollbar-hide">
-        <div className="flex items-center gap-1.5 w-max">
+      <div>
+        <div className="flex items-center gap-1.5 flex-wrap">
           <button
             type="button"
             onClick={handleToggleAll}
@@ -104,6 +104,7 @@ export function FacilityFilter({
         </div>
       </div>
       <div className="flex items-center gap-1">
+        <span className="text-[10px] text-[#9CA3AF] mr-0.5">반경</span>
         {RADIUS_OPTIONS.map((opt) => (
           <button
             key={opt.value}
@@ -113,7 +114,7 @@ export function FacilityFilter({
               h-7 px-2.5 rounded-full text-[11px] font-medium
               transition-all duration-150 active:scale-95
               ${radius === opt.value
-                ? 'bg-[#FF6B6B] text-white'
+                ? 'bg-[#1A1A1A] text-white'
                 : 'bg-[#F3F4F6] text-[#9CA3AF] hover:text-[#6B7280]'
               }
             `}

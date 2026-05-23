@@ -47,6 +47,7 @@ interface NaverMapOptions {
 interface NaverMap {
   setCenter: (latlng: NaverLatLng) => void;
   getCenter: () => NaverLatLng;
+  setZoom: (zoom: number) => void;
 }
 
 interface NaverLatLng {
@@ -104,6 +105,13 @@ const TYPE_SVG_ICONS: Record<FacilityType, string> = {
   meal_store: `<path d="M9,8 L9,18 M13,8 L13,13 L11,18 M17,8 L17,13 Q17,15 15,15 L15,18" stroke="white" stroke-width="1.5" fill="none" opacity="0.9"/>`,
 };
 
+const RADIUS_ZOOM: Record<number, number> = {
+  500: 16,
+  1000: 15,
+  3000: 13,
+  5000: 12,
+};
+
 interface FacilityMapProps {
   facilities: Facility[];
   onSelectFacility: (facility: Facility) => void;
@@ -130,9 +138,10 @@ export function FacilityMap({ facilities, onSelectFacility, userLocation, radius
     if (!mapContainerRef.current || !window.naver?.maps) return;
 
     const center = new window.naver.maps.LatLng(lat, lng);
+    const zoom = RADIUS_ZOOM[radiusMeters ?? 3000] ?? 13;
     mapRef.current = new window.naver.maps.Map(mapContainerRef.current, {
       center,
-      zoom: 14,
+      zoom,
     });
     setMapReady(true);
 
@@ -156,10 +165,13 @@ export function FacilityMap({ facilities, onSelectFacility, userLocation, radius
       map: mapRef.current,
       title: '내 위치',
       icon: {
-        content: `<div style="width:22px;height:22px;border-radius:50%;background:#3B82F6;border:3px solid white;box-shadow:0 0 0 2px rgba(59,130,246,0.35), 0 2px 8px rgba(0,0,0,0.35);z-index:9999;"></div>`,
+        content: `<div style="width:22px;height:22px;border-radius:50%;background:#1E40AF;border:3px solid white;box-shadow:0 0 0 2px rgba(30,64,175,0.35), 0 2px 8px rgba(0,0,0,0.35);z-index:9999;"></div>`,
         anchor: new window.naver.maps.Point(11, 11),
       },
     });
+
+    const targetZoom = RADIUS_ZOOM[radiusMeters ?? 3000] ?? 13;
+    mapRef.current.setZoom(targetZoom);
 
     if (radiusCircleRef.current) radiusCircleRef.current.setMap(null);
     if (radiusMeters && radiusMeters > 0) {
@@ -167,11 +179,11 @@ export function FacilityMap({ facilities, onSelectFacility, userLocation, radius
         map: mapRef.current,
         center: position,
         radius: radiusMeters,
-        strokeColor: '#FF6B6B',
-        strokeOpacity: 0.7,
-        strokeWeight: 2,
-        fillColor: '#FF6B6B',
-        fillOpacity: 0.08,
+        strokeColor: '#94A3B8',
+        strokeOpacity: 0.5,
+        strokeWeight: 1.5,
+        fillColor: '#94A3B8',
+        fillOpacity: 0.06,
       });
     }
   }, [lat, lng, radiusMeters, mapReady]);
