@@ -38,7 +38,7 @@ function getMockData() {
 }
 
 export async function GET() {
-  const apiKey = process.env.AIR_QUALITY_API_KEY;
+  const apiKey = process.env.DATA_GO_KR_API_KEY;
 
   if (apiKey) {
     try {
