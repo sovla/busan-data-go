@@ -4,7 +4,7 @@ import { useChat, Chat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
 import { useEffect, useRef, useState, useMemo } from "react";
 import { motion } from "framer-motion";
-import { MessageCircle, Heart, MapPin, Baby, Navigation, Sparkles, ArrowRight } from "lucide-react";
+import { MessageCircle, Heart, MapPin, Baby, Navigation, Sparkles, ArrowRight, Briefcase, Lightbulb } from "lucide-react";
 import ChatMessage from "@/components/chat/ChatMessage";
 import ChatInput from "@/components/chat/ChatInput";
 import ToolResultCard from "@/components/chat/ToolResultCard";
@@ -208,7 +208,7 @@ export default function HomePage() {
               </motion.div>
 
               {/* 바로가기 */}
-              <div className="px-6 pb-8">
+              <div className="px-6 pb-5">
                 <div className="flex gap-2">
                   <Link href="/map" className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl bg-gray-50 hover:bg-gray-100 transition-colors text-xs font-medium text-gray-500">
                     <MapPin className="h-3.5 w-3.5" /> 시설 지도
@@ -221,6 +221,44 @@ export default function HomePage() {
                   </Link>
                 </div>
               </div>
+
+              {/* 서비스 소개 (심사위원 동선) */}
+              <motion.div
+                initial={{ opacity: 0, y: 12 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: 0.95, duration: 0.4 }}
+                className="px-6 pb-8"
+              >
+                <p className="text-xs font-medium text-gray-400 uppercase tracking-wider mb-3">
+                  서비스 소개
+                </p>
+                <div className="grid grid-cols-2 gap-2">
+                  <Link
+                    href="/about/business"
+                    className="flex items-center gap-2.5 p-3 rounded-xl border border-gray-100 bg-white hover:shadow-sm transition-all active:scale-[0.97]"
+                  >
+                    <div className="w-8 h-8 rounded-lg bg-[#F0FDFB] flex items-center justify-center flex-shrink-0">
+                      <Briefcase className="h-4 w-4 text-[#4ECDC4]" />
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-xs font-semibold text-gray-800 truncate">사업 소개</p>
+                      <p className="text-[10px] text-gray-400 truncate">시장·BM·로드맵</p>
+                    </div>
+                  </Link>
+                  <Link
+                    href="/about/intelligence"
+                    className="flex items-center gap-2.5 p-3 rounded-xl border border-gray-100 bg-white hover:shadow-sm transition-all active:scale-[0.97]"
+                  >
+                    <div className="w-8 h-8 rounded-lg bg-[#FFF0F0] flex items-center justify-center flex-shrink-0">
+                      <Lightbulb className="h-4 w-4 text-[#FF6B6B]" />
+                    </div>
+                    <div className="min-w-0">
+                      <p className="text-xs font-semibold text-gray-800 truncate">기술 소개</p>
+                      <p className="text-[10px] text-gray-400 truncate">핵심 역량·차별성</p>
+                    </div>
+                  </Link>
+                </div>
+              </motion.div>
             </div>
           ) : (
             <div className="px-4 py-4 space-y-4">
