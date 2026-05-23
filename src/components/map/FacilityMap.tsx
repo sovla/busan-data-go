@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef, useCallback } from 'react';
+import { useEffect, useRef, useCallback, useState } from 'react';
 import { Facility, FacilityType } from '@/types/facility';
 import { Locate } from 'lucide-react';
 
@@ -13,12 +13,30 @@ declare global {
         Marker: new (options: NaverMarkerOptions) => NaverMarker;
         InfoWindow: new (options: NaverInfoWindowOptions) => NaverInfoWindow;
         Point: new (x: number, y: number) => NaverPoint;
+        Circle: new (options: NaverCircleOptions) => NaverCircle;
         Event: {
           addListener: (target: unknown, type: string, handler: () => void) => void;
         };
       };
     };
   }
+}
+
+interface NaverCircleOptions {
+  map: NaverMap;
+  center: NaverLatLng;
+  radius: number;
+  strokeColor?: string;
+  strokeOpacity?: number;
+  strokeWeight?: number;
+  fillColor?: string;
+  fillOpacity?: number;
+}
+
+interface NaverCircle {
+  setMap: (map: NaverMap | null) => void;
+  setRadius: (radius: number) => void;
+  setCenter: (center: NaverLatLng) => void;
 }
 
 interface NaverMapOptions {
@@ -88,17 +106,20 @@ const TYPE_SVG_ICONS: Record<FacilityType, string> = {
 
 interface FacilityMapProps {
   facilities: Facility[];
-  selectedFacility: Facility | null;
   onSelectFacility: (facility: Facility) => void;
   userLocation?: { lat: number; lng: number };
+  radiusMeters?: number;
   onMapPanReady?: (panFn: (lat: number, lng: number) => void) => void;
 }
 
-export function FacilityMap({ facilities, selectedFacility, onSelectFacility, userLocation, onMapPanReady }: FacilityMapProps) {
+export function FacilityMap({ facilities, onSelectFacility, userLocation, radiusMeters, onMapPanReady }: FacilityMapProps) {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<NaverMap | null>(null);
   const markersRef = useRef<NaverMarker[]>([]);
   const infoWindowRef = useRef<NaverInfoWindow | null>(null);
+  const userMarkerRef = useRef<NaverMarker | null>(null);
+  const radiusCircleRef = useRef<NaverCircle | null>(null);
+  const [mapReady, setMapReady] = useState(false);
   const onSelectRef = useRef(onSelectFacility);
   onSelectRef.current = onSelectFacility;
 
@@ -113,6 +134,7 @@ export function FacilityMap({ facilities, selectedFacility, onSelectFacility, us
       center,
       zoom: 14,
     });
+    setMapReady(true);
 
     if (onMapPanReady) {
       onMapPanReady((targetLat: number, targetLng: number) => {
@@ -122,6 +144,37 @@ export function FacilityMap({ facilities, selectedFacility, onSelectFacility, us
       });
     }
   }, [lat, lng, onMapPanReady]);
+
+  // 사용자 위치 마커 + 반경 원
+  useEffect(() => {
+    if (!mapReady || !mapRef.current || !window.naver?.maps) return;
+    const position = new window.naver.maps.LatLng(lat, lng);
+
+    if (userMarkerRef.current) userMarkerRef.current.setMap(null);
+    userMarkerRef.current = new window.naver.maps.Marker({
+      position,
+      map: mapRef.current,
+      title: '내 위치',
+      icon: {
+        content: `<div style="width:22px;height:22px;border-radius:50%;background:#3B82F6;border:3px solid white;box-shadow:0 0 0 2px rgba(59,130,246,0.35), 0 2px 8px rgba(0,0,0,0.35);z-index:9999;"></div>`,
+        anchor: new window.naver.maps.Point(11, 11),
+      },
+    });
+
+    if (radiusCircleRef.current) radiusCircleRef.current.setMap(null);
+    if (radiusMeters && radiusMeters > 0) {
+      radiusCircleRef.current = new window.naver.maps.Circle({
+        map: mapRef.current,
+        center: position,
+        radius: radiusMeters,
+        strokeColor: '#FF6B6B',
+        strokeOpacity: 0.7,
+        strokeWeight: 2,
+        fillColor: '#FF6B6B',
+        fillOpacity: 0.08,
+      });
+    }
+  }, [lat, lng, radiusMeters, mapReady]);
 
   useEffect(() => {
     if (!mapRef.current || !window.naver?.maps) return;
@@ -156,6 +209,9 @@ export function FacilityMap({ facilities, selectedFacility, onSelectFacility, us
         infoWindow.open(mapRef.current!, marker);
         infoWindowRef.current = infoWindow;
         onSelectRef.current(facility);
+        if (mapRef.current && window.naver?.maps) {
+          mapRef.current.setCenter(new window.naver.maps.LatLng(facility.lat, facility.lng));
+        }
       });
 
       markersRef.current.push(marker);

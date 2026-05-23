@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import Script from 'next/script';
 import { Facility, FacilityType } from '@/types/facility';
 import { FacilityMap } from '@/components/map/FacilityMap';
@@ -62,6 +62,19 @@ export default function MapPage() {
 
   useEffect(() => { fetchFacilities(); }, [fetchFacilities]);
 
+  const typeCounts = useMemo(() => {
+    const counts: Partial<Record<FacilityType, number>> = {};
+    for (const f of facilities) {
+      counts[f.type] = (counts[f.type] ?? 0) + 1;
+    }
+    return counts;
+  }, [facilities]);
+
+  const radiusLabel = useMemo(() => {
+    const m = parseInt(radius, 10);
+    return m >= 1000 ? `${m / 1000}km` : `${m}m`;
+  }, [radius]);
+
   const formatDistance = (m: number) => m < 1000 ? `${Math.round(m)}m` : `${(m / 1000).toFixed(1)}km`;
 
   const handleListItemClick = (facility: Facility) => {
@@ -74,11 +87,24 @@ export default function MapPage() {
 
   const renderList = (animate: boolean) => {
     if (facilities.length === 0) {
-      return <div className="text-center py-12 text-[#9CA3AF] text-sm">주변에 시설이 없습니다</div>;
+      return (
+        <div className="flex flex-col items-center justify-center py-16 px-6 text-center">
+          <div className="w-12 h-12 rounded-full bg-[#F3F4F6] flex items-center justify-center mb-3">
+            <MapPin className="w-5 h-5 text-[#9CA3AF]" />
+          </div>
+          <p className="text-sm font-medium text-[#1A1A1A]">검색 반경에 시설이 없어요</p>
+          <p className="text-xs text-[#9CA3AF] mt-1 leading-relaxed">반경을 더 넓히거나<br/>필터를 추가해보세요</p>
+        </div>
+      );
     }
+    const sorted = [...facilities].sort((a, b) => {
+      const da = a.distance_m ?? Number.MAX_SAFE_INTEGER;
+      const db = b.distance_m ?? Number.MAX_SAFE_INTEGER;
+      return da - db;
+    });
     return (
       <div className="space-y-0.5">
-        {facilities.slice(0, 50).map((f, idx) => {
+        {sorted.slice(0, 50).map((f, idx) => {
           const Icon = TYPE_ICONS[f.type];
           const isSelected = selectedFacility?.id === f.id;
           const item = (
@@ -98,7 +124,12 @@ export default function MapPage() {
                   </span>
                 </div>
                 <p className="text-xs text-[#9CA3AF] mt-0.5 truncate">{f.address}</p>
-                {f.phone && <p className="text-[11px] text-[#9CA3AF] mt-0.5">{f.phone}</p>}
+                <div className="flex items-center gap-2 mt-0.5">
+                  {f.distance_m !== undefined && f.distance_m !== null && (
+                    <span className="text-[11px] font-semibold text-[#FF6B6B]">{formatDistance(f.distance_m)}</span>
+                  )}
+                  {f.phone && <span className="text-[11px] text-[#9CA3AF]">{f.phone}</span>}
+                </div>
               </div>
               <Navigation className="h-3.5 w-3.5 text-[#9CA3AF] flex-shrink-0" />
             </button>
@@ -137,7 +168,7 @@ export default function MapPage() {
             <span className="text-xs text-[#9CA3AF]">{facilities.length}개</span>
           </div>
           <div className="px-4 py-3 border-b border-[#F3F4F6]">
-            <FacilityFilter selectedTypes={selectedTypes} onTypesChange={setSelectedTypes} radius={radius} onRadiusChange={setRadius} />
+            <FacilityFilter selectedTypes={selectedTypes} onTypesChange={setSelectedTypes} radius={radius} onRadiusChange={setRadius} typeCounts={typeCounts} />
           </div>
           <div className="flex-1 overflow-y-auto">
             {renderList(false)}
@@ -149,16 +180,20 @@ export default function MapPage() {
           {/* 모바일 필터 오버레이 */}
           <div className="absolute top-0 left-0 right-0 z-10 px-4 pt-3 pb-2 md:hidden">
             <div className="bg-white/90 backdrop-blur-md rounded-2xl px-3 py-2.5 shadow-sm border border-[#F3F4F6]">
-              <FacilityFilter selectedTypes={selectedTypes} onTypesChange={setSelectedTypes} radius={radius} onRadiusChange={setRadius} />
+              <div className="flex items-center justify-between px-1 pb-2 mb-2 border-b border-gray-100">
+                <span className="text-[11px] font-medium text-[#9CA3AF]">내 위치 반경 {radiusLabel}</span>
+                <span className="text-xs font-bold text-[#1A1A1A]">{facilities.length}<span className="text-[10px] font-normal text-[#9CA3AF] ml-0.5">개 시설</span></span>
+              </div>
+              <FacilityFilter selectedTypes={selectedTypes} onTypesChange={setSelectedTypes} radius={radius} onRadiusChange={setRadius} typeCounts={typeCounts} />
             </div>
           </div>
 
           {naverLoaded ? (
             <FacilityMap
               facilities={facilities}
-              selectedFacility={selectedFacility}
               onSelectFacility={setSelectedFacility}
               userLocation={userLocation}
+              radiusMeters={parseInt(radius, 10)}
               onMapPanReady={(fn) => { mapPanRef.current = fn; }}
             />
           ) : (
@@ -236,7 +271,7 @@ export default function MapPage() {
               </button>
             </div>
             <div className="px-4 py-3">
-              <FacilityFilter selectedTypes={selectedTypes} onTypesChange={setSelectedTypes} radius={radius} onRadiusChange={setRadius} />
+              <FacilityFilter selectedTypes={selectedTypes} onTypesChange={setSelectedTypes} radius={radius} onRadiusChange={setRadius} typeCounts={typeCounts} />
             </div>
             <div className="flex-1 overflow-y-auto px-4 pb-20">
               {renderList(true)}
