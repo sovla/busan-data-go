@@ -37,7 +37,7 @@ const QUICK_QUESTIONS = [
 const STATS = [
   { label: "수유실", value: "291" },
   { label: "키즈카페", value: "69" },
-  { label: "어린이집", value: "317" },
+  { label: "어린이집", value: "1,172" },
   { label: "산후조리원", value: "12" },
   { label: "도시철도", value: "114역" },
   { label: "보행자길", value: "31" },
@@ -265,7 +265,7 @@ export default function HomePage() {
                   <div className="flex items-center justify-between mb-3">
                     <div>
                       <p className="text-xs font-medium text-[#E8847C]">부산시 공공데이터 활용</p>
-                      <p className="text-[10px] text-gray-400 mt-0.5">8종 36,531건 실시간 연동</p>
+                      <p className="text-[10px] text-gray-400 mt-0.5">11종 37,826건 + 실시간 대기질 연동</p>
                     </div>
                     <ArrowRight className="h-3.5 w-3.5 text-[#E8847C]" />
                   </div>

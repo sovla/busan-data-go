@@ -25,7 +25,22 @@ const publicDatasets: DatasetGroup[] = [
       { label: "수유실", count: "291개", usage: "지도·챗봇 시설 검색", url: "https://data.busan.go.kr/dataset/datasetSearch.nm?searchTxt=수유실" },
       { label: "키즈카페", count: "69개", usage: "주변 시설 추천", url: "https://data.busan.go.kr/dataset/datasetSearch.nm?searchTxt=키즈카페" },
       { label: "산후조리원", count: "12개", usage: "주변 시설 추천", url: "https://data.busan.go.kr/dataset/datasetSearch.nm?searchTxt=산후조리원" },
-      { label: "어린이집", count: "317개", usage: "지도·챗봇 시설 검색", url: "https://data.busan.go.kr/dataset/datasetSearch.nm?searchTxt=어린이집" },
+      { label: "어린이집", count: "1,172개", usage: "지도·챗봇 시설 검색 (16개 구·군 전체)", url: "https://info.childcare.go.kr" },
+    ],
+  },
+  {
+    source: "data.go.kr",
+    url: "https://www.data.go.kr",
+    items: [
+      { label: "종합병원 현황", count: "30개", usage: "지도·챗봇 의료기관 추천", url: "https://www.data.go.kr/data/15097898/fileData.do" },
+      { label: "지역화폐(동백전) 가맹점", count: "410개", usage: "출산축하금 사용처 안내 (영유아 관련 9,735개 중 카테고리당 100개)", url: "https://www.data.go.kr/data/15083033/fileData.do" },
+    ],
+  },
+  {
+    source: "한국환경공단 (에어코리아)",
+    url: "https://www.airkorea.or.kr",
+    items: [
+      { label: "실시간 대기질", count: "라이브", usage: "영유아 외출 가능 여부 안내 (메인 페이지 배지)", url: "https://www.data.go.kr/data/15073861/openapi.do" },
     ],
   },
   {
