@@ -71,29 +71,31 @@ export default function StrollerPage() {
         strategy="afterInteractive"
       />
       <div className="flex flex-col h-screen">
-        <div className="h-14 bg-white border-b border-[#F3F4F6] z-10 px-4 flex items-center justify-between flex-shrink-0">
-          <div className="flex items-center gap-2">
-            <div className="w-7 h-7 rounded-full bg-[#E6FAF5] flex items-center justify-center">
-              <Navigation className="w-3.5 h-3.5 text-[#4ECDC4]" />
+        <div className="bg-white border-b border-[#F3F4F6] z-10 flex-shrink-0">
+          <div className="h-14 px-4 flex items-center justify-between">
+            <div className="flex items-center gap-2">
+              <div className="w-7 h-7 rounded-full bg-[#E6FAF5] flex items-center justify-center">
+                <Navigation className="w-3.5 h-3.5 text-[#4ECDC4]" />
+              </div>
+              <div>
+                <h1 className="text-base font-bold text-[#1A1A1A]">유모차 길 안내</h1>
+                <p className="text-[10px] text-[#9CA3AF] -mt-0.5">부산 도시철도 {stations.length}개 역 접근성 · 보행자우선도로 {roads.length}개</p>
+              </div>
             </div>
-            <h1 className="text-lg font-bold text-[#1A1A1A]">
-              유모차 길 안내
-            </h1>
           </div>
-          <div className="flex items-center gap-2 text-[11px] font-semibold">
-            <span className="flex items-center gap-1 text-[#2ECC71]">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#2ECC71]" />
-              {stats.safe}
-            </span>
-            <span className="flex items-center gap-1 text-[#F39C12]">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#F39C12]" />
-              {stats.normal}
-            </span>
-            <span className="flex items-center gap-1 text-[#FF6B6B]">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#FF6B6B]" />
-              {stats.caution}
-            </span>
-            <span className="text-[#9CA3AF] font-normal">· {roads.length}도로</span>
+          <div className="px-4 pb-3 flex items-center gap-2">
+            <div className="flex-1 rounded-xl bg-[#F0FDF4] px-3 py-2 text-center">
+              <p className="text-lg font-bold text-[#2ECC71]">{stats.safe}</p>
+              <p className="text-[10px] text-[#6B7280]">안전</p>
+            </div>
+            <div className="flex-1 rounded-xl bg-[#FFF7ED] px-3 py-2 text-center">
+              <p className="text-lg font-bold text-[#F39C12]">{stats.normal}</p>
+              <p className="text-[10px] text-[#6B7280]">보통</p>
+            </div>
+            <div className="flex-1 rounded-xl bg-[#FFF0F0] px-3 py-2 text-center">
+              <p className="text-lg font-bold text-[#FF6B6B]">{stats.caution}</p>
+              <p className="text-[10px] text-[#6B7280]">주의</p>
+            </div>
           </div>
         </div>
 

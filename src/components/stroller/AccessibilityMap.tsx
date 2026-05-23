@@ -39,11 +39,16 @@ function getAccessibilityColor(station: MetroStation): string {
   return GRADE_COLORS[getStationGrade(station)];
 }
 
-function makeMarkerIcon(color: string): string {
+function getLineNumber(line: string): string {
+  const m = line.match(/(\d)/);
+  return m ? m[1] : '●';
+}
+
+function makeMarkerIcon(color: string, lineNum: string): string {
   return `data:image/svg+xml;charset=utf-8,${encodeURIComponent(`
-    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 28 28">
-      <circle cx="14" cy="14" r="11" fill="${color}" stroke="white" stroke-width="2.5"/>
-      <text x="14" y="19" text-anchor="middle" font-size="12" fill="white" font-family="sans-serif" font-weight="bold">지</text>
+    <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 32 32">
+      <circle cx="16" cy="16" r="13" fill="${color}" stroke="white" stroke-width="2.5"/>
+      <text x="16" y="21" text-anchor="middle" font-size="13" fill="white" font-family="sans-serif" font-weight="bold">${lineNum}</text>
     </svg>
   `)}`;
 }
@@ -97,14 +102,15 @@ export function AccessibilityMap({ stations, roads, onSelectStation }: Accessibi
       if (!coords) return;
 
       const color = getAccessibilityColor(station);
+      const lineNum = getLineNumber(station.line);
       const marker = new maps.Marker({
         position: new maps.LatLng(coords[0], coords[1]),
         map,
-        title: station.station_name,
+        title: `${station.station_name}역 (${station.line})`,
         icon: {
-          url: makeMarkerIcon(color),
-          size: new maps.Size(28, 28),
-          anchor: new maps.Point(14, 14),
+          url: makeMarkerIcon(color, lineNum),
+          size: new maps.Size(32, 32),
+          anchor: new maps.Point(16, 16),
         },
       });
 
