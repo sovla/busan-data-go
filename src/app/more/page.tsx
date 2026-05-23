@@ -1,6 +1,6 @@
 "use client";
 import { Card, CardContent } from "@/components/ui/card";
-import { Heart, Database, Cpu, Map, ExternalLink, Briefcase, ChevronRight } from "lucide-react";
+import { Heart, Database, Cpu, Map, ExternalLink, Briefcase, ChevronRight, Sparkles } from "lucide-react";
 import { PageTransition } from "@/components/PageTransition";
 import Link from "next/link";
 
@@ -212,6 +212,28 @@ export default function MorePage() {
                   </p>
                   <p className="mt-0.5 text-xs text-gray-500 leading-relaxed">
                     시장 규모 · 수익 모델 · 사업화 로드맵 · ESG 가치
+                  </p>
+                </div>
+                <ChevronRight className="w-4 h-4 text-gray-300 flex-shrink-0" />
+              </CardContent>
+            </Card>
+          </Link>
+
+          <Link
+            href="/about/intelligence"
+            className="mt-2 block transition-all active:scale-[0.98]"
+          >
+            <Card className="border-0 shadow-sm">
+              <CardContent className="flex items-center gap-3 p-4">
+                <div className="w-10 h-10 rounded-xl bg-[#FFF0F0] flex items-center justify-center flex-shrink-0">
+                  <Sparkles className="w-5 h-5 text-[#FF6B6B]" />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <p className="text-sm font-semibold text-gray-900">
+                    기술 개요 보기
+                  </p>
+                  <p className="mt-0.5 text-xs text-gray-500 leading-relaxed">
+                    핵심 역량 · 기술 스택 · 응답 품질 · 유사 서비스 비교
                   </p>
                 </div>
                 <ChevronRight className="w-4 h-4 text-gray-300 flex-shrink-0" />
