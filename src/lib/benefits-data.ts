@@ -60,6 +60,7 @@ export const BENEFITS: Benefit[] = [
       pregnancy: false,
       min_children: 1,
       child_ages: [0],
+      exclusionGroup: "parent_allowance",
     },
   },
   {
@@ -76,6 +77,7 @@ export const BENEFITS: Benefit[] = [
       pregnancy: false,
       min_children: 1,
       child_ages: [1],
+      exclusionGroup: "parent_allowance",
     },
   },
   {
@@ -196,6 +198,7 @@ export const BENEFITS: Benefit[] = [
     url: "https://www.bokjiro.go.kr",
     eligibility: {
       income_level: "middle",
+      excludeWhenPregnant: true,
     },
   },
   {

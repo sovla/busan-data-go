@@ -40,14 +40,26 @@ export default function MapPage() {
   const [naverLoaded, setNaverLoaded] = useState(false);
   const [viewMode, setViewMode] = useState<ViewMode>('map');
   const [userLocation, setUserLocation] = useState({ lat: 35.1796, lng: 129.0756 });
+  const [locationReady, setLocationReady] = useState(false);
+  const [locationFallback, setLocationFallback] = useState(false);
   const mapPanRef = useRef<((lat: number, lng: number) => void) | null>(null);
 
   useEffect(() => {
     if (typeof window !== 'undefined' && navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
-        (pos) => setUserLocation({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
-        () => {}
+        (pos) => {
+          setUserLocation({ lat: pos.coords.latitude, lng: pos.coords.longitude });
+          setLocationReady(true);
+        },
+        () => {
+          setLocationFallback(true);
+          setLocationReady(true);
+        },
+        { timeout: 5000 }
       );
+    } else {
+      setLocationFallback(true);
+      setLocationReady(true);
     }
     const param = new URLSearchParams(window.location.search).get('type');
     if (param) {
@@ -59,8 +71,8 @@ export default function MapPage() {
   }, []);
 
   const fetchFacilities = useCallback(async () => {
-    if (selectedTypes.length === 0) {
-      setFacilities([]);
+    if (!locationReady || selectedTypes.length === 0) {
+      if (selectedTypes.length === 0) setFacilities([]);
       return;
     }
     const types = selectedTypes.join(',');
@@ -69,7 +81,7 @@ export default function MapPage() {
     );
     const data = await res.json();
     setFacilities(data.facilities ?? []);
-  }, [selectedTypes, radius, userLocation]);
+  }, [selectedTypes, radius, userLocation, locationReady]);
 
   useEffect(() => { fetchFacilities(); }, [fetchFacilities]);
 
@@ -198,6 +210,14 @@ export default function MapPage() {
               <FacilityFilter selectedTypes={selectedTypes} onTypesChange={setSelectedTypes} radius={radius} onRadiusChange={setRadius} typeCounts={typeCounts} />
             </div>
           </div>
+
+          {locationFallback && (
+            <div className="absolute top-[72px] md:top-3 left-1/2 -translate-x-1/2 z-20">
+              <div className="bg-[#1A1A1A]/80 backdrop-blur-sm text-white text-[11px] font-medium px-3 py-1.5 rounded-full whitespace-nowrap">
+                📍 부산시청 기준으로 표시합니다
+              </div>
+            </div>
+          )}
 
           {naverLoaded ? (
             <FacilityMap

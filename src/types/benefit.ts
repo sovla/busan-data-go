@@ -15,6 +15,8 @@ export interface Benefit {
     child_ages?: number[];
     income_level?: string;
     district?: string;
+    excludeWhenPregnant?: boolean;
+    exclusionGroup?: string;
   };
 }
 

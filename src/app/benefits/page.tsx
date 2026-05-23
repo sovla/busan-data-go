@@ -85,7 +85,7 @@ export default function BenefitsPage() {
               transition={{ duration: 0.2 }}
               className="space-y-4"
             >
-              <BenefitResult benefits={results} searched={searched} />
+              <BenefitResult benefits={results} searched={searched} isPregnant={userContext?.pregnancy_week !== null && userContext?.pregnancy_week !== undefined && userContext.pregnancy_week > 0} />
               {searched && results.length > 0 && userContext && (
                 <AIAnalysis benefits={results} userContext={userContext} />
               )}

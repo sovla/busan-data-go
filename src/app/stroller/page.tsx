@@ -7,6 +7,7 @@ import { StationDetail } from '@/components/stroller/StationDetail';
 import { AccessibilityLegend } from '@/components/stroller/AccessibilityLegend';
 import { Navigation } from 'lucide-react';
 import { PageTransition } from '@/components/PageTransition';
+import { getStationGrade } from '@/lib/stroller-grade';
 
 interface MetroStation {
   id: number;
@@ -54,9 +55,9 @@ export default function StrollerPage() {
   const stats = useMemo(() => {
     let safe = 0, normal = 0, caution = 0;
     for (const s of stations) {
-      const el = (s.elevator_inner ?? 0) + (s.elevator_outer ?? 0);
-      if (el >= 4 && (s.outer_ramp ?? 0) >= 2) safe++;
-      else if (el >= 3) normal++;
+      const grade = getStationGrade(s);
+      if (grade === 'safe') safe++;
+      else if (grade === 'normal') normal++;
       else caution++;
     }
     return { safe, normal, caution };

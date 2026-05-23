@@ -51,74 +51,76 @@ export function FacilityFilter({
 
   return (
     <div className="flex flex-col gap-2">
-      <div className="flex items-center gap-1.5 flex-wrap">
-        <button
-          type="button"
-          onClick={handleToggleAll}
-          className={`
-            inline-flex items-center h-8 px-3 rounded-full text-xs font-medium
-            border transition-all duration-150 whitespace-nowrap
-            active:scale-95
-            ${allSelected
-              ? 'bg-[#1A1A1A] text-white border-[#1A1A1A]'
-              : 'bg-white text-[#1A1A1A] border-[#1A1A1A] hover:bg-gray-50'
-            }
-          `}
-        >
-          {allSelected ? '전체 해제' : '전체 선택'}
-        </button>
-        {FACILITY_TYPES.map(({ type, label, color }) => {
-          const isSelected = selectedTypes.includes(type);
-          return (
-            <button
-              key={type}
-              type="button"
-              onClick={() => toggleType(type)}
-              className={`
-                inline-flex items-center gap-1.5 h-8 px-3 rounded-full text-xs font-medium
-                border transition-all duration-150 whitespace-nowrap
-                active:scale-95
-                ${isSelected
-                  ? 'text-white border-transparent'
-                  : 'bg-white text-[#6B7280] border-[#E5E7EB] hover:border-[#9CA3AF]'
-                }
-              `}
-              style={isSelected ? { backgroundColor: color } : undefined}
-            >
-              <span
-                className="w-2 h-2 rounded-full flex-shrink-0"
-                style={{ backgroundColor: isSelected ? 'rgba(255,255,255,0.85)' : color }}
-              />
-              {label}
-              {typeCounts && typeCounts[type] !== undefined && (
+      <div className="overflow-x-auto -mx-1 px-1 scrollbar-hide">
+        <div className="flex items-center gap-1.5 w-max">
+          <button
+            type="button"
+            onClick={handleToggleAll}
+            className={`
+              inline-flex items-center h-8 px-3 rounded-full text-xs font-medium
+              border transition-all duration-150 whitespace-nowrap
+              active:scale-95
+              ${allSelected
+                ? 'bg-[#1A1A1A] text-white border-[#1A1A1A]'
+                : 'bg-white text-[#1A1A1A] border-[#1A1A1A] hover:bg-gray-50'
+              }
+            `}
+          >
+            {allSelected ? '전체 해제' : '전체 선택'}
+          </button>
+          {FACILITY_TYPES.map(({ type, label, color }) => {
+            const isSelected = selectedTypes.includes(type);
+            return (
+              <button
+                key={type}
+                type="button"
+                onClick={() => toggleType(type)}
+                className={`
+                  inline-flex items-center gap-1.5 h-8 px-3 rounded-full text-xs font-medium
+                  border transition-all duration-150 whitespace-nowrap
+                  active:scale-95
+                  ${isSelected
+                    ? 'text-white border-transparent'
+                    : 'bg-white text-[#6B7280] border-[#E5E7EB] hover:border-[#9CA3AF]'
+                  }
+                `}
+                style={isSelected ? { backgroundColor: color } : undefined}
+              >
                 <span
-                  className={`ml-0.5 text-[10px] font-semibold ${isSelected ? 'text-white/90' : 'text-gray-400'}`}
-                >
-                  {typeCounts[type]}
-                </span>
-              )}
-            </button>
-          );
-        })}
-        <div className="flex items-center gap-1">
-          {RADIUS_OPTIONS.map((opt) => (
-            <button
-              key={opt.value}
-              type="button"
-              onClick={() => onRadiusChange(opt.value)}
-              className={`
-                h-7 px-2.5 rounded-full text-[11px] font-medium
-                transition-all duration-150 active:scale-95
-                ${radius === opt.value
-                  ? 'bg-[#FF6B6B] text-white'
-                  : 'bg-[#F3F4F6] text-[#9CA3AF] hover:text-[#6B7280]'
-                }
-              `}
-            >
-              {opt.label}
-            </button>
-          ))}
+                  className="w-2 h-2 rounded-full flex-shrink-0"
+                  style={{ backgroundColor: isSelected ? 'rgba(255,255,255,0.85)' : color }}
+                />
+                {label}
+                {typeCounts && typeCounts[type] !== undefined && (
+                  <span
+                    className={`ml-0.5 text-[10px] font-semibold ${isSelected ? 'text-white/90' : 'text-gray-400'}`}
+                  >
+                    {typeCounts[type]}
+                  </span>
+                )}
+              </button>
+            );
+          })}
         </div>
+      </div>
+      <div className="flex items-center gap-1">
+        {RADIUS_OPTIONS.map((opt) => (
+          <button
+            key={opt.value}
+            type="button"
+            onClick={() => onRadiusChange(opt.value)}
+            className={`
+              h-7 px-2.5 rounded-full text-[11px] font-medium
+              transition-all duration-150 active:scale-95
+              ${radius === opt.value
+                ? 'bg-[#FF6B6B] text-white'
+                : 'bg-[#F3F4F6] text-[#9CA3AF] hover:text-[#6B7280]'
+              }
+            `}
+          >
+            {opt.label}
+          </button>
+        ))}
       </div>
     </div>
   );

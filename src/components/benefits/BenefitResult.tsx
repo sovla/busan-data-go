@@ -10,6 +10,7 @@ import { motion, AnimatePresence } from "framer-motion";
 interface BenefitResultProps {
   benefits: Benefit[];
   searched: boolean;
+  isPregnant?: boolean;
 }
 
 function formatAmount(value: number): string {
@@ -65,7 +66,7 @@ const item = {
   show: { opacity: 1, y: 0, transition: { duration: 0.3 } },
 };
 
-export function BenefitResult({ benefits, searched }: BenefitResultProps) {
+export function BenefitResult({ benefits, searched, isPregnant = false }: BenefitResultProps) {
   if (!searched) {
     return (
       <div className="flex flex-col items-center justify-center h-72 rounded-2xl border border-dashed border-[#F3F4F6] bg-white text-center px-6">
@@ -98,14 +99,30 @@ export function BenefitResult({ benefits, searched }: BenefitResultProps) {
     );
   }
 
-  const totalMonthly = benefits
-    .filter((b) => b.amount.includes("월"))
-    .reduce((sum, b) => sum + b.amountValue, 0);
+  const summableBenefits = benefits.filter(
+    (b) => !(isPregnant && b.eligibility.excludeWhenPregnant)
+  );
 
-  const totalOneTime = benefits
-    .filter((b) => !b.amount.includes("월") && b.amountValue > 0)
-    .reduce((sum, b) => sum + b.amountValue, 0);
+  const dedupeByGroup = (items: Benefit[]): Benefit[] => {
+    const groups = new Map<string, Benefit>();
+    const ungrouped: Benefit[] = [];
+    for (const b of items) {
+      const g = b.eligibility.exclusionGroup;
+      if (g) {
+        const existing = groups.get(g);
+        if (!existing || b.amountValue > existing.amountValue) groups.set(g, b);
+      } else {
+        ungrouped.push(b);
+      }
+    }
+    return [...ungrouped, ...groups.values()];
+  };
 
+  const monthlyItems = dedupeByGroup(summableBenefits.filter((b) => b.amount.includes("월")));
+  const oneTimeItems = dedupeByGroup(summableBenefits.filter((b) => !b.amount.includes("월") && b.amountValue > 0));
+
+  const totalMonthly = monthlyItems.reduce((sum, b) => sum + b.amountValue, 0);
+  const totalOneTime = oneTimeItems.reduce((sum, b) => sum + b.amountValue, 0);
   const annualEstimate = totalMonthly * 12 + totalOneTime;
 
   const immediateCount = benefits.filter(isImmediatelyApplicable).length;

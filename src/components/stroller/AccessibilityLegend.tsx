@@ -2,7 +2,7 @@
 
 export function AccessibilityLegend() {
   return (
-    <div className="bg-white/90 backdrop-blur-sm rounded-2xl shadow-sm border border-[#F3F4F6] p-4">
+    <div className="bg-white rounded-2xl shadow-md border border-[#F3F4F6] p-4">
       <div className="flex items-baseline justify-between mb-3">
         <h3 className="text-xs font-semibold text-[#6B7280]">안전 등급 산출</h3>
         <span className="text-[10px] text-[#9CA3AF]">114역 데이터</span>

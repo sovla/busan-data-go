@@ -2,6 +2,7 @@
 
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { Badge } from '@/components/ui/badge';
+import { getStationGrade, GRADE_COLORS, GRADE_LABELS } from '@/lib/stroller-grade';
 
 interface MetroStation {
   id: number;
@@ -29,10 +30,7 @@ const LINE_COLORS: Record<string, string> = {
 };
 
 function getAccessibilityLevel(station: MetroStation) {
-  const totalElevators = (station.elevator_inner ?? 0) + (station.elevator_outer ?? 0);
-  if (totalElevators >= 2 && (station.nursing_room ?? 0) >= 1) return 'safe';
-  if (totalElevators >= 1) return 'normal';
-  return 'caution';
+  return getStationGrade(station);
 }
 
 export function StationDetail({ station, onClose }: StationDetailProps) {
@@ -87,18 +85,10 @@ export function StationDetail({ station, onClose }: StationDetailProps) {
           </div>
         </div>
 
-        <div className={`rounded-xl p-3 text-sm font-medium text-center ${
-          level === 'safe'
-            ? 'text-white'
-            : level === 'normal'
-            ? 'text-white'
-            : 'text-white'
-        }`} style={{
-          backgroundColor: level === 'safe' ? '#2ECC71' : level === 'normal' ? '#F39C12' : '#FF6B6B'
+        <div className="rounded-xl p-3 text-sm font-medium text-center text-white" style={{
+          backgroundColor: GRADE_COLORS[level]
         }}>
-          {level === 'safe' && '유모차 이용이 편리합니다'}
-          {level === 'normal' && '엘리베이터가 있어 이용 가능합니다'}
-          {level === 'caution' && '엘리베이터가 없어 주의가 필요합니다'}
+          {GRADE_LABELS[level]}
         </div>
       </SheetContent>
     </Sheet>

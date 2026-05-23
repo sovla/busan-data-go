@@ -2,6 +2,7 @@
 
 import { useEffect, useRef } from 'react';
 import { MapPin } from 'lucide-react';
+import { getStationGrade, GRADE_COLORS } from '@/lib/stroller-grade';
 
 interface MetroStation {
   id: number;
@@ -35,10 +36,7 @@ interface AccessibilityMapProps {
 }
 
 function getAccessibilityColor(station: MetroStation): string {
-  const totalElevators = (station.elevator_inner ?? 0) + (station.elevator_outer ?? 0);
-  if (totalElevators >= 2 && (station.nursing_room ?? 0) >= 1) return '#10b981';
-  if (totalElevators >= 1) return '#f59e0b';
-  return '#f87171';
+  return GRADE_COLORS[getStationGrade(station)];
 }
 
 function makeMarkerIcon(color: string): string {
