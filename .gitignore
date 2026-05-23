@@ -53,3 +53,10 @@ supabase/.temp/
 .playwright-mcp/
 cycle*-*.png
 mobile-*.png
+
+# 자체 QA 로그 (로컬 전용) + 심볼릭 링크
+.qa/
+QA-LOG.md
+
+# QA 스크린샷
+qa-*.png
