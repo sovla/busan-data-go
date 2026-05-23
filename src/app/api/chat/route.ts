@@ -1,7 +1,6 @@
 import { streamText, convertToModelMessages, type UIMessage, tool, stepCountIs } from 'ai';
 import { anthropic } from '@ai-sdk/anthropic';
 import { createClient } from '@/lib/supabase/server';
-import { BENEFITS } from '@/lib/benefits-data';
 import { z } from 'zod';
 
 const SYSTEM_PROMPT_STANDARD = `당신은 '맘편한 부산' AI 도우미입니다. 부산시 임산부와 예비부모를 위한 출산/육아 혜택, 시설 정보를 안내합니다.
@@ -64,8 +63,13 @@ export async function POST(req: Request) {
           keyword: z.string().optional().describe('검색 키워드'),
         }),
         execute: async ({ keyword }) => {
+          const supabase = await createClient();
           if (!keyword) {
-            return { benefits: BENEFITS.slice(0, 10) };
+            const { data } = await supabase
+              .from('benefits')
+              .select('id, title, category, description, amount, provider, how_to_apply, url, eligibility')
+              .limit(10);
+            return { benefits: data ?? [] };
           }
           const normalize = (s: string) => s.replace(/\s+/g, '').toLowerCase();
           const tokens = keyword
@@ -74,11 +78,28 @@ export async function POST(req: Request) {
             .map((t) => t.trim())
             .filter(Boolean)
             .map(normalize);
-          const matched = BENEFITS.filter((b) => {
-            const hay = normalize(`${b.title ?? ''} ${b.description ?? ''} ${b.category ?? ''}`);
-            return tokens.some((t) => hay.includes(t));
-          });
-          return { benefits: matched.length > 0 ? matched : BENEFITS.slice(0, 10) };
+          // title, description, category 에 OR ilike 검색
+          const orFilter = tokens
+            .flatMap((t) => [
+              `title.ilike.%${t}%`,
+              `description.ilike.%${t}%`,
+              `category.ilike.%${t}%`,
+            ])
+            .join(',');
+          const { data } = await supabase
+            .from('benefits')
+            .select('id, title, category, description, amount, provider, how_to_apply, url, eligibility')
+            .or(orFilter)
+            .limit(10);
+          if (data && data.length > 0) {
+            return { benefits: data };
+          }
+          // fallback: 전체 상위 10건
+          const { data: fallback } = await supabase
+            .from('benefits')
+            .select('id, title, category, description, amount, provider, how_to_apply, url, eligibility')
+            .limit(10);
+          return { benefits: fallback ?? [] };
         },
       }),
     },
