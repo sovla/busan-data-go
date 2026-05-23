@@ -3,7 +3,7 @@
 import { Sheet, SheetContent, SheetHeader, SheetTitle } from '@/components/ui/sheet';
 import { Button } from '@/components/ui/button';
 import { Facility, FacilityType } from '@/types/facility';
-import { Phone, Navigation, MapPin, Info, Baby, Coffee, Heart, School, Stethoscope } from 'lucide-react';
+import { Phone, Navigation, MapPin, Info, Baby, Coffee, Heart, School, Stethoscope, Shield, UtensilsCrossed } from 'lucide-react';
 
 const TYPE_LABELS: Record<FacilityType, string> = {
   nursing_room: '수유실',
@@ -11,6 +11,8 @@ const TYPE_LABELS: Record<FacilityType, string> = {
   postpartum: '산후조리원',
   daycare: '어린이집',
   hospital: '병원',
+  atopy_school: '안심학교',
+  meal_store: '급식가맹점',
 };
 
 const TYPE_CONFIG: Record<FacilityType, { icon: React.ReactNode; color: string; bg: string }> = {
@@ -38,6 +40,16 @@ const TYPE_CONFIG: Record<FacilityType, { icon: React.ReactNode; color: string; 
     icon: <Stethoscope className="w-5 h-5" />,
     color: '#F39C12',
     bg: '#FFF8E7',
+  },
+  atopy_school: {
+    icon: <Shield className="w-5 h-5" />,
+    color: '#3B82F6',
+    bg: '#EFF6FF',
+  },
+  meal_store: {
+    icon: <UtensilsCrossed className="w-5 h-5" />,
+    color: '#EC4899',
+    bg: '#FDF2F8',
   },
 };
 
