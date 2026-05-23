@@ -55,8 +55,8 @@ export default function StrollerPage() {
     let safe = 0, normal = 0, caution = 0;
     for (const s of stations) {
       const el = (s.elevator_inner ?? 0) + (s.elevator_outer ?? 0);
-      if (el >= 2 && (s.nursing_room ?? 0) >= 1) safe++;
-      else if (el >= 1) normal++;
+      if (el >= 4 && (s.outer_ramp ?? 0) >= 2) safe++;
+      else if (el >= 3) normal++;
       else caution++;
     }
     return { safe, normal, caution };

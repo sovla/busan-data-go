@@ -74,10 +74,8 @@ export default function HomePage() {
   };
 
   const getToolParts = (msg: (typeof messages)[number]) => {
-    return msg.parts.filter(
-      (p) =>
-        p.type === "tool-searchFacilities" ||
-        p.type === "tool-searchBenefits"
+    return msg.parts.filter((p) =>
+      typeof p.type === "string" && p.type.startsWith("tool-")
     );
   };
 

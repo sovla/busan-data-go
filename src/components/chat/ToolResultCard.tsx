@@ -118,6 +118,9 @@ export default function ToolResultCard({ toolName, result }: ToolResultCardProps
         >
           <MapPin className="h-3 w-3" /> 지도에서 보기
         </Link>
+        <div className="text-right text-[10px] text-gray-400 mt-2">
+          📊 부산광역시 공공데이터 · data.busan.go.kr
+        </div>
       </motion.div>
     );
   }
@@ -146,6 +149,9 @@ export default function ToolResultCard({ toolName, result }: ToolResultCardProps
         >
           <Heart className="h-3 w-3" /> 혜택 자세히 보기
         </Link>
+        <div className="text-right text-[10px] text-gray-400 mt-2">
+          📊 부산광역시 공공데이터 · data.busan.go.kr
+        </div>
       </motion.div>
     );
   }

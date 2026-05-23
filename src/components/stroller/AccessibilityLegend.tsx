@@ -10,15 +10,15 @@ export function AccessibilityLegend() {
       <div className="flex flex-col gap-2">
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 rounded-full flex-shrink-0" style={{ backgroundColor: '#2ECC71' }} />
-          <span className="text-xs text-[#6B7280]">엘리베이터 2개+ &amp; 수유실 (안전)</span>
+          <span className="text-xs text-[#6B7280]">엘리베이터 4개+ &amp; 경사로 2개+ (안전)</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 rounded-full flex-shrink-0" style={{ backgroundColor: '#F39C12' }} />
-          <span className="text-xs text-[#6B7280]">엘리베이터 1개 이상 (보통)</span>
+          <span className="text-xs text-[#6B7280]">엘리베이터 3개 이상 (보통)</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-3 h-3 rounded-full flex-shrink-0" style={{ backgroundColor: '#FF6B6B' }} />
-          <span className="text-xs text-[#6B7280]">엘리베이터 없음 (주의)</span>
+          <span className="text-xs text-[#6B7280]">엘리베이터 2개 이하 (주의)</span>
         </div>
         <div className="flex items-center gap-2">
           <div className="w-6 h-1 rounded bg-blue-500 flex-shrink-0" />

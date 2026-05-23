@@ -8,6 +8,7 @@ type DatasetItem = {
   label: string;
   count: string;
   usage: string;
+  url: string;
 };
 
 type DatasetGroup = {
@@ -21,26 +22,26 @@ const publicDatasets: DatasetGroup[] = [
     source: "data.busan.go.kr",
     url: "https://data.busan.go.kr",
     items: [
-      { label: "수유실", count: "291개", usage: "지도·챗봇 시설 검색" },
-      { label: "키즈카페", count: "69개", usage: "주변 시설 추천" },
-      { label: "산후조리원", count: "12개", usage: "주변 시설 추천" },
-      { label: "어린이집", count: "317개", usage: "지도·챗봇 시설 검색" },
+      { label: "수유실", count: "291개", usage: "지도·챗봇 시설 검색", url: "https://data.busan.go.kr/dataset/datasetSearch.nm?searchTxt=수유실" },
+      { label: "키즈카페", count: "69개", usage: "주변 시설 추천", url: "https://data.busan.go.kr/dataset/datasetSearch.nm?searchTxt=키즈카페" },
+      { label: "산후조리원", count: "12개", usage: "주변 시설 추천", url: "https://data.busan.go.kr/dataset/datasetSearch.nm?searchTxt=산후조리원" },
+      { label: "어린이집", count: "317개", usage: "지도·챗봇 시설 검색", url: "https://data.busan.go.kr/dataset/datasetSearch.nm?searchTxt=어린이집" },
     ],
   },
   {
     source: "부산교통공사",
     url: "https://www.humetro.busan.kr",
     items: [
-      { label: "도시철도 편의시설", count: "114역", usage: "유모차 경로 추천" },
+      { label: "도시철도 편의시설", count: "114역", usage: "유모차 경로 추천", url: "https://data.busan.go.kr/dataset/datasetSearch.nm?searchTxt=도시철도+편의시설" },
     ],
   },
   {
     source: "부산광역시",
     url: "https://www.busan.go.kr",
     items: [
-      { label: "보행자우선도로", count: "31개", usage: "안전한 유모차 길 안내" },
-      { label: "아동급식카드 가맹점", count: "35,239개", usage: "지도 가맹점 검색" },
-      { label: "아토피·천식 안심학교", count: "458개", usage: "교육시설 매핑" },
+      { label: "보행자우선도로", count: "31개", usage: "안전한 유모차 길 안내", url: "https://data.busan.go.kr/dataset/datasetSearch.nm?searchTxt=보행자우선도로" },
+      { label: "아동급식카드 가맹점", count: "35,239개", usage: "지도 가맹점 검색", url: "https://data.busan.go.kr/dataset/datasetSearch.nm?searchTxt=급식" },
+      { label: "아토피·천식 안심학교", count: "458개", usage: "교육시설 매핑", url: "https://data.busan.go.kr/dataset/datasetSearch.nm?searchTxt=안심학교" },
     ],
   },
 ];
@@ -107,6 +108,9 @@ export default function MorePage() {
               <p className="mt-3 text-[11px] text-gray-500 leading-relaxed">
                 부산광역시·부산교통공사·각 구 공식 공공데이터를 활용하여 출산·육아 정보를 통합 제공합니다.
               </p>
+              <p className="mt-2 text-[10px] text-gray-400 leading-relaxed italic">
+                각 데이터셋 클릭 시 부산광역시 공공데이터포털 검색 결과로 이동합니다.
+              </p>
             </CardContent>
           </Card>
 
@@ -130,20 +134,23 @@ export default function MorePage() {
                   </a>
                   <div className="divide-y divide-gray-50">
                     {dataset.items.map((item) => (
-                      <div
+                      <a
                         key={item.label}
-                        className="flex items-start justify-between gap-3 px-4 py-3"
+                        href={item.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="flex items-start justify-between gap-3 px-4 py-3 hover:bg-gray-50/50 transition-colors group"
                       >
                         <div className="flex-1 min-w-0">
-                          <p className="text-sm text-gray-700">{item.label}</p>
+                          <p className="text-sm text-gray-700 group-hover:text-[#FF6B6B] transition-colors">{item.label}</p>
                           <p className="mt-0.5 text-[11px] text-gray-400 leading-relaxed">
                             {item.usage}
                           </p>
                         </div>
-                        <span className="text-sm font-bold text-gray-900 flex-shrink-0">
+                        <span className="text-sm font-bold text-gray-900 flex-shrink-0 group-hover:text-[#FF6B6B] transition-colors">
                           {item.count}
                         </span>
-                      </div>
+                      </a>
                     ))}
                   </div>
                 </div>
