@@ -159,29 +159,33 @@ export function BenefitForm({ onSearch }: BenefitFormProps) {
             <Baby className="h-4 w-4 text-[#FF6B6B]" />
             자녀 수
           </div>
-          <div className="flex items-center gap-3">
+          <div className="grid grid-cols-6 gap-1">
             {[0, 1, 2, 3, 4, 5].map((n) => (
               <button
                 key={n}
                 type="button"
                 onClick={() => setChildrenCount(n)}
-                className={`flex flex-col items-center gap-1 py-2 px-2 rounded-xl transition-all active:scale-95 ${
+                className={`flex flex-col items-center justify-center gap-1 py-2 rounded-xl transition-all active:scale-95 min-w-0 ${
                   childrenCount === n ? "bg-[#FFF0F0]" : "hover:bg-[#F8F8F8]"
                 }`}
               >
                 {n === 0 ? (
-                  <div className="w-8 h-8 rounded-full bg-[#F3F4F6] flex items-center justify-center">
+                  <div className="w-7 h-7 rounded-full bg-[#F3F4F6] flex items-center justify-center">
                     <span className="text-xs text-[#9CA3AF]">-</span>
                   </div>
+                ) : n >= 4 ? (
+                  <div className="flex items-center gap-0.5">
+                    <BabyIcon filled={childrenCount === n} size={20} />
+                    <span className="text-[10px] text-[#FF6B6B] font-bold">×{n}</span>
+                  </div>
                 ) : (
-                  <div className="flex -space-x-2">
-                    {Array.from({ length: Math.min(n, 3) }).map((_, i) => (
-                      <BabyIcon key={i} filled={childrenCount === n} size={n > 2 ? 24 : 28} />
+                  <div className="flex -space-x-1.5">
+                    {Array.from({ length: n }).map((_, i) => (
+                      <BabyIcon key={i} filled={childrenCount === n} size={n >= 3 ? 18 : 22} />
                     ))}
-                    {n > 3 && <span className="text-xs text-[#FF6B6B] font-bold ml-1 self-center">+{n - 3}</span>}
                   </div>
                 )}
-                <span className={`text-[11px] font-medium ${
+                <span className={`text-[10px] font-medium ${
                   childrenCount === n ? "text-[#FF6B6B]" : "text-[#9CA3AF]"
                 }`}>
                   {n === 0 ? "없음" : n === 5 ? "5+" : `${n}명`}

@@ -1,11 +1,10 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo } from 'react';
 import Script from 'next/script';
 import { AccessibilityMap } from '@/components/stroller/AccessibilityMap';
 import { StationDetail } from '@/components/stroller/StationDetail';
 import { AccessibilityLegend } from '@/components/stroller/AccessibilityLegend';
-import { Badge } from '@/components/ui/badge';
 import { Navigation } from 'lucide-react';
 import { PageTransition } from '@/components/PageTransition';
 
@@ -52,6 +51,17 @@ export default function StrollerPage() {
       .then((d) => setRoads(d.roads ?? []));
   }, []);
 
+  const stats = useMemo(() => {
+    let safe = 0, normal = 0, caution = 0;
+    for (const s of stations) {
+      const el = (s.elevator_inner ?? 0) + (s.elevator_outer ?? 0);
+      if (el >= 2 && (s.nursing_room ?? 0) >= 1) safe++;
+      else if (el >= 1) normal++;
+      else caution++;
+    }
+    return { safe, normal, caution };
+  }, [stations]);
+
   return (
     <PageTransition>
       <Script
@@ -69,9 +79,21 @@ export default function StrollerPage() {
               유모차 길 안내
             </h1>
           </div>
-          <Badge className="bg-gray-100 text-gray-600 border-gray-200 text-xs font-medium px-2.5 py-1 rounded-full">
-            {stations.length}개 역 · {roads.length}개 도로
-          </Badge>
+          <div className="flex items-center gap-2 text-[11px] font-semibold">
+            <span className="flex items-center gap-1 text-[#2ECC71]">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#2ECC71]" />
+              {stats.safe}
+            </span>
+            <span className="flex items-center gap-1 text-[#F39C12]">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#F39C12]" />
+              {stats.normal}
+            </span>
+            <span className="flex items-center gap-1 text-[#FF6B6B]">
+              <span className="w-1.5 h-1.5 rounded-full bg-[#FF6B6B]" />
+              {stats.caution}
+            </span>
+            <span className="text-[#9CA3AF] font-normal">· {roads.length}도로</span>
+          </div>
         </div>
 
         <div className="flex-1 relative overflow-hidden">
