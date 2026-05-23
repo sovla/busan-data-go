@@ -2,7 +2,6 @@ import { streamText, convertToModelMessages, type UIMessage, tool, stepCountIs }
 import { anthropic } from '@ai-sdk/anthropic';
 import { createClient } from '@/lib/supabase/server';
 import { BENEFITS } from '@/lib/benefits-data';
-import { HOSPITALS } from '@/lib/hospitals-data';
 import { z } from 'zod';
 
 const SYSTEM_PROMPT_STANDARD = `당신은 '맘편한 부산' AI 도우미입니다. 부산시 임산부와 예비부모를 위한 출산/육아 혜택, 시설 정보를 안내합니다.
@@ -46,30 +45,11 @@ export async function POST(req: Request) {
           limit: z.number().optional().default(10).describe('최대 결과 수'),
         }),
         execute: async ({ district, type, limit }) => {
-          const cap = limit ?? 10;
-          if (type === 'hospital') {
-            const filtered = district
-              ? HOSPITALS.filter(
-                  (h) =>
-                    h.district.includes(district) || h.address.includes(district),
-                )
-              : HOSPITALS;
-            return {
-              facilities: filtered.slice(0, cap).map((h) => ({
-                id: h.id,
-                type: 'hospital' as const,
-                name: h.name,
-                address: h.address,
-                phone: h.phone,
-                district: h.district,
-              })),
-            };
-          }
           const supabase = await createClient();
           let query = supabase
             .from('facilities')
             .select('id, type, name, address, phone, district')
-            .limit(cap);
+            .limit(limit ?? 10);
           if (district) {
             query = query.or(`district.ilike.%${district}%,address.ilike.%${district}%`);
           }
