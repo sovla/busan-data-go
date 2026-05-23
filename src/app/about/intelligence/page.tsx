@@ -63,10 +63,10 @@ const compareTable: CompareRow[] = [
 ];
 
 const competitors = [
-  { key: "ours" as const, label: "맘편한 부산", highlight: true },
+  { key: "ours" as const, label: "맘편한\n부산", highlight: true },
   { key: "gov24" as const, label: "정부24", highlight: false },
   { key: "bokjiro" as const, label: "복지로", highlight: false },
-  { key: "busanPortal" as const, label: "부산포털", highlight: false },
+  { key: "busanPortal" as const, label: "부산\n포털", highlight: false },
 ];
 
 const qualityChecks = [
@@ -213,13 +213,13 @@ export default function IntelligencePage() {
                   <table className="w-full text-xs">
                     <thead>
                       <tr className="bg-gray-50/60 border-b border-gray-100">
-                        <th className="text-left font-medium text-gray-500 px-3 py-3 min-w-[140px]">
+                        <th className="text-left font-medium text-gray-500 px-3 py-3 min-w-[120px] text-[11px]">
                           기능
                         </th>
                         {competitors.map((c) => (
                           <th
                             key={c.key}
-                            className={`text-center font-semibold px-2 py-3 ${
+                            className={`text-center font-semibold px-1.5 py-3 whitespace-pre-line leading-tight text-[11px] ${
                               c.highlight ? "text-[#FF6B6B]" : "text-gray-500"
                             }`}
                           >
@@ -234,7 +234,7 @@ export default function IntelligencePage() {
                           key={row.feature}
                           className={ri > 0 ? "border-t border-gray-50" : ""}
                         >
-                          <td className="px-3 py-3 text-gray-700">{row.feature}</td>
+                          <td className="px-3 py-3 text-gray-700 text-[12px] leading-tight">{row.feature}</td>
                           {competitors.map((c) => (
                             <td
                               key={c.key}
