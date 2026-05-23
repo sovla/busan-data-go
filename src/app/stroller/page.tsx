@@ -70,7 +70,7 @@ export default function StrollerPage() {
         onReady={() => setNaverLoaded(true)}
         strategy="afterInteractive"
       />
-      <div className="flex flex-col h-screen">
+      <div className="flex flex-col" style={{ height: "calc(100dvh - 56px)" }}>
         <div className="bg-white border-b border-[#F3F4F6] z-10 flex-shrink-0">
           <div className="h-14 px-4 flex items-center justify-between">
             <div className="flex items-center gap-2">

@@ -15,6 +15,8 @@ interface MetroStation {
   escalator: number;
   outer_ramp: number;
   location: string;
+  lat?: number;
+  lng?: number;
 }
 
 interface PedestrianRoad {
@@ -98,13 +100,14 @@ export function AccessibilityMap({ stations, roads, onSelectStation }: Accessibi
     mapInstanceRef.current = map;
 
     stations.forEach((station) => {
-      const coords = BUSAN_STATION_COORDS[station.station_name];
-      if (!coords) return;
+      const lat = station.lat ?? BUSAN_STATION_COORDS[station.station_name]?.[0];
+      const lng = station.lng ?? BUSAN_STATION_COORDS[station.station_name]?.[1];
+      if (!lat || !lng) return;
 
       const color = getAccessibilityColor(station);
       const lineNum = getLineNumber(station.line);
       const marker = new maps.Marker({
-        position: new maps.LatLng(coords[0], coords[1]),
+        position: new maps.LatLng(lat, lng),
         map,
         title: `${station.station_name}역 (${station.line})`,
         icon: {
