@@ -1,16 +1,16 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { ArrowLeft, Wallet, MapPin, Phone } from "lucide-react";
 import { PageTransition } from "@/components/PageTransition";
-import { DONGBAEK_STORES, Store } from "@/lib/dongbaek-stores";
 
-type Category = "전체" | Store["category"];
+type Store = { id: number; name: string; category: string; district: string; address: string; phone?: string; };
+type Category = "전체" | "육아용품" | "의료" | "약국" | "식품" | "교육";
 
 const CATEGORIES: Category[] = ["전체", "육아용품", "의료", "약국", "식품", "교육"];
 
-const CATEGORY_COLORS: Record<Store["category"], { bg: string; text: string }> = {
+const CATEGORY_COLORS: Record<Exclude<Category, "전체">, { bg: string; text: string }> = {
   육아용품: { bg: "#FFF0F0", text: "#FF6B6B" },
   의료:     { bg: "#F0FDFB", text: "#4ECDC4" },
   약국:     { bg: "#FFF8E7", text: "#F39C12" },
@@ -20,11 +20,20 @@ const CATEGORY_COLORS: Record<Store["category"], { bg: string; text: string }> =
 
 export default function DongbaekPage() {
   const [selected, setSelected] = useState<Category>("전체");
+  const [stores, setStores] = useState<Store[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetch('/api/dongbaek')
+      .then(r => r.json())
+      .then(d => { setStores(d.stores ?? []); setLoading(false); })
+      .catch(() => setLoading(false));
+  }, []);
 
   const filtered =
     selected === "전체"
-      ? DONGBAEK_STORES
-      : DONGBAEK_STORES.filter((s) => s.category === selected);
+      ? stores
+      : stores.filter((s) => s.category === selected);
 
   return (
     <PageTransition>
@@ -77,13 +86,19 @@ export default function DongbaekPage() {
 
           {/* 결과 카운트 */}
           <p className="text-xs text-gray-400">
-            {filtered.length}개 가맹점
+            {loading ? "로딩 중..." : `${filtered.length}개 가맹점`}
           </p>
 
           {/* 가맹점 카드 리스트 */}
           <div className="space-y-3">
-            {filtered.map((store) => {
-              const color = CATEGORY_COLORS[store.category];
+            {loading && Array.from({ length: 6 }).map((_, i) => (
+              <div key={i} className="rounded-2xl border border-gray-100 bg-white shadow-sm p-4 flex flex-col gap-2 animate-pulse">
+                <div className="h-4 bg-gray-100 rounded w-1/2" />
+                <div className="h-3 bg-gray-100 rounded w-3/4" />
+              </div>
+            ))}
+            {!loading && filtered.map((store) => {
+              const color = CATEGORY_COLORS[store.category as Exclude<Category, "전체">] ?? { bg: "#F3F4F6", text: "#6B7280" };
               return (
                 <div
                   key={store.id}

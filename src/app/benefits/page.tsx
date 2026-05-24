@@ -2,7 +2,6 @@
 
 import { useState, useRef } from "react";
 import { Benefit, BenefitMatchRequest } from "@/types/benefit";
-import { matchBenefits } from "@/lib/benefits-matcher";
 import { BenefitForm } from "@/components/benefits/BenefitForm";
 import { BenefitResult } from "@/components/benefits/BenefitResult";
 import { AIAnalysis } from "@/components/benefits/AIAnalysis";
@@ -30,7 +29,7 @@ export default function BenefitsPage() {
   const [userContext, setUserContext] = useState<BenefitMatchRequest | null>(null);
   const resultRef = useRef<HTMLDivElement>(null);
 
-  function handleSearch(request: BenefitMatchRequest) {
+  async function handleSearch(request: BenefitMatchRequest) {
     setLoading(true);
     setSearched(false);
 
@@ -38,13 +37,19 @@ export default function BenefitsPage() {
       resultRef.current?.scrollIntoView({ behavior: "smooth", block: "start" });
     }, 100);
 
-    setTimeout(() => {
-      const matched = matchBenefits(request);
-      setResults(matched);
+    try {
+      const res = await fetch("/api/benefits/match", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(request),
+      });
+      const { benefits: matched } = await res.json();
+      setResults(matched ?? []);
       setUserContext(request);
       setSearched(true);
+    } finally {
       setLoading(false);
-    }, 1500);
+    }
   }
 
   return (

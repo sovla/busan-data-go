@@ -1,5 +1,4 @@
 import { Benefit, BenefitMatchRequest } from "@/types/benefit";
-import { BENEFITS } from "@/lib/benefits-data";
 
 function scoreMatch(benefit: Benefit, request: BenefitMatchRequest): number {
   const { eligibility } = benefit;
@@ -48,8 +47,8 @@ function scoreMatch(benefit: Benefit, request: BenefitMatchRequest): number {
   return score;
 }
 
-export function matchBenefits(request: BenefitMatchRequest): Benefit[] {
-  const scored = BENEFITS.map((benefit) => ({
+export function matchBenefits(benefits: Benefit[], request: BenefitMatchRequest): Benefit[] {
+  const scored = benefits.map((benefit) => ({
     benefit,
     score: scoreMatch(benefit, request),
   }));
