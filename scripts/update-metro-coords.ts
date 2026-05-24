@@ -72,12 +72,13 @@ async function main() {
   let updated = 0;
   let skipped = 0;
   for (const s of stations) {
-    const coord = COORDS[s.station_name];
-    if (!coord) { skipped++; continue; }
+    const baseName = s.station_name.replace(/\(\d\)$/, '').replace(/\./g, '·');
+    const coord = COORDS[s.station_name] ?? COORDS[baseName];
+    if (!coord) { skipped++; console.log(`  좌표 없음: ${s.station_name}`); continue; }
     const [lat, lng] = coord;
     const { error } = await supabase
       .from('metro_accessibility')
-      .update({ location: `SRID=4326;POINT(${lng} ${lat})` })
+      .update({ lat, lng })
       .eq('id', s.id);
     if (error) {
       console.error(`${s.station_name} 업데이트 실패:`, error.message);
