@@ -2,7 +2,7 @@
 
 import { useChat, Chat } from "@ai-sdk/react";
 import { DefaultChatTransport } from "ai";
-import { useEffect, useRef, useState, useMemo } from "react";
+import { useEffect, useRef, useState, useMemo, useCallback } from "react";
 import { motion } from "framer-motion";
 import { MessageCircle, Heart, MapPin, Baby, Navigation, Sparkles, ArrowRight, Briefcase, Lightbulb } from "lucide-react";
 import ChatMessage from "@/components/chat/ChatMessage";
@@ -74,9 +74,13 @@ export default function HomePage() {
     if (!profile) setShowOnboarding(true);
   }, []);
 
+  const scrollToBottom = useCallback(() => {
+    bottomRef.current?.scrollIntoView({ behavior: "smooth", block: "end" });
+  }, []);
+
   useEffect(() => {
-    bottomRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
+    scrollToBottom();
+  }, [messages, status, scrollToBottom]);
 
   const handleDialectToggle = () => {
     setDialect((prev) => {
@@ -334,17 +338,22 @@ export default function HomePage() {
               </motion.div>
             </div>
           ) : (
-            <div className="px-4 py-4 space-y-4">
-              {mergedMessages.map((msg) => {
+            <div className="px-4 py-4 space-y-5">
+              {mergedMessages.map((msg, msgIdx) => {
                 const text = getMessageText(msg);
                 const toolParts = msg.role === "assistant" ? getToolParts(msg) : [];
+                const isLastAssistant =
+                  msg.role === "assistant" &&
+                  msgIdx === mergedMessages.length - 1;
+                const isMessageStreaming = isLastAssistant && status === "streaming" && !!text;
 
                 return (
-                  <div key={msg.id} className="space-y-2">
+                  <div key={msg.id} className="space-y-3">
                     {text && (
                       <ChatMessage
                         role={msg.role as "user" | "assistant"}
                         content={text}
+                        isStreaming={isMessageStreaming}
                       />
                     )}
                     {toolParts.map((part, i) => {
@@ -357,23 +366,34 @@ export default function HomePage() {
                       };
                       if (toolPart.state === "output-available" && toolPart.output) {
                         return (
-                          <div key={toolPart.toolCallId} className="flex items-end gap-2">
-                            <div className="w-8 flex-shrink-0" />
-                            <div className="max-w-[75%]">
+                          <motion.div
+                            key={toolPart.toolCallId}
+                            initial={{ opacity: 0, y: 6 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.3 }}
+                            className="flex items-start gap-2.5"
+                          >
+                            <div className="w-7 flex-shrink-0" />
+                            <div className="max-w-[85%]">
                               <ToolResultCard
                                 toolName={toolPart.toolName}
                                 result={toolPart.output}
                               />
                             </div>
-                          </div>
+                          </motion.div>
                         );
                       }
                       if (toolPart.state === "input-available" || toolPart.state === "input-streaming") {
                         return (
-                          <div key={toolPart.toolCallId ?? i} className="flex items-end gap-2">
-                            <div className="w-8 flex-shrink-0" />
-                            <div className="text-xs text-gray-400 px-4 py-2">
-                              검색 중...
+                          <div key={toolPart.toolCallId ?? i} className="flex items-start gap-2.5">
+                            <div className="w-7 flex-shrink-0" />
+                            <div className="flex items-center gap-2 px-3 py-2">
+                              <div className="flex gap-1">
+                                <span className="w-1.5 h-1.5 rounded-full bg-[#FF6B6B] animate-pulse" />
+                                <span className="w-1.5 h-1.5 rounded-full bg-[#FF6B6B] animate-pulse [animation-delay:200ms]" />
+                                <span className="w-1.5 h-1.5 rounded-full bg-[#FF6B6B] animate-pulse [animation-delay:400ms]" />
+                              </div>
+                              <span className="text-xs text-gray-400">데이터를 찾고 있어요</span>
                             </div>
                           </div>
                         );
@@ -384,16 +404,16 @@ export default function HomePage() {
                 );
               })}
 
-              {isLoading && (
-                <div className="flex items-end gap-2">
-                  <div className="w-8 h-8 rounded-full bg-[#FFF8F0] flex items-center justify-center flex-shrink-0">
-                    <MessageCircle className="h-4 w-4 text-[#FF6B6B]" />
+              {status === "submitted" && (
+                <div className="flex items-start gap-2.5">
+                  <div className="w-7 h-7 rounded-full bg-gradient-to-br from-[#FF6B6B] to-[#E8847C] flex items-center justify-center flex-shrink-0">
+                    <MessageCircle className="h-3.5 w-3.5 text-white" />
                   </div>
-                  <div className="bg-white border border-gray-100 rounded-2xl rounded-bl-sm px-4 py-3 shadow-sm">
-                    <div className="flex gap-1 items-center h-4">
-                      <span className="w-2 h-2 bg-[#FF6B6B] rounded-full animate-bounce [animation-delay:0ms]" />
-                      <span className="w-2 h-2 bg-[#E8847C] rounded-full animate-bounce [animation-delay:150ms]" />
-                      <span className="w-2 h-2 bg-[#FF6B6B] rounded-full animate-bounce [animation-delay:300ms]" />
+                  <div className="px-1 py-2">
+                    <div className="flex gap-1 items-center h-5">
+                      <span className="w-1.5 h-1.5 bg-[#FF6B6B] rounded-full animate-pulse" />
+                      <span className="w-1.5 h-1.5 bg-[#E8847C] rounded-full animate-pulse [animation-delay:200ms]" />
+                      <span className="w-1.5 h-1.5 bg-[#FF6B6B] rounded-full animate-pulse [animation-delay:400ms]" />
                     </div>
                   </div>
                 </div>
@@ -427,7 +447,7 @@ export default function HomePage() {
           <ChatInput
             input={input}
             isLoading={isLoading}
-            onInputChange={(e) => setInput(e.target.value)}
+            onInputChange={setInput}
             onSubmit={handleSubmit}
           />
         </div>

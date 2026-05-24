@@ -5,7 +5,7 @@ import Script from 'next/script';
 import { Facility, FacilityType } from '@/types/facility';
 import { FacilityMap } from '@/components/map/FacilityMap';
 import { FacilityFilter } from '@/components/map/FacilityFilter';
-import { MapPin, Phone, Navigation, X, List, Baby, Puzzle, HeartPulse, GraduationCap, Stethoscope, Shield, UtensilsCrossed } from 'lucide-react';
+import { MapPin, Phone, Navigation, X, List, Baby, Puzzle, HeartPulse, GraduationCap, Stethoscope, Shield, UtensilsCrossed, Search } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { type LucideIcon } from 'lucide-react';
 
@@ -42,10 +42,24 @@ export default function MapPage() {
   const [userLocation, setUserLocation] = useState({ lat: 35.1796, lng: 129.0756 });
   const [locationReady, setLocationReady] = useState(false);
   const [locationFallback, setLocationFallback] = useState(false);
+  const [mapMoved, setMapMoved] = useState(false);
+  const [pendingCenter, setPendingCenter] = useState<{ lat: number; lng: number } | null>(null);
   const mapPanRef = useRef<((lat: number, lng: number) => void) | null>(null);
   const handleMapPanReady = useCallback((fn: (lat: number, lng: number) => void) => {
     mapPanRef.current = fn;
   }, []);
+
+  const handleCenterChanged = useCallback((newLat: number, newLng: number) => {
+    setPendingCenter({ lat: newLat, lng: newLng });
+    setMapMoved(true);
+  }, []);
+
+  const handleSearchHere = useCallback(() => {
+    if (!pendingCenter) return;
+    setUserLocation(pendingCenter);
+    setMapMoved(false);
+    setPendingCenter(null);
+  }, [pendingCenter]);
 
   useEffect(() => {
     if (typeof window !== 'undefined' && navigator.geolocation) {
@@ -238,12 +252,30 @@ export default function MapPage() {
               userLocation={userLocation}
               radiusMeters={parseInt(radius, 10)}
               onMapPanReady={handleMapPanReady}
+              onCenterChanged={handleCenterChanged}
             />
           ) : (
             <div className="w-full h-full flex items-center justify-center bg-[#F8F8F8]">
               <div className="w-8 h-8 rounded-full bg-[#F3F4F6] animate-pulse" />
             </div>
           )}
+
+          {/* 이 지역에서 검색하기 버튼 */}
+          <AnimatePresence>
+            {mapMoved && (
+              <motion.button
+                initial={{ opacity: 0, y: -10 }}
+                animate={{ opacity: 1, y: 0 }}
+                exit={{ opacity: 0, y: -10 }}
+                transition={{ duration: 0.2 }}
+                onClick={handleSearchHere}
+                className="absolute top-[130px] md:top-4 left-1/2 -translate-x-1/2 z-20 flex items-center gap-1.5 h-10 px-5 rounded-full bg-white text-[#1A1A1A] text-xs font-semibold shadow-lg border border-[#E5E7EB] active:scale-95 transition-transform hover:bg-[#F8F8F8]"
+              >
+                <Search className="w-3.5 h-3.5 text-[#FF6B6B]" />
+                이 지역에서 검색하기
+              </motion.button>
+            )}
+          </AnimatePresence>
 
           {/* 모바일 리스트 보기 버튼 */}
           <button

@@ -218,3 +218,29 @@
 .pb-safe {
   padding-bottom: env(safe-area-inset-bottom, 0px);
 }
+
+/* 스트리밍 커서 — GPT-style blinking caret */
+@keyframes cursor-blink {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0; }
+}
+
+.streaming-text > *:last-child::after {
+  content: '▍';
+  animation: cursor-blink 0.8s step-end infinite;
+  color: #FF6B6B;
+  font-weight: 400;
+  margin-left: 1px;
+}
+
+/* 검색 중 shimmer */
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.search-shimmer {
+  background: linear-gradient(90deg, #f3f4f6 25%, #e5e7eb 50%, #f3f4f6 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s ease-in-out infinite;
+}

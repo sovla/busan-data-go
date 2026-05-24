@@ -118,9 +118,10 @@ interface FacilityMapProps {
   userLocation?: { lat: number; lng: number };
   radiusMeters?: number;
   onMapPanReady?: (panFn: (lat: number, lng: number) => void) => void;
+  onCenterChanged?: (lat: number, lng: number) => void;
 }
 
-export function FacilityMap({ facilities, onSelectFacility, userLocation, radiusMeters, onMapPanReady }: FacilityMapProps) {
+export function FacilityMap({ facilities, onSelectFacility, userLocation, radiusMeters, onMapPanReady, onCenterChanged }: FacilityMapProps) {
   const mapContainerRef = useRef<HTMLDivElement>(null);
   const mapRef = useRef<NaverMap | null>(null);
   const markersRef = useRef<NaverMarker[]>([]);
@@ -130,6 +131,8 @@ export function FacilityMap({ facilities, onSelectFacility, userLocation, radius
   const [mapReady, setMapReady] = useState(false);
   const onSelectRef = useRef(onSelectFacility);
   onSelectRef.current = onSelectFacility;
+  const onCenterChangedRef = useRef(onCenterChanged);
+  onCenterChangedRef.current = onCenterChanged;
 
   const lat = userLocation?.lat ?? 35.1796;
   const lng = userLocation?.lng ?? 129.0756;
@@ -152,6 +155,12 @@ export function FacilityMap({ facilities, onSelectFacility, userLocation, radius
         }
       });
     }
+
+    window.naver.maps.Event.addListener(mapRef.current, 'dragend', () => {
+      if (!mapRef.current) return;
+      const center = mapRef.current.getCenter();
+      onCenterChangedRef.current?.(center.lat(), center.lng());
+    });
   }, [lat, lng, onMapPanReady]);
 
   // 사용자 위치 마커 + 반경 원
